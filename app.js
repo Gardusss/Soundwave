@@ -11,7 +11,7 @@ const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY,
 const $ = (selector) => document.querySelector(selector);
 const escapeHtml = (v = '') => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const state = { user:null, profile:null, artist:null, admin:false, page:'discover', songs:[], artists:[], favorites:[], playlists:[], playlistSongs:[], playlistCollaborators:[], albums:[], genres:[], plans:[], subscriptions:[], podcasts:[], episodes:[], myShows:[], history:[], members:[], selectedShow:null, selectedPlaylist:null, selectedArtist:null, podcastHistory:[], followers:[], following:[], player:null, playerToken:0, loading:false, error:'',coverUrls:{},subscriptionMembers:[],sharedMemberships:[],paymentRows:[],uiFilter:'all',libraryExpanded:true,navStack:[],navForward:[],songMenu:null, offlineDownloads:[], entitlement:null, socialSource:'user_follow', liked:[], likedIds:new Set(), likesAvailable:true, selectedAlbum:null, searchQuery:'', searchGenre:null, searchTab:'all', libFilter:'all', discoverFilter:'all', railTab:'now', hist:{i:0,max:0}, routeReady:false, installEvent:null, tint:null, focusSearch:null, libQuery:'', libSearchOpen:false };
-Object.assign(state, { historyError: '', historyWriteError: '', episodeTitles: {}, likesMode: 'remote', artistFollowers: [], followerCounts: {}, socialProfiles: {}, socialRpc: { counts: false, mine: false, profiles: false }, profileStats:null, studioStats:null, royaltySummary:null, adminData:null, subscriptionRequests:[], lyricsCache:{}, profilePhotoUrl:null, ownedSongs:[], adminTab:'accounts', adminQuery:'', adminStatus:'all', adminPriority:false, playlistInviteHandled:false, adminUserIds:[], adminView:'overview', artistStudioView:'overview', podcastStudioView:'overview', albumStreamCounts:{}, albumStreamLoading:{}, crossDeviceRefreshBound:false });
+Object.assign(state, { historyError: '', historyWriteError: '', episodeTitles: {}, likesMode: 'remote', artistFollowers: [], followerCounts: {}, socialProfiles: {}, socialRpc: { counts: false, mine: false, profiles: false }, profileStats:null, studioStats:null, royaltySummary:null, adminData:null, subscriptionRequests:[], lyricsCache:{}, profilePhotoUrl:null, ownedSongs:[], adminTab:'accounts', adminQuery:'', adminStatus:'all', adminPriority:false, playlistInviteHandled:false, adminUserIds:[], adminView:'overview', artistStudioView:'overview', podcastStudioView:'overview', albumStreamCounts:{}, albumStreamLoading:{}, crossDeviceRefreshBound:false, mayaPaymentNotice:null, mayaReturnProcessing:false, subscriptionInviteProcessing:false });
 
 const HISTORY_CACHE_LIMIT = 80;
 const PODCAST_HISTORY_CACHE_LIMIT = 50;
@@ -856,6 +856,95 @@ function confirmView(email) {
     timer = setInterval(() => { wait--; if (!document.body.contains(btn)) return clearInterval(timer); if (wait <= 0) { clearInterval(timer); btn.disabled = false; btn.textContent = 'Resend confirmation email'; } else btn.textContent = `Resend in ${wait}s`; }, 1000);
   });
 }
+const MAYA_RETURN_KEY='soundwave-pending-maya-return-v21';
+function captureMayaReturn(){
+  const params=new URLSearchParams(location.search);
+  const result=params.get('maya');
+  if(!result)return null;
+  const payload={result,reference:params.get('rrn')||sessionStorage.getItem('soundwave-maya-reference')||'',captured_at:Date.now()};
+  try{sessionStorage.setItem(MAYA_RETURN_KEY,JSON.stringify(payload));}catch{}
+  params.delete('maya');params.delete('rrn');
+  sessionStorage.removeItem('soundwave-maya-reference');
+  const query=params.toString();
+  history.replaceState(history.state||{},document.title,`${location.pathname}${query?`?${query}`:''}${location.hash||'#/plans'}`);
+  return payload;
+}
+function pendingMayaReturn(){
+  try{return JSON.parse(sessionStorage.getItem(MAYA_RETURN_KEY)||'null');}catch{return null;}
+}
+function clearPendingMayaReturn(){try{sessionStorage.removeItem(MAYA_RETURN_KEY);}catch{}}
+async function edgeFunctionMessage(error){
+  try{
+    const res=error?.context;
+    if(res?.clone){const body=await res.clone().json().catch(()=>null);if(body?.error)return String(body.error);}
+  }catch{}
+  return error?.message||String(error||'Unknown error');
+}
+function schedulePendingPaymentVerification(delay=250){
+  if(!state.user||!pendingMayaReturn())return;
+  setTimeout(()=>{processPendingMayaReturn().catch(e=>console.warn('Maya verification deferred:',e));},delay);
+}
+async function processPendingMayaReturn(){
+  if(!state.user||state.mayaReturnProcessing)return false;
+  const pending=pendingMayaReturn();if(!pending)return false;
+  state.mayaReturnProcessing=true;
+  try{
+    state.page='plans';
+    if(pending.result==='cancelled'){
+      state.mayaPaymentNotice={type:'info',message:'Maya Sandbox checkout was cancelled. No subscription was activated.'};
+      clearPendingMayaReturn();render();return true;
+    }
+    if(pending.result!=='success'){
+      state.mayaPaymentNotice={type:'error',message:'The Maya Sandbox payment was not completed. You can choose a plan and try again.'};
+      clearPendingMayaReturn();render();return true;
+    }
+    if(!pending.reference){
+      state.mayaPaymentNotice={type:'error',message:'The checkout returned without a payment reference. Your login is safe; start a new sandbox checkout when ready.'};
+      clearPendingMayaReturn();render();return true;
+    }
+    state.mayaPaymentNotice={type:'pending',message:'Confirming your Maya Sandbox payment… You can keep using SoundWave while verification finishes.'};
+    render();
+    const {data,error}=await db.functions.invoke('maya-confirm-payment',{body:{reference:pending.reference}});
+    if(error){
+      const msg=await edgeFunctionMessage(error);
+      state.mayaPaymentNotice={type:'pending',message:`Payment verification is pending. Your account is still signed in. ${msg}`};
+      render();return true;
+    }
+    if(data?.pending){
+      state.mayaPaymentNotice={type:'pending',message:data?.message||'Maya is still finalizing the sandbox transaction. Retry verification in a moment.'};
+      render();return true;
+    }
+    if(data?.error){
+      state.mayaPaymentNotice={type:'pending',message:`Payment verification is pending. ${data.error}`};
+      render();return true;
+    }
+    clearPendingMayaReturn();
+    await loadData();
+    state.page='plans';
+    state.mayaPaymentNotice={type:'success',message:'Payment verified. Your Premium benefits are now active.'};
+    render();
+    toast('Welcome to SoundWave Premium!');
+    setTimeout(()=>document.getElementById('premium-welcome-dialog')?.showModal(),80);
+    return true;
+  }catch(e){
+    console.error('Maya return processing failed:',e);
+    state.mayaPaymentNotice={type:'pending',message:`Payment verification could not finish yet. Your login remains active. ${await edgeFunctionMessage(e)}`};
+    render();return true;
+  }finally{state.mayaReturnProcessing=false;}
+}
+async function acceptPendingSubscriptionInvite(){
+  if(!state.user||state.subscriptionInviteProcessing)return false;
+  const params=new URLSearchParams(location.search),token=params.get('subscription_invite');
+  if(!token)return false;
+  state.subscriptionInviteProcessing=true;
+  try{
+    const {data,error}=await db.rpc('accept_subscription_invite',{p_token:token});
+    if(error)throw error;
+    params.delete('subscription_invite');const q=params.toString();history.replaceState(history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}#/plans`);
+    await loadData();state.page='plans';render();toast('Premium plan invitation accepted.');return true;
+  }catch(e){console.error(e);toast(`Could not accept subscription invite: ${e?.message||'Please try again.'}`,true);return false;}
+  finally{state.subscriptionInviteProcessing=false;}
+}
 async function finishInteractiveSignIn(session){
   const user=session?.user;
   if(!user)throw Error('Sign-in succeeded but no session was returned. Please try again.');
@@ -870,9 +959,12 @@ async function finishInteractiveSignIn(session){
   bindCrossDeviceRefresh();
   state.playlistInviteHandled=false;
   await acceptPendingPlaylistInvite();
-  const mayaReturn=await handleMayaReturn();
-  if(!mayaReturn)state.page=defaultLanding();
+  state.page=defaultLanding();
   render();
+  // Payment and subscription-invite callbacks are intentionally processed only
+  // after the authenticated app is already rendered. They can never reject login.
+  setTimeout(()=>acceptPendingSubscriptionInvite(),120);
+  schedulePendingPaymentVerification(180);
 }
 function authView(register=false){document.getElementById('soundwave-player')?.remove();$('#app').innerHTML=`<div class="auth-wrap"><div class="auth-show"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div><div class="eyebrow">Your sound. Your space.</div><h1>Everything sounds better together.</h1><p class="muted">Discover music, build playlists, release tracks and explore podcasts.</p></div><div class="small" style="color:#c5cce6">Music &amp; podcasts, all in one place.</div></div><div class="auth-panel"><div class="auth-box"><div class="eyebrow">Welcome to SoundWave</div><h2>${register?'Create an account':'Listen without limits.'}</h2><p class="muted">${register?'Choose your account type and create your profile.':'Sign in to explore your music and podcasts.'}</p><div class="auth-mode"><button class="button ${register?'secondary':''}" id="mode-login">Sign in</button><button class="button ${register?'':'secondary'}" id="mode-register">Register</button></div><button type="button" class="button secondary auth-google" id="auth-google"><span class="auth-google-mark">G</span><span>Continue with Google</span></button><div class="auth-separator"><span>or continue with email</span></div><form class="form" id="authform">${register?`<div class="field"><label>Display name</label><input id="display-name" required maxlength="90" placeholder="Alex Rivera"/></div><div class="field"><label>Account type</label><select id="account-type"><option value="Listener">Listener</option><option value="Artist">Artist</option></select></div><div class="field" id="artist-name-field" style="display:none"><label>Artist name</label><input id="artist-name" maxlength="100" placeholder="Your stage name"/></div>`:''}<div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="your@email.com"/></div><div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/></div><button class="button" data-busy>${register?'Create account':'Sign in'} →</button></form><p class="footnote">Registration uses Supabase Auth. Email confirmation may be required depending on your project settings. Google sign-in requires the Google provider to be enabled in Supabase.</p></div></div></div>`;enhanceAuth();$('#mode-login').onclick=()=>authView(false);$('#mode-register').onclick=()=>authView(true);$('#auth-google')?.addEventListener('click',()=>action(async()=>{const { error } = await db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } }); if(error) throw error; }));$('#account-type')?.addEventListener('change',e=>{const a=e.target.value==='Artist';$('#artist-name-field').style.display=a?'flex':'none';$('#artist-name').required=a;});$('#authform').onsubmit=e=>{e.preventDefault();action(async()=>{const email=val('auth-email'),password=$('#auth-password').value;if(!register){const r=await db.auth.signInWithPassword({email,password});if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}throw r.error;}await finishInteractiveSignIn(r.data?.session);toast('Signed in');return;}const account_type=val('account-type'),display_name=val('display-name'),artist_name=account_type==='Artist'?val('artist-name'):null;const data=check(await db.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin,data:{name:display_name,full_name:display_name,account_type,artist_name}}}));if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){toast('That email is already registered. Please sign in instead.',true);authView(false);return;}if(data.session){console.warn('Supabase returned a session straight after sign-up, so "Confirm email" is OFF for this project. Turn it on in Authentication > Sign In / Providers > Email.');toast('Registration complete');}else{confirmView(email);}});};}
 async function loadData(){if(!state.user)return;const id=state.user.id;const requests=[
@@ -998,11 +1090,16 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
  // Premium entitlement is primarily derived from the user's active subscription.
  // If the optional helper RPC is installed it also resolves Duo/Family members.
  state.entitlement=null;
- const ent=await db.rpc('get_my_entitlement');
+ let ent=await db.rpc('soundwave_my_entitlement');
+ if(ent.error)ent=await db.rpc('get_my_entitlement');
  if(!ent.error){state.entitlement=Array.isArray(ent.data)?ent.data[0]:ent.data;}
  else {
    const own=state.subscriptions.find(x=>String(x.status).toLowerCase()==='active');
-   if(own)state.entitlement={is_premium:true,plan_name:own.plan?.plan_name||'Premium',subscription_id:own.subscription_id};
+   if(own)state.entitlement={is_premium:true,plan_name:own.plan?.plan_name||'Premium',subscription_id:own.subscription_id,plan_id:own.plan_id,relationship:'Owner',owner_user_id:id};
+ }
+ if(state.entitlement?.subscription_id){
+   const memberRpc=await db.rpc('subscription_members_for_current_plan',{p_subscription_id:Number(state.entitlement.subscription_id)});
+   if(!memberRpc.error&&Array.isArray(memberRpc.data))state.subscriptionMembers=memberRpc.data;
  }
  // Liked Songs: saved to your account; if the liked_song table is not installed yet, fall back to this device.
  const likedRes=await db.from('saved_song').select('song_id,date_saved').eq('user_id',id).order('date_saved',{ascending:false});
@@ -1018,7 +1115,7 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
    db.rpc('profile_stats'),
    state.artist?db.rpc('artist_studio_stats'):Promise.resolve({data:null,error:null}),
    state.artist?db.rpc('artist_royalty_summary'):Promise.resolve({data:null,error:null}),
-   db.rpc('my_subscription_entitlement'),
+   db.rpc('soundwave_my_entitlement'),
    state.admin?db.rpc('admin_moderation_data'):Promise.resolve({data:null,error:null}),
    db.from('subscription_request').select('*').eq('user_id',id).order('created_at',{ascending:false}),
    db.rpc('my_library_playlists'),
@@ -1714,10 +1811,14 @@ function plans(){
  const relationship=(current?.relationship||'Owner');
  const currentPlan=state.plans.find(p=>String(p.plan_id)===String(current?.plan_id)) || null;
  const maxMembers=Number(current?.max_members||currentPlan?.max_members||1);
- const ownedMembers=current?.subscription_id?state.subscriptionMembers.filter(m=>String(m.subscription_id)===String(current.subscription_id)):[];
- const usedSeats=Math.max(1,ownedMembers.length||0);
+ const ownedMembers=current?.subscription_id?state.subscriptionMembers.filter(m=>String(m.subscription_id)===String(current.subscription_id)&&String(m.user_id)!==String(current.owner_user_id||state.user?.id)):[];
+ const isPlanOwner=String(relationship).toLowerCase()==='owner';
+ const usedSeats=Math.min(maxMembers,1+ownedMembers.length);
  const availableSeats=Math.max(0,maxMembers-usedSeats);
- const sharedMemberRows=ownedMembers.length?`<div class="subscription-members-list">${ownedMembers.map((m,i)=>`<div class="subscription-member-chip"><span class="member-avatar">${esc(String(m.user_id||'U').slice(0,1).toUpperCase())}</span><span><strong>${String(m.user_id)===String(state.user?.id)?'You':`Member ${i+1}`}</strong><small>${String(m.user_id)===String(state.user?.id)?'Plan owner':'Shared seat'}</small></span></div>`).join('')}</div>`:'<p class="muted">No shared members are linked yet.</p>';
+ const ownerId=current?.owner_user_id||state.user?.id;
+ const memberCards=[`<div class="subscription-member-chip owner"><span class="member-avatar">${esc(String(ownerId||'O').slice(0,1).toUpperCase())}</span><span><strong>${isPlanOwner?'You':'Plan owner'}</strong><small>Owner</small></span></div>`];
+ ownedMembers.forEach((m,i)=>{const memberLabel=String(m.user_id)===String(state.user?.id)?'You':('Member '+(i+1));const removeButton=isPlanOwner&&String(m.user_id)!==String(state.user?.id)?`<button type="button" class="icon-quiet" data-remove-sub-member="${esc(m.user_id)}" title="Remove member">${icon('close')}</button>`:'';memberCards.push(`<div class="subscription-member-chip"><span class="member-avatar">${esc(String(m.user_id||'U').slice(0,1).toUpperCase())}</span><span><strong>${esc(memberLabel)}</strong><small>Shared Premium seat</small></span>${removeButton}</div>`);});
+ const sharedMemberRows=`<div class="subscription-members-list">${memberCards.join('')}</div>`;
  const sharedMemberInfo=state.sharedMemberships.length?`<div class="subscription-shared-note">${icon('users')} You are currently included in ${state.sharedMemberships.length} shared plan${state.sharedMemberships.length===1?'':'s'}.</div>`:'';
  const paymentRows=(state.paymentRows||[]).slice(0,5).map(r=>`<div class="subscription-payment-row"><span><strong>${esc(r.payment_status||'Recorded')}</strong><small>${esc(r.payment_method||'Payment')}</small></span><span>${r.payment_amount!=null?`₱${Number(r.payment_amount).toFixed(2)}`:'—'}</span><span>${esc(String(r.payment_date||'—').slice(0,10))}</span></div>`).join('');
  const cards=state.plans.map(p=>{
@@ -1726,44 +1827,40 @@ function plans(){
    const action=isCurrent?`<button class="button secondary" disabled>${icon('check')} Current plan</button>`:price<=0?`<button class="button secondary" disabled>Free access</button>`:`<button class="button" data-maya-plan="${p.plan_id}">${icon('forward')} Continue to Maya Sandbox</button>`;
    return `<article class="plan-card ${isCurrent?'current-plan':''}"><span>${esc(p.plan_name)}</span><strong>₱${price.toFixed(0)}<small>/month</small></strong><p>${p.max_members} ${Number(p.max_members)===1?'member':'members'}</p><small class="plan-meta">${Number(p.max_members)>1?'Best for shared listening':'Great for personal listening'}</small>${action}</article>`;
  }).join('');
- const manageSection=current?`<section class="subscription-layout"><article class="subscription-panel emphasis"><div class="subscription-panel-head"><div><span class="eyebrow">ACTIVE SUBSCRIPTION</span><h3>${esc(current.plan_name||'Premium')}</h3></div><span class="status-pill active">${esc(relationship)}</span></div><div class="subscription-stat-grid"><div><small>Status</small><strong>Premium active</strong></div><div><small>Downloads</small><strong>${state.offlineDownloads.length}</strong></div><div><small>Period</small><strong>${esc(current.start_date||'—')} → ${esc(current.end_date||'—')}</strong></div></div>${sharedMemberInfo}${relationship==='Owner'||relationship==='Admin'||maxMembers>1?`<div class="subscription-share-box"><div><strong>Plan sharing</strong><p>${maxMembers>1?`This plan supports up to ${maxMembers} members. ${availableSeats?`${availableSeats} seat${availableSeats===1?'':'s'} still available.`:'All seats are currently used.'}`:'This plan is intended for one member only.'}</p></div>${maxMembers>1?`<button type="button" class="button secondary" id="copy-plan-help">${icon('users')} Copy sharing guide</button>`:''}</div>`:''}</article><article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">MEMBERS</span><h3>${usedSeats} / ${maxMembers} seats used</h3></div></div>${sharedMemberRows}<p class="footnote">Additional users are linked through <code>subscription_member</code>. Owners can share multi-member plans; members receive Premium benefits under the same subscription.</p></article>${paymentRows?`<article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">PAYMENTS</span><h3>Recent payment records</h3></div></div><div class="subscription-payment-list">${paymentRows}</div></article>`:''}</section>`:`<section class="subscription-layout"><article class="subscription-panel maya-sandbox-info"><div class="subscription-panel-head"><div><span class="eyebrow">MAYA SANDBOX</span><h3>Instant Premium activation without real money</h3></div><span class="sandbox-badge">Test mode</span></div><div class="subscription-flow"><div><strong>1. Choose a paid plan</strong><p>SoundWave creates a Maya Sandbox checkout using the selected plan price from Supabase.</p></div><div><strong>2. Complete the sandbox checkout</strong><p>You are redirected to Maya's hosted test checkout. No real money is processed.</p></div><div><strong>3. Server verifies the payment</strong><p>A Supabase Edge Function verifies the Maya transaction instead of trusting the browser redirect.</p></div><div><strong>4. Premium activates automatically</strong><p>The subscription and payment records are created, then SoundWave reloads your Premium entitlement.</p></div></div></article></section>`;
- shell(`${current?`<section class="workspace-hero premium-hero"><div><span class="eyebrow">SUBSCRIPTION</span><h2>${esc(current.plan_name||'Premium')} is active.</h2><p>${esc(relationship)} · ${esc(current.start_date||'')} → ${esc(current.end_date||'')}</p><div class="inline hero-inline-pills">${premiumAccountBadge(current.plan_name||'Premium')}</div></div><span class="hero-vinyl">✓</span></section>`:`<section class="workspace-hero premium-hero"><div><span class="eyebrow">MAYA SANDBOX</span><h2>Upgrade to SoundWave Premium.</h2><p>Test the complete checkout and automatic activation flow without processing real money.</p></div><span class="hero-vinyl">M</span></section>`}${manageSection}<div class="section-heading subscription-heading"><div><h2>Available plans</h2><small class="muted">Paid plans open Maya Checkout Sandbox.</small></div><span class="sandbox-badge">Sandbox</span></div><div class="plan-grid">${cards}</div>
- <dialog class="sw-modal maya-checkout-dialog" id="maya-checkout-dialog"><div class="modal-head"><div><span class="eyebrow">MAYA CHECKOUT SANDBOX</span><h2 id="maya-checkout-title">Confirm plan</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="maya-checkout-body"><div class="maya-order-summary"><span class="maya-mark">M</span><div><small>SoundWave Premium</small><strong id="maya-plan-name">Premium</strong><p id="maya-plan-members">1 member</p></div><strong id="maya-plan-price">₱0</strong></div><div class="maya-test-notice">${icon('shield')} <span><strong>Sandbox payment</strong><small>This is a test transaction. No real money will be charged.</small></span></div><ol class="maya-checkout-steps"><li><span>1</span>SoundWave creates a secure checkout session.</li><li><span>2</span>You finish payment on Maya's sandbox page.</li><li><span>3</span>SoundWave verifies the payment and activates Premium.</li></ol><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button type="button" class="button maya-pay-button" id="maya-start-checkout">Continue to Maya Sandbox</button></div><p class="footnote">Requires the v19 Maya Sandbox SQL, Edge Functions, and Maya sandbox API keys included in this ZIP.</p></div></dialog>`,'Subscription',current?`${current.plan_name} subscription`:'Maya Sandbox Premium checkout.');
+ const manageSection=current?`<section class="subscription-layout"><article class="subscription-panel emphasis"><div class="subscription-panel-head"><div><span class="eyebrow">ACTIVE SUBSCRIPTION</span><h3>${esc(current.plan_name||'Premium')}</h3></div><span class="status-pill active">${esc(relationship)}</span></div><div class="subscription-stat-grid"><div><small>Status</small><strong>Premium active</strong></div><div><small>Downloads</small><strong>${state.offlineDownloads.length}</strong></div><div><small>Period</small><strong>${esc(current.start_date||'—')} → ${esc(current.end_date||'—')}</strong></div></div>${sharedMemberInfo}${relationship==='Owner'||relationship==='Admin'||maxMembers>1?`<div class="subscription-share-box"><div><strong>Plan sharing</strong><p>${maxMembers>1?`This plan supports up to ${maxMembers} members. ${availableSeats?`${availableSeats} seat${availableSeats===1?'':'s'} still available.`:'All seats are currently used.'}`:'This plan is intended for one member only.'}</p></div>${maxMembers>1&&isPlanOwner?`<button type="button" class="button secondary" id="invite-plan-member" ${availableSeats<1?'disabled':''}>${icon('users')} ${availableSeats>0?'Invite member':'Plan full'}</button>`:''}</div>`:''}</article><article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">MEMBERS</span><h3>${usedSeats} / ${maxMembers} seats used</h3></div></div>${sharedMemberRows}<p class="footnote">Additional users are linked through <code>subscription_member</code>. Owners can share multi-member plans; members receive Premium benefits under the same subscription.</p></article>${paymentRows?`<article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">PAYMENTS</span><h3>Recent payment records</h3></div></div><div class="subscription-payment-list">${paymentRows}</div></article>`:''}</section>`:`<section class="subscription-layout"><article class="subscription-panel maya-sandbox-info"><div class="subscription-panel-head"><div><span class="eyebrow">MAYA SANDBOX</span><h3>Instant Premium activation without real money</h3></div><span class="sandbox-badge">Test mode</span></div><div class="subscription-flow"><div><strong>1. Choose a paid plan</strong><p>SoundWave creates a Maya Sandbox checkout using the selected plan price from Supabase.</p></div><div><strong>2. Complete the sandbox checkout</strong><p>You are redirected to Maya's hosted test checkout. No real money is processed.</p></div><div><strong>3. Server verifies the payment</strong><p>A Supabase Edge Function verifies the Maya transaction instead of trusting the browser redirect.</p></div><div><strong>4. Premium activates automatically</strong><p>The subscription and payment records are created, then SoundWave reloads your Premium entitlement.</p></div></div></article></section>`;
+ const paymentNotice=state.mayaPaymentNotice?`<div class="payment-return-notice ${esc(state.mayaPaymentNotice.type||'info')}"><span>${state.mayaPaymentNotice.type==='success'?icon('check'):icon('clock')}</span><div><strong>${state.mayaPaymentNotice.type==='success'?'Premium activated':state.mayaPaymentNotice.type==='pending'?'Payment verification':'Checkout update'}</strong><p>${esc(state.mayaPaymentNotice.message||'')}</p></div>${state.mayaPaymentNotice.type==='pending'?`<button type="button" class="button secondary sm" id="retry-maya-payment">Retry verification</button>`:''}</div>`:'';
+ shell(`${paymentNotice}${current?`<section class="workspace-hero premium-hero"><div><span class="eyebrow">SUBSCRIPTION</span><h2>${esc(current.plan_name||'Premium')} is active.</h2><p>${esc(relationship)} · ${esc(current.start_date||'')} → ${esc(current.end_date||'')}</p><div class="inline hero-inline-pills">${premiumAccountBadge(current.plan_name||'Premium')}</div></div><span class="hero-vinyl">✓</span></section>`:`<section class="workspace-hero premium-hero"><div><span class="eyebrow">MAYA SANDBOX</span><h2>Upgrade to SoundWave Premium.</h2><p>Test the complete checkout and automatic activation flow without processing real money.</p></div><span class="hero-vinyl">M</span></section>`}${manageSection}<div class="section-heading subscription-heading"><div><h2>Available plans</h2><small class="muted">Paid plans open Maya Checkout Sandbox.</small></div><span class="sandbox-badge">Sandbox</span></div><div class="plan-grid">${cards}</div>
+ <dialog class="sw-modal maya-checkout-dialog" id="maya-checkout-dialog"><div class="modal-head"><div><span class="eyebrow">MAYA CHECKOUT SANDBOX</span><h2 id="maya-checkout-title">Confirm plan</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="maya-checkout-body"><div class="maya-order-summary"><span class="maya-mark">M</span><div><small>SoundWave Premium</small><strong id="maya-plan-name">Premium</strong><p id="maya-plan-members">1 member</p></div><strong id="maya-plan-price">₱0</strong></div><div class="maya-test-notice">${icon('shield')} <span><strong>Sandbox payment</strong><small>This is a test transaction. No real money will be charged.</small></span></div><ol class="maya-checkout-steps"><li><span>1</span>SoundWave creates a secure checkout session.</li><li><span>2</span>You finish payment on Maya's sandbox page.</li><li><span>3</span>SoundWave verifies the payment and activates Premium.</li></ol><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button type="button" class="button maya-pay-button" id="maya-start-checkout">Continue to Maya Sandbox</button></div><p class="footnote">Requires the Maya Sandbox SQL, Edge Functions, and Maya sandbox API keys included in this ZIP.</p></div></dialog>
+ <dialog class="sw-modal" id="subscription-invite-dialog"><div class="modal-head"><div><span class="eyebrow">SHARE PREMIUM</span><h2>Invite a member</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="form"><p class="muted">Generate a one-time link. The other person signs in to SoundWave and opens the link to use one available seat.</p><button type="button" class="button" id="generate-sub-invite">${icon('users')} Generate invite link</button><label class="single-field" id="sub-invite-result" hidden>Invite link<input id="sub-invite-url" readonly></label><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Done</button><button type="button" class="button secondary" id="copy-sub-invite" hidden>Copy link</button></div></div></dialog>
+ <dialog class="sw-modal premium-welcome-dialog" id="premium-welcome-dialog"><div class="modal-head"><div><span class="eyebrow">WELCOME TO PREMIUM</span><h2>Your Premium plan is active.</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="premium-benefit-grid"><div>${icon('download')}<strong>Offline downloads</strong><small>Save supported songs to this device.</small></div><div>${icon('check')}<strong>Premium status</strong><small>Your account now shows its active Premium plan.</small></div><div>${icon('users')}<strong>Plan sharing</strong><small>Eligible multi-seat plans can invite other SoundWave users.</small></div></div><div class="dialog-actions"><button type="button" class="button" data-close-modal>Start listening</button></div></dialog>`,'Subscription',current?`${current.plan_name} subscription`:'Maya Sandbox Premium checkout.');
  let chosenPlan=null;
  document.querySelectorAll('[data-maya-plan]').forEach(b=>b.onclick=()=>{chosenPlan=state.plans.find(x=>String(x.plan_id)===String(b.dataset.mayaPlan));if(!chosenPlan)return;$('#maya-plan-name').textContent=chosenPlan.plan_name;$('#maya-plan-members').textContent=`${chosenPlan.max_members} ${Number(chosenPlan.max_members)===1?'member':'members'}`;$('#maya-plan-price').textContent=`₱${Number(chosenPlan.monthly_price||0).toFixed(2)}`;$('#maya-checkout-title').textContent=`Choose ${chosenPlan.plan_name}`;$('#maya-checkout-dialog').showModal();});
  $('#maya-start-checkout')?.addEventListener('click',()=>action(async()=>{
-   if(!chosenPlan)throw Error('Choose a Premium plan first.');
+   if(!chosenPlan){toast('Choose a Premium plan first.',true);return;}
    const btn=$('#maya-start-checkout');btn.disabled=true;btn.textContent='Creating Maya checkout…';
    try{
      const {data,error}=await db.functions.invoke('maya-create-checkout',{body:{plan_id:Number(chosenPlan.plan_id)}});
-     if(error)throw error;if(data?.error)throw Error(data.error);if(!data?.checkout_url)throw Error('Maya checkout URL was not returned.');
+     if(error){toast(`Could not start Maya Sandbox checkout: ${await edgeFunctionMessage(error)}`,true);return;}
+     if(data?.error){toast(`Could not start Maya Sandbox checkout: ${data.error}`,true);return;}
+     if(!data?.checkout_url){toast('Maya did not return a checkout URL. Check the Edge Function logs.',true);return;}
      sessionStorage.setItem('soundwave-maya-reference',String(data.reference||''));
      window.location.assign(data.checkout_url);
    }finally{btn.disabled=false;btn.textContent='Continue to Maya Sandbox';}
  }));
- $('#copy-plan-help')?.addEventListener('click',async()=>{const text=`SoundWave plan sharing: this ${current?.plan_name||'Premium'} plan supports up to ${maxMembers} members. Additional users are linked in the subscription_member table.`;try{await navigator.clipboard.writeText(text);toast('Sharing guide copied');}catch{toast('Could not copy the sharing guide',true);}});
+ $('#retry-maya-payment')?.addEventListener('click',()=>{state.mayaPaymentNotice={type:'pending',message:'Retrying payment verification…'};processPendingMayaReturn();});
+ $('#invite-plan-member')?.addEventListener('click',()=>document.getElementById('subscription-invite-dialog')?.showModal());
+ $('#generate-sub-invite')?.addEventListener('click',()=>action(async()=>{
+   if(!current?.subscription_id)throw Error('No active subscription was found.');
+   const {data,error}=await db.rpc('create_subscription_invite',{p_subscription_id:Number(current.subscription_id)});
+   if(error)throw error;const token=Array.isArray(data)?data[0]?.token??data[0]:data?.token??data;if(!token)throw Error('No invite token was returned.');
+   const url=`${location.origin}${location.pathname}?subscription_invite=${encodeURIComponent(String(token))}#/plans`;
+   document.getElementById('sub-invite-url').value=url;document.getElementById('sub-invite-result').hidden=false;document.getElementById('copy-sub-invite').hidden=false;
+ }));
+ $('#copy-sub-invite')?.addEventListener('click',async()=>{const input=document.getElementById('sub-invite-url');if(!input?.value)return;try{await navigator.clipboard.writeText(input.value);toast('Premium invite link copied');}catch{input.select();document.execCommand?.('copy');toast('Invite link ready to share');}});
+ document.querySelectorAll('[data-remove-sub-member]').forEach(b=>b.onclick=()=>{if(!confirm('Remove this member from the Premium plan?'))return;action(async()=>{const {error}=await db.rpc('remove_subscription_member',{p_subscription_id:Number(current.subscription_id),p_user_id:b.dataset.removeSubMember});if(error)throw error;await loadData();render();toast('Member removed');});});
 }
 
-async function handleMayaReturn(){
- if(!state.user)return false;
- const params=new URLSearchParams(location.search),result=params.get('maya');
- if(!result)return false;
- const reference=params.get('rrn')||sessionStorage.getItem('soundwave-maya-reference')||'';
- state.page='plans';
- const clean=()=>{params.delete('maya');params.delete('rrn');sessionStorage.removeItem('soundwave-maya-reference');const query=params.toString();history.replaceState(history.state||{},document.title,`${location.pathname}${query?`?${query}`:''}#/plans`);};
- if(result==='success'){
-   toast('Verifying Maya Sandbox payment…');
-   try{
-     const {data,error}=await db.functions.invoke('maya-confirm-payment',{body:{reference}});
-     if(error)throw error;if(data?.error)throw Error(data.error);
-     await loadData();
-     toast('Sandbox payment verified. Premium is active!');
-   }catch(e){console.error(e);toast(`Maya returned successfully, but verification is still pending: ${humanErr(e)}`,true);}
- }else if(result==='cancelled')toast('Maya Sandbox checkout was cancelled.');
- else toast('Maya Sandbox payment was not completed.',true);
- clean();
- return true;
-}
+// Maya return processing is handled by captureMayaReturn/processPendingMayaReturn above.
 
 // ---------- Step-by-step upload helpers (songs + podcasts) ----------
 function howItWorks(steps) {
@@ -2151,9 +2248,31 @@ async function acceptPendingPlaylistInvite(){
    window.history.replaceState(window.history.state||{},document.title,cleanUrl);
  }catch(e){console.error(e);toast(humanErr(e),true);}
 }
-async function boot(){if(requireConfig())return;try{const result=await db.auth.getSession();if(result.error)throw result.error;state.user=result.data.session?.user||null;state.hist.i=window.history.state?.i??0;state.hist.max=state.hist.i;if(state.user){await loadData();await loadCompetitionData();await restoreLastSongPlayer();setupRealtime();bindCrossDeviceRefresh();await acceptPendingPlaylistInvite();const mayaReturn=await handleMayaReturn();const matched=mayaReturn?true:applyHash(location.hash), firstRoleEntry=!sessionStorage.getItem('soundwave-role-entry');if(!matched||(firstRoleEntry&&/^#\/(?:discover|home)?$/.test(location.hash||'#/discover')))state.page=defaultLanding();sessionStorage.setItem('soundwave-role-entry','1');}await routeLoad();}catch(e){console.error(e);state.error=humanErr(e);authView();toast(state.error,true);}db.auth.onAuthStateChange((event,session)=>{ // Schedule outside callback to avoid auth-client re-entrancy/deadlocks.
- setTimeout(()=>{action(async()=>{const newUser=session?.user||null;if(newUser?.id===state.user?.id)return;await stopAudio();state.user=newUser;state.coverUrls={};state.selectedPlaylist=null;state.page='discover';state.routeReady=false;if(newUser){await loadData();await loadCompetitionData();await restoreLastSongPlayer();setupRealtime();bindCrossDeviceRefresh();state.playlistInviteHandled=false;await acceptPendingPlaylistInvite();const mayaReturn=await handleMayaReturn();if(!mayaReturn)state.page=defaultLanding();}render();});},0);
-});}
+async function boot(){
+ if(requireConfig())return;
+ captureMayaReturn();
+ try{
+   const result=await db.auth.getSession();if(result.error)throw result.error;
+   state.user=result.data.session?.user||null;state.hist.i=window.history.state?.i??0;state.hist.max=state.hist.i;
+   if(state.user){
+     await loadData();await loadCompetitionData();await restoreLastSongPlayer();setupRealtime();bindCrossDeviceRefresh();await acceptPendingPlaylistInvite();
+     const matched=applyHash(location.hash),firstRoleEntry=!sessionStorage.getItem('soundwave-role-entry');
+     if(!matched||(firstRoleEntry&&/^#\/(?:discover|home)?$/.test(location.hash||'#/discover')))state.page=defaultLanding();
+     sessionStorage.setItem('soundwave-role-entry','1');
+   }
+   await routeLoad();
+   if(state.user){setTimeout(()=>acceptPendingSubscriptionInvite(),120);schedulePendingPaymentVerification(180);}
+ }catch(e){console.error(e);state.error=humanErr(e);authView();toast(state.error,true);}
+ db.auth.onAuthStateChange((event,session)=>{
+   setTimeout(()=>{action(async()=>{
+     const newUser=session?.user||null;if(newUser?.id===state.user?.id)return;
+     await stopAudio();state.user=newUser;state.coverUrls={};state.selectedPlaylist=null;state.page='discover';state.routeReady=false;
+     if(newUser){await loadData();await loadCompetitionData();await restoreLastSongPlayer();setupRealtime();bindCrossDeviceRefresh();state.playlistInviteHandled=false;await acceptPendingPlaylistInvite();state.page=defaultLanding();}
+     render();
+     if(newUser){setTimeout(()=>acceptPendingSubscriptionInvite(),120);schedulePendingPaymentVerification(180);}
+   });},0);
+ });
+}
 function queueRow(item, idx) {
   return `<button type="button" class="queue-row ${idx == null ? 'current' : ''}" ${idx != null ? `data-queue-jump="${idx}"` : ''}><span class="queue-art">${item.song ? albumArt(item.song, 'tiny') : `<span class="placeholder-art tiny">${icon('mic')}</span>`}</span><span class="queue-text"><strong>${esc(item.title)}</strong><small>${esc(item.artist)}</small></span></button>`;
 }
