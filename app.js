@@ -12,7 +12,7 @@ const $ = (selector) => document.querySelector(selector);
 const escapeHtml = (v = '') => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const state = { user:null, profile:null, artist:null, admin:false, page:'discover', songs:[], artists:[], favorites:[], playlists:[], playlistSongs:[], playlistCollaborators:[], albums:[], genres:[], plans:[], subscriptions:[], podcasts:[], episodes:[], myShows:[], history:[], members:[], selectedShow:null, selectedPlaylist:null, selectedArtist:null, podcastHistory:[], followers:[], following:[], player:null, playerToken:0, loading:false, error:'',coverUrls:{},subscriptionMembers:[],sharedMemberships:[],paymentRows:[],uiFilter:'all',libraryExpanded:true,navStack:[],navForward:[],songMenu:null, offlineDownloads:[], entitlement:null, socialSource:'user_follow', liked:[], likedIds:new Set(), likesAvailable:true, selectedAlbum:null, searchQuery:'', searchGenre:null, searchTab:'all', libFilter:'all', discoverFilter:'all', railTab:'now', hist:{i:0,max:0}, routeReady:false, installEvent:null, tint:null, focusSearch:null, libQuery:'', libSearchOpen:false };
 Object.assign(state, { historyError: '', historyWriteError: '', episodeTitles: {}, likesMode: 'remote', artistFollowers: [], followerCounts: {}, socialProfiles: {}, socialRpc: { counts: false, mine: false, profiles: false }, profileStats:null, studioStats:null, royaltySummary:null, adminData:null, subscriptionRequests:[], lyricsCache:{}, profilePhotoUrl:null, ownedSongs:[], adminTab:'accounts', playlistInviteHandled:false });
-Object.assign(state,{insightHistory:[],listeningStats:null,topWeekSongs:[],friendActivity:[],friendNow:[],artistThirtyDay:[],artistTopListeners:[],adminAnalyticsHistory:[],recentSearches:[],playlistPresence:[],competitionLoaded:false});
+Object.assign(state,{insightHistory:[],listeningStats:null,topWeekSongs:[],friendActivity:[],friendNow:[],artistThirtyDay:[],artistTopListeners:[],adminAnalyticsHistory:[],recentSearches:[],playlistPresence:[],competitionLoaded:false,podcastStudioHistory:[]});
 const nice = (n) => Number.isFinite(Number(n)) ? `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}` : '—';
 const val = (id) => document.getElementById(id)?.value?.trim();
 const opts = (rows,key,label) => rows.map(x=>`<option value="${escapeHtml(x[key])}">${escapeHtml(x[label])}</option>`).join('');
@@ -577,7 +577,15 @@ function bindPlayerBar(audio, details, token) {
   $('#sw-mute').onclick = () => { prefs.muted = !prefs.muted; if (!prefs.muted && prefs.volume === 0) prefs.volume = .5; savePrefs(); paintVol(); };
   $('#sw-queue').onclick = () => { state.railTab = state.railTab === 'queue' && !prefs.railHidden ? 'now' : 'queue'; if (prefs.railHidden) toggleRail(false); refreshRail(); };
   $('#sw-view').onclick = () => { toggleRail(); $('#sw-view').classList.toggle('active', !prefs.railHidden); refreshRail(); };
-  audio.addEventListener('timeupdate', sync); audio.addEventListener('loadedmetadata', sync); audio.addEventListener('durationchange', sync);
+  audio.addEventListener('timeupdate', () => {
+    sync();
+    if (!live()) return;
+    const seconds=Math.floor(Number(audio.currentTime)||0);
+    if(seconds>=5 && (!details.checkpointAt || seconds-details.checkpointAt>=10)){
+      details.checkpointAt=seconds;
+      void saveListening(false);
+    }
+  }); audio.addEventListener('loadedmetadata', sync); audio.addEventListener('durationchange', sync);
   audio.onplay = () => { sync(); markPlaying(); if (live()) details.createPromise = createListening(); };
   audio.onpause = () => { sync(); markPlaying(); if (live()) void saveListening(false); };
   audio.onended = () => { sync(); markPlaying(); if (live()) { void saveListening(true); if (details.kind === 'song') action(() => skip(1, true)); } };
@@ -614,12 +622,51 @@ function initMediaKeys() {
 async function createListening(){const p=state.player;if(!p||p.recorded||p.creating||!state.user)return;p.creating=true;
  const isPodcast=p.kind==='podcast';const table=isPodcast?'podcast_listening_history':'listening_history';
  const payload=isPodcast?{user_id:state.user.id,episode_id:p.id,duration_played_seconds:0,resume_position_seconds:0,completion_status:'Partial',device_type:'Web'}:{user_id:state.user.id,song_id:p.id,duration_played_seconds:0,completion_status:'Partial',device_type:'Web',stream_quality:'Standard'};
- try{const q=check(await db.from(table).insert(payload).select(isPodcast?'podcast_stream_id':'stream_id').single());p.historyId=q[isPodcast?'podcast_stream_id':'stream_id'];p.recorded=true;state.historyWriteError='';const row=isPodcast?{podcast_stream_id:p.historyId,episode_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,resume_position_seconds:0,completion_status:'Partial'}:{stream_id:p.historyId,song_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,completion_status:'Partial'};(isPodcast?state.podcastHistory:state.history).unshift(row);if(isPodcast)state.episodeTitles[p.id]=p.title;if(state.page==='history')render();}catch(e){console.warn('Listening-history write failed:',e);state.historyWriteError=humanErr(e);toast('Playback works, but history could not be recorded: '+humanErr(e),true);p.recorded=true;if(state.page==='history')render();}finally{p.creating=false;}
+ try{const q=check(await db.from(table).insert(payload).select(isPodcast?'podcast_stream_id':'stream_id').single());p.historyId=q[isPodcast?'podcast_stream_id':'stream_id'];p.recorded=true;state.historyWriteError='';const row=isPodcast?{podcast_stream_id:p.historyId,episode_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,resume_position_seconds:0,completion_status:'Partial'}:{stream_id:p.historyId,song_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,completion_status:'Partial'};(isPodcast?state.podcastHistory:state.history).unshift(row);if(isPodcast)state.episodeTitles[p.id]=p.title;else scheduleStreamMetricsRefresh();if(state.page==='history')render();}catch(e){console.warn('Listening-history write failed:',e);state.historyWriteError=humanErr(e);toast('Playback works, but history could not be recorded: '+humanErr(e),true);p.recorded=true;if(state.page==='history')render();}finally{p.creating=false;}
 }
 async function saveListening(ended=false){const p=state.player, audio=document.getElementById('sw-audio');if(!p||!audio)return;const elapsed=Math.floor(Number(audio.currentTime)||0);if(p.createPromise)await p.createPromise;if(!p.historyId)return;const maximum=Number(p.duration)||Math.ceil(audio.duration)||elapsed;const seconds=Math.min(elapsed,maximum);if(seconds===p.lastSaved&&!ended)return;p.lastSaved=seconds;const isPodcast=p.kind==='podcast';const payload={duration_played_seconds:seconds,completion_status:ended?'Completed':seconds<5?'Skipped':'Partial'};if(isPodcast)payload.resume_position_seconds=ended?0:seconds;
  const r=await db.from(isPodcast?'podcast_listening_history':'listening_history').update(payload).eq(isPodcast?'podcast_stream_id':'stream_id',p.historyId);if(r.error){console.warn('Could not update playback history:',r.error);return;}
  const list=isPodcast?state.podcastHistory:state.history,key=isPodcast?'podcast_stream_id':'stream_id',row=list.find(x=>x[key]===p.historyId);if(row)Object.assign(row,payload);
+ if(!isPodcast)scheduleStreamMetricsRefresh();
 }
+let streamMetricsRefreshTimer=null;
+function scheduleStreamMetricsRefresh(){
+  clearTimeout(streamMetricsRefreshTimer);
+  streamMetricsRefreshTimer=setTimeout(()=>{void refreshStreamMetrics();},450);
+}
+async function refreshStreamMetrics(){
+  if(!state.user||!db)return;
+  try{
+    const now=Date.now(),since90=new Date(now-90*86400000).toISOString(),since30=new Date(now-30*86400000).toISOString();
+    const hist=await db.from('listening_history').select('stream_id,user_id,song_id,stream_date,duration_played_seconds,completion_status').eq('user_id',state.user.id).gte('stream_date',since90).order('stream_date',{ascending:false}).limit(1500);
+    if(!hist.error){
+      state.insightHistory=hist.data||[];
+      state.listeningStats=computeListeningStats(state.insightHistory);
+      const weekCut=now-7*86400000,counts=new Map();
+      state.insightHistory.filter(r=>new Date(r.stream_date).getTime()>=weekCut).forEach(r=>counts.set(Number(r.song_id),(counts.get(Number(r.song_id))||0)+1));
+      state.topWeekSongs=[...counts.entries()].sort((a,b)=>b[1]-a[1]).map(([id])=>songById(id)).filter(Boolean).slice(0,20);
+    }
+    const ps=await db.rpc('profile_stats');
+    if(!ps.error)state.profileStats=Array.isArray(ps.data)?ps.data[0]:ps.data;
+    if(state.artist&&state.ownedSongs.length){
+      const songIds=state.ownedSongs.map(s=>s.song_id);
+      const [ar,ss,roy]=await Promise.all([
+        db.from('listening_history').select('user_id,song_id,stream_date,duration_played_seconds,completion_status').in('song_id',songIds).gte('stream_date',since30).order('stream_date',{ascending:true}).limit(4000),
+        db.rpc('artist_studio_stats'),
+        db.rpc('artist_royalty_summary')
+      ]);
+      if(!ar.error){
+        state.artistThirtyDay=ar.data||[];
+        const listeners=new Map();state.artistThirtyDay.forEach(r=>listeners.set(String(r.user_id),(listeners.get(String(r.user_id))||0)+1));
+        state.artistTopListeners=[...listeners.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([uid,count])=>({uid,count,name:state.socialProfiles[uid]?.display_name||`Listener ${uid.slice(0,6)}`}));
+      }
+      if(!ss.error)state.studioStats=Array.isArray(ss.data)?ss.data[0]:ss.data;
+      if(!roy.error)state.royaltySummary=Array.isArray(roy.data)?roy.data[0]:roy.data;
+    }
+    if(['discover','listener-dashboard','artist-dashboard','studio','history','profile'].includes(state.page))render();
+  }catch(e){console.warn('Could not refresh stream-dependent metrics:',e);}
+}
+
 // Shown after sign-up (and when someone tries to sign in before confirming): tells them to check their inbox, with a resend button.
 function confirmView(email) {
   authView(false);
@@ -661,6 +708,22 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
    state.artist=null;
  }
  if(state.artist){const r=await db.from('album').select('album_id,album_title,description,release_type,release_date,cover_path,is_active').eq('artist_id',state.artist.artist_id).order('album_id',{ascending:false});state.albums=r.error?[]:r.data;const albumIds=state.albums.map(a=>a.album_id);if(albumIds.length){const sr=await db.from('song').select('song_id,album_id,genre_id,song_title,description,cover_path,duration_seconds,track_number,audio_path,is_active').in('album_id',albumIds).order('song_id',{ascending:false});state.ownedSongs=sr.error?[]:(sr.data||[]).map(song=>{const a=state.albums.find(x=>Number(x.album_id)===Number(song.album_id));return {...song,album:a?{...a,artist:state.artist}:null};});}else state.ownedSongs=[];}else{state.albums=[];state.ownedSongs=[];}if(state.selectedPlaylist && !state.playlists.some(p=>p.playlist_id===state.selectedPlaylist)){state.selectedPlaylist=null;state.playlistSongs=[];}
+ // Keep Podcast Studio statistics accurate even before a show is opened.
+ // showDetail() may later replace state.episodes with one selected show's rows.
+ const ownShowIdsForStudio=state.myShows.map(x=>Number(x.show_id)).filter(Boolean);
+ state.podcastStudioHistory=[];
+ if(ownShowIdsForStudio.length){
+   const er=await db.from('podcast_episode').select('episode_id,show_id,episode_title,description,duration_seconds,audio_path,release_at,is_active').in('show_id',ownShowIdsForStudio).order('release_at',{ascending:false});
+   if(!er.error){
+     state.episodes=er.data||[];
+     const ownEpisodeIdsForStudio=state.episodes.map(x=>Number(x.episode_id)).filter(Boolean);
+     if(ownEpisodeIdsForStudio.length){
+       const ph=await db.from('podcast_listening_history').select('podcast_stream_id,episode_id,stream_date,duration_played_seconds,completion_status').in('episode_id',ownEpisodeIdsForStudio).order('stream_date',{ascending:false}).limit(3000);
+       if(!ph.error)state.podcastStudioHistory=ph.data||[];
+     }
+   }else console.warn('Podcast Studio episodes unavailable',er.error);
+ }else if(!state.selectedShow){state.episodes=[];}
+
  // Load owned subscription members; no auth.users enumeration in the browser.
  state.subscriptionMembers=[];state.sharedMemberships=[];state.paymentRows=[];
  const shared=await db.from('subscription_member').select('subscription_id,user_id').eq('user_id',id);if(!shared.error)state.sharedMemberships=shared.data||[];else console.warn('Shared memberships unavailable',shared.error);
@@ -856,7 +919,10 @@ function curatedTile(pick){
   return `<article class="release-tile curated-card card-link" tabindex="0" role="link" ${song.album?`data-open-album="${song.album.album_id}"`:''} data-queue="${q}"><span class="release-art">${albumArt(song,'large')}<button type="button" class="hover-play" data-play="${song.song_id}" aria-label="Play ${esc(song.song_title)}">${icon('play')}</button></span><strong>${esc(song.song_title)}</strong><small>${esc(song.album?.artist?.artist_name||'SoundWave artist')}</small><span class="reason-caption">${esc(pick.reason)}</span></article>`;
 }
 function discoverFilterChips(){
-  return `<div class="discover-filter-bar" role="tablist" aria-label="Filter Discover">${[['all','All'],['music','Music'],['podcasts','Podcasts']].map(([key,label])=>`<button type="button" class="discover-filter-chip ${state.discoverFilter===key?'active':''}" data-discover-filter="${key}" role="tab" aria-selected="${state.discoverFilter===key}">${label}</button>`).join('')}</div>`;
+  const musicCount=catalogAlbums().filter(a=>a?.is_active!==false&&a?.artist?.is_active!==false).length;
+  const counts={all:musicCount+state.podcasts.length,music:musicCount,podcasts:state.podcasts.length};
+  const icons={all:'grid',music:'music',podcasts:'mic'};
+  return `<div class="discover-filter-wrap"><span class="discover-filter-label">Show</span><div class="discover-filter-bar" role="tablist" aria-label="Filter Discover">${[['all','All'],['music','Music'],['podcasts','Podcasts']].map(([key,label])=>`<button type="button" class="discover-filter-chip ${state.discoverFilter===key?'active':''}" data-discover-filter="${key}" role="tab" aria-selected="${state.discoverFilter===key}">${icon(icons[key])}<span>${label}</span><span class="filter-count">${counts[key]}</span></button>`).join('')}</div></div>`;
 }
 function discoverPage(){
   const all=[...catalogAlbums()].filter(a=>a?.artist && a.is_active!==false && a.artist?.is_active!==false && a.songs?.some(s=>s.is_active!==false)).sort((a,b)=>String(b.release_date||'').localeCompare(String(a.release_date||''))||Number(b.album_id)-Number(a.album_id));
@@ -914,7 +980,8 @@ function bindMusic(root = document) {
 
 // ---------- Library sidebar (Spotify-style "Your Library") ----------
 function libraryChips() {
-  return [['playlists', 'Playlists'], ['artists', 'Artists'], ['podcasts', 'Podcasts']].map(([k, label]) => `<button type="button" class="filter-pill ${state.libFilter === k ? 'active' : ''}" data-lib-filter="${k}" aria-pressed="${state.libFilter === k}">${label}</button>`).join('');
+  const counts={all:state.playlists.length+state.artists.filter(a=>state.favorites.some(x=>x.artist_id===a.artist_id)).length+state.myShows.filter(s=>s.is_active).length,playlists:state.playlists.length,artists:state.artists.filter(a=>state.favorites.some(x=>x.artist_id===a.artist_id)).length,podcasts:state.myShows.filter(s=>s.is_active).length};
+  return [['all','All'],['playlists','Playlists'], ['artists', 'Artists'], ['podcasts', 'Podcasts']].map(([k, label]) => `<button type="button" class="filter-pill ${state.libFilter === k ? 'active' : ''}" data-lib-filter="${k}" aria-pressed="${state.libFilter === k}"><span>${label}</span><span class="filter-count">${counts[k]}</span></button>`).join('');
 }
 function libraryToolsHtml() {
   const open = state.libSearchOpen || state.libQuery;
@@ -923,7 +990,12 @@ function libraryToolsHtml() {
 function libraryEntries() {
   const f = state.libFilter, q = (state.libQuery || '').trim().toLowerCase(), out = [];
   const add = (name, meta, art, attrs, active, cls = '') => out.push({ name, meta, art, attrs, active, cls });
-  if (f === 'all' || f === 'playlists') state.playlists.slice(0, 80).forEach((p, i) => add(p.playlist_name, `Playlist · ${p.visibility}`, `<span class="library-art" style="background:${grad(i)}">${icon('music')}</span>`, `data-openplaylist="${p.playlist_id}"`, state.page === 'playlists' && state.selectedPlaylist === p.playlist_id));
+  if (f === 'all' || f === 'playlists') state.playlists.slice(0, 80).forEach((p, i) => {
+    const playlistArt=p.cover_path&&state.coverUrls[p.cover_path]
+      ? `<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="${esc(p.playlist_name)} cover" loading="lazy">`
+      : icon('music');
+    add(p.playlist_name, `Playlist · ${p.visibility}`, `<span class="library-art playlist-library-art" style="background:${grad(i)}">${playlistArt}</span>`, `data-openplaylist="${p.playlist_id}"`, state.page === 'playlists' && state.selectedPlaylist === p.playlist_id);
+  });
   if (f === 'all' || f === 'podcasts') state.myShows.filter((s) => s.is_active).slice(0, 40).forEach((s, i) => {
     const podcastArt = s.cover_path && state.coverUrls[s.cover_path]
       ? `<img class="cover-img" src="${esc(state.coverUrls[s.cover_path])}" alt="${esc(s.show_title)}">`
@@ -1235,8 +1307,8 @@ function podcastStudio(){
  const ownEpisodes=state.episodes.filter(ep=>ownShowIds.has(Number(ep.show_id)));
  const activeEpisodes=ownEpisodes.filter(ep=>ep.is_active!==false).length;
  const ownEpisodeIds=new Set(ownEpisodes.map(ep=>Number(ep.episode_id)));
- const totalListens=(state.podcastHistory||[]).filter(h=>ownEpisodeIds.has(Number(h.episode_id))).length;
- const showCards=state.myShows.map((p,i)=>`<article class="podcast-studio-card"><div class="podcast-card-art" style="background:${grad(i)}">${p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="${esc(p.show_title)}">`:icon('mic')}</div><div class="podcast-card-copy"><div class="card-title-line"><strong>${esc(p.show_title)}</strong><span class="status-pill ${p.is_active?'active':'inactive'}">${p.is_active?'Active':'Inactive'}</span></div><small>${esc(p.category||'Podcast')}</small><p>${esc(p.description||'No description yet.')}</p></div><div class="card-actions"><button class="button secondary sm" data-studio-show="${p.show_id}" aria-label="Edit ${esc(p.show_title)}">${icon('settings')} Edit</button><button class="button secondary sm" data-show-active="${p.show_id}" data-active="${p.is_active?'false':'true'}" aria-label="${p.is_active?'Deactivate':'Restore'} ${esc(p.show_title)}">${p.is_active?'Deactivate':'Restore'}</button></div></article>`).join('');
+ const totalListens=(state.podcastStudioHistory||[]).filter(h=>ownEpisodeIds.has(Number(h.episode_id))).length;
+ const showCards=state.myShows.map((p,i)=>`<article class="podcast-studio-card"><div class="podcast-card-art-wrap"><div class="podcast-card-art" style="background:${grad(i)}">${p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="${esc(p.show_title)}" loading="lazy">`:icon('mic')}</div><span class="podcast-card-state status-pill ${p.is_active?'active':'inactive'}">${p.is_active?'Active':'Inactive'}</span></div><div class="podcast-card-copy"><span class="podcast-card-category">${esc(p.category||'Podcast')}</span><strong class="podcast-card-title">${esc(p.show_title)}</strong><p>${esc(p.description||'No description yet. Add a short description so listeners know what your show is about.')}</p></div><div class="card-actions podcast-card-actions"><button class="button secondary sm" data-studio-show="${p.show_id}" aria-label="Edit ${esc(p.show_title)}">${icon('settings')} <span>Edit show</span></button><button class="button secondary sm ${p.is_active?'danger-soft':''}" data-show-active="${p.show_id}" data-active="${p.is_active?'false':'true'}" aria-label="${p.is_active?'Deactivate':'Restore'} ${esc(p.show_title)}">${p.is_active?'Deactivate':'Restore'}</button></div></article>`).join('');
  shell(`<section class="workspace-hero podcast-studio-hero"><div><span class="eyebrow">CREATOR WORKSPACE</span><h2>Podcast Studio</h2><p>Publish shows and episodes with a focused workflow built for creators.</p><div class="inline"><button class="button hero-cta" data-open-modal="create-show-dialog">${icon('plus')} Create show</button><button class="button secondary" data-open-modal="publish-episode-dialog" ${!activeShows.length?'disabled':''}>${icon('upload')} Publish episode</button></div></div><span class="hero-vinyl">${icon('mic')}</span></section>
  <section class="studio-stat-strip three"><button type="button" data-open-modal="create-show-dialog"><small>Shows</small><strong data-count="${state.myShows.length}">${state.myShows.length}</strong><span>Your podcast catalog</span></button><button type="button" data-open-modal="publish-episode-dialog" ${!activeShows.length?'disabled':''}><small>Active episodes</small><strong data-count="${activeEpisodes}">${activeEpisodes}</strong><span>Currently available</span></button><button type="button" data-nav="podcasts"><small>Total listens</small><strong data-count="${totalListens}">${totalListens}</strong><span>Visible listening records</span></button></section>
  <div class="section-heading"><div><span class="eyebrow">YOUR SHOWS</span><h2>Manage your podcasts</h2></div><button class="text-link" data-nav="podcasts">Explore podcasts</button></div><div class="podcast-studio-grid">${showCards||`<div class="empty studio-empty"><span>${icon('mic')}</span><h3>Start your first show</h3><p>Create a show, add cover art, then publish your first episode.</p><button class="button" data-open-modal="create-show-dialog">${icon('plus')} Create show</button></div>`}</div>
