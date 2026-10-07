@@ -1261,7 +1261,8 @@ html,body{max-width:100%;overflow-x:hidden}
 .page-search.mobile-search{display:none}
 .library-filters{display:none!important}
 @media (max-width:700px){
-  html,body,#app{width:100%;max-width:100%;overflow-x:hidden}
+  html,body{width:100%;max-width:100%;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #app{width:100%;max-width:100%;min-height:100dvh;overflow:visible}
   .app-top{height:var(--space-5);padding:0 var(--space-1);gap:var(--space-1)}
   .app-top-left{flex:1;min-width:0;gap:var(--space-1)}
   .top-logo{width:var(--space-4);height:var(--space-4);flex:0 0 var(--space-4)}
@@ -1273,8 +1274,9 @@ html,body{max-width:100%;overflow-x:hidden}
 
   .workspace,.workspace:has(.library-collapsed),body.rail-hidden .workspace{display:block;width:100%;max-width:100%;padding:0}
   .workspace .sidebar,.workspace .context-rail{display:none!important}
-  .workspace .main{width:100%;max-width:100%;min-height:calc(100dvh - 117px);border-radius:0;overflow:hidden}
-  .dashboard-content{width:100%;max-width:100%;padding:var(--space-2) var(--space-2) calc(var(--space-5) + env(safe-area-inset-bottom,0))}
+  .workspace .main{width:100%;max-width:100%;height:auto!important;min-height:calc(100dvh - 117px);border-radius:0;overflow:visible!important}
+  .dashboard-content{width:100%;max-width:100%;min-height:100%;padding:var(--space-2) var(--space-2) calc(69px + var(--space-3) + env(safe-area-inset-bottom,0))}
+  body:has(#soundwave-player) .dashboard-content{padding-bottom:calc(69px + 72px + var(--space-3) + env(safe-area-inset-bottom,0))}
   .page-intro{margin:0 0 var(--space-2)}
   .page-title{font-size:var(--type-5);line-height:1.15}
 
