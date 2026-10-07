@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://azqbzyxknfdwfuqevbrd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OcR9EJnNuPqBWtZrmNVUdA_tt_CMCmR';
 const configured = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('YOUR_PROJECT') && !SUPABASE_KEY.includes('YOUR_PUBLISHABLE_KEY'));
 const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, flowType: 'implicit' }
+  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, flowType: 'pkce' }
 }) : null;
 /* ====== APP ====== */
 
@@ -387,8 +387,45 @@ function showCard(p, i = 0) {
   return `<button type="button" class="cover-card" data-open-show="${p.show_id}"><span class="cover-art" style="background:${grad(i)}">${art}</span><strong>${esc(p.show_title)}</strong><small>${esc(p.category || 'Podcast')}</small></button>`;
 }
 function toast(msg,error=false){ const el=document.createElement('div'); el.className=`toast ${error?'error':''}`; el.setAttribute('role',error?'alert':'status'); el.innerHTML=`<span class=\"toast-mark\">${error?'!':'✓'}</span><span>${esc(msg)}</span>`;document.body.append(el);requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),450)},5000); }
-function humanErr(e){const msg=e?.message || String(e||'');if(msg.includes('row-level security'))return 'That action is not available for this account.';if(/failed to fetch|network|offline/i.test(msg))return 'SoundWave cannot reach the server right now. Check your connection and try again.';if(/provider|oauth|google|redirect|flow state|code verifier|invalid grant/i.test(msg))return `Google sign-in failed: ${msg}`;if(/jwt|session|auth/i.test(msg))return 'Your session needs to be refreshed. Please sign in again.';return 'Something went wrong. Please try again.';}
-function check(result){if(result.error) throw result.error;return result.data;}
+function authErrorMessage(e){
+  const code=String(e?.code||e?.error_code||'').toLowerCase();
+  const msg=String(e?.message||e?.error_description||e||'');
+  const hay=`${code} ${msg}`.toLowerCase();
+  if(/invalid_credentials|invalid login credentials|wrong password/.test(hay))return 'Incorrect email or password. Check your credentials and try again.';
+  if(/email_not_confirmed|email not confirmed/.test(hay))return 'Your email is not confirmed yet. Open the confirmation email first, then sign in.';
+  if(/user_banned|banned|disabled user/.test(hay))return 'This sign-in account has been disabled. Contact an administrator if you think this is a mistake.';
+  if(/user_already_exists|already registered|already been registered/.test(hay))return 'That email is already registered. Sign in instead, or use a different email.';
+  if(/weak_password|password.*weak|password should/.test(hay))return 'That password is too weak. Use a longer password with letters, numbers, and symbols.';
+  if(/email_address_invalid|invalid email|unable to validate email/.test(hay))return 'Enter a valid email address.';
+  if(/signup_disabled|signups not allowed/.test(hay))return 'New account registration is currently disabled.';
+  if(/provider_disabled|unsupported provider|provider is not enabled/.test(hay))return 'Google sign-in is not enabled correctly for this project.';
+  if(/flow_state_not_found|flow state.*not found|code verifier/.test(hay))return 'The Google sign-in session expired or was opened in a different browser context. Start Google sign-in again from SoundWave.';
+  if(/flow_state_expired|invalid grant|authorization code.*expired/.test(hay))return 'The Google sign-in link expired. Start Google sign-in again.';
+  if(/identity_already_exists/.test(hay))return 'This Google identity is already linked to another account.';
+  if(/over_request_rate_limit|rate limit|too many requests|429/.test(hay))return 'Too many attempts were made. Wait a short while, then try again.';
+  if(/captcha_failed|captcha/.test(hay))return 'The security check failed. Refresh the page and try again.';
+  if(/otp_expired|token.*expired|expired.*token/.test(hay))return 'That sign-in or confirmation link has expired. Request a new one.';
+  if(/same_password/.test(hay))return 'Choose a password different from your current password.';
+  if(/reauthentication_needed/.test(hay))return 'Please sign in again before making this security-sensitive change.';
+  if(/access_denied|popup_closed|cancelled|canceled|user denied/.test(hay))return 'Google sign-in was cancelled before it finished.';
+  if(/redirect_uri|redirect.*mismatch/.test(hay))return 'Google sign-in is misconfigured: the callback or redirect URL does not match the OAuth settings.';
+  if(/provider|oauth|google/.test(hay))return `Google sign-in could not finish${msg?`: ${msg}`:''}`;
+  return '';
+}
+function humanErr(e){
+  const authMsg=authErrorMessage(e);if(authMsg)return authMsg;
+  const code=String(e?.code||'');const msg=e?.message || String(e||'');const hay=`${code} ${msg}`;
+  if(/row-level security|permission denied|42501/i.test(hay))return 'You do not have permission to perform that action with this account.';
+  if(/23505|duplicate key|unique constraint/i.test(hay))return 'That value is already in use. Choose a different name or title.';
+  if(/23514|check constraint/i.test(hay))return "One of the values does not follow SoundWave's rules. Review the highlighted fields and try again.";
+  if(/23502|null value.*violates/i.test(hay))return 'A required field is missing. Complete all required fields and try again.';
+  if(/23503|foreign key/i.test(hay))return 'That item is linked to another record and cannot be changed this way.';
+  if(/payload too large|entity too large|maximum.*size|file.*too large/i.test(hay))return 'That file is too large. Choose a smaller file and try again.';
+  if(/resource already exists|duplicate.*object/i.test(hay))return 'A file with that name already exists. Rename it or choose another file.';
+  if(/failed to fetch|network|offline/i.test(hay))return 'SoundWave cannot reach the server right now. Check your connection and try again.';
+  if(/jwt|session|auth/i.test(hay))return 'Your session is no longer valid. Sign in again.';
+  return msg && msg.length<180 ? msg : 'Something went wrong. Please try again.';
+}
 async function action(fn){if(state.loading)return;state.loading=true;showAsyncSkeleton();try{await fn();}catch(e){console.error(e);toast(humanErr(e),true);}finally{state.loading=false;hideAsyncSkeleton();document.querySelectorAll('[data-busy]').forEach(b=>b.disabled=false);}}
 function requireConfig(){if(configured)return false; $('#app').innerHTML=`<main class="main" style="max-width:820px;padding-top:90px"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div class="card"><span class="eyebrow">Setup required</span><h1 class="page-title">Connect your Supabase project</h1><p class="muted">Make a copy of <code>.env.example</code> named <code>.env</code> and add your real project URL and publishable key. Restart the development server.</p><pre style="overflow:auto;background:#0d1526;padding:20px;border-radius:13px">VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co\nVITE_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY</pre><p class="footnote">Never place your database password, secret key or service_role key in this application.</p></div></main>`;return true;}
 const nav = [['music','♫','Search'],['artists','♥','Artists'],['playlists','▤','Your library'],['history','◷','Recently played'],['podcasts','◉','Podcasts'],['plans','♢','Premium']];
@@ -1075,10 +1112,11 @@ function authView(register=false){
         <div class="auth-separator"><span>or</span></div>
         <div class="auth-email-shell${emailOpen}" id="auth-email-shell">
           <div class="auth-mode"><button class="button ${register?'secondary':''}" id="mode-login">Sign in</button><button class="button ${register?'':'secondary'}" id="mode-register">Sign up</button></div>
-          <form class="form" id="authform">
+          <form class="form" id="authform" novalidate>
+            <div class="auth-form-alert" id="auth-form-alert" role="alert" hidden></div>
             ${register?`<div class="field"><label>Display name</label><input id="display-name" required maxlength="90" placeholder="Alex Rivera"/><small class="field-help availability" id="display-name-status"></small></div><div class="field"><label>Account type</label><select id="account-type"><option value="Listener">Listener</option><option value="Artist">Artist</option></select></div><div class="field" id="artist-name-field" style="display:none"><label>Artist name</label><input id="artist-name" maxlength="100" placeholder="Your stage name"/><small class="field-help availability" id="artist-name-status"></small></div>`:''}
-            <div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@example.com"/></div>
-            <div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/></div>
+            <div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@example.com"/><small class="field-help auth-field-error" id="auth-email-error"></small></div>
+            <div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/><small class="field-help auth-field-error" id="auth-password-error"></small></div>
             <button class="button auth-email-submit" data-busy>${register?'Create account':'Sign in'}</button>
           </form>
         </div>
@@ -1088,6 +1126,8 @@ function authView(register=false){
   </div>`;
   enhanceAuth();
   const shell=$('#auth-email-shell');
+  const showAuthError=(message,field='')=>{const box=$('#auth-form-alert');if(box){box.textContent=message||'';box.hidden=!message;}if(field==='email')setFieldState($('#auth-email'),$('#auth-email-error'),false,message);if(field==='password')setFieldState($('#auth-password'),$('#auth-password-error'),false,message);};
+  const clearAuthErrors=()=>{const box=$('#auth-form-alert');if(box){box.hidden=true;box.textContent='';}[$('#auth-email'),$('#auth-password')].forEach(el=>el?.classList.remove('field-invalid','field-valid'));[$('#auth-email-error'),$('#auth-password-error')].forEach(el=>{if(el){el.textContent='';el.className='field-help auth-field-error';}});};
   $('#auth-email-toggle')?.addEventListener('click',()=>{
     shell?.classList.toggle('open');
     if(shell?.classList.contains('open')) setTimeout(()=>$('#auth-email')?.focus(),80);
@@ -1095,18 +1135,15 @@ function authView(register=false){
   $('#mode-login').onclick=()=>authView(false);
   $('#mode-register').onclick=()=>authView(true);
   $('#auth-google')?.addEventListener('click',()=>action(async()=>{
-    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    clearAuthErrors();
+    const redirectTo=`${window.location.origin}${window.location.pathname}?oauth=google`;
     sessionStorage.setItem('soundwave-oauth-return','google');
-    const { error } = await db.auth.signInWithOAuth({
+    const {data,error}=await db.auth.signInWithOAuth({
       provider:'google',
-      options:{
-        redirectTo,
-        scopes:'openid email profile',
-        queryParams:{prompt:'select_account'},
-        skipBrowserRedirect:false
-      }
+      options:{redirectTo,scopes:'openid email profile',queryParams:{prompt:'select_account'},skipBrowserRedirect:false}
     });
-    if(error) throw error;
+    if(error){showAuthError(authErrorMessage(error)||humanErr(error));throw error;}
+    if(!data?.url)throw Error('Google did not return an authorization URL. Check the Google provider configuration in Supabase.');
   }));
   $('#account-type')?.addEventListener('change',e=>{const a=e.target.value==='Artist';$('#artist-name-field').style.display=a?'flex':'none';$('#artist-name').required=a;});
   if(register){
@@ -1114,10 +1151,14 @@ function authView(register=false){
     $('#display-name')?.addEventListener('blur',validateIdentity);$('#artist-name')?.addEventListener('blur',validateIdentity);
   }
   $('#authform').onsubmit=e=>{e.preventDefault();action(async()=>{
+    clearAuthErrors();
     const email=val('auth-email'),password=$('#auth-password').value;
+    if(!email||!/^\S+@\S+\.\S+$/.test(email)){showAuthError('Enter a valid email address.','email');return;}
+    if(!password){showAuthError('Enter your password.','password');return;}
+    if(password.length<6){showAuthError('Password must contain at least 6 characters.','password');return;}
     if(!register){
       const r=await db.auth.signInWithPassword({email,password});
-      if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}throw r.error;}
+      if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}const friendly=authErrorMessage(r.error)||humanErr(r.error);showAuthError(friendly,/invalid_credentials|password/i.test(`${r.error.code||''} ${r.error.message||''}`)?'password':'');return;}
       await finishInteractiveSignIn(r.data?.session);toast('Signed in');return;
     }
     const account_type=val('account-type'),display_name=val('display-name'),artist_name=account_type==='Artist'?val('artist-name'):null;
@@ -1127,7 +1168,9 @@ function authView(register=false){
       if(!available.displayAvailable) throw Error('That display name is already taken. Choose another one.');
       if(!available.artistAvailable) throw Error('That artist name is already taken. Choose another one.');
     }
-    const data=check(await db.auth.signUp({email,password,options:{emailRedirectTo:`${window.location.origin}${window.location.pathname}`,data:{name:display_name,full_name:display_name,account_type,artist_name}}}));
+    const signup=await db.auth.signUp({email,password,options:{emailRedirectTo:`${window.location.origin}${window.location.pathname}`,data:{name:display_name,full_name:display_name,account_type,artist_name}}});
+    if(signup.error){showAuthError(authErrorMessage(signup.error)||humanErr(signup.error));return;}
+    const data=signup.data;
     if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){toast('That email is already registered. Please sign in instead.',true);authView(false);return;}
     if(data.session){toast('Registration complete');await finishInteractiveSignIn(data.session);}else{confirmView(email);}
   });};
@@ -2529,15 +2572,12 @@ function cleanOAuthUrl(){
 async function completeOAuthReturn(){
   const params=new URLSearchParams(location.search);
   const oauthError=params.get('error_description')||params.get('error');
-  if(oauthError){cleanOAuthUrl();throw Error(oauthError);}
-  const hash=String(location.hash||'');
-  const looksLikeOAuth=/access_token=|error_description=|type=recovery|type=signup/i.test(hash);
-  const expected=sessionStorage.getItem('soundwave-oauth-return')==='google';
-  if(!looksLikeOAuth&&!expected)return null;
-  // detectSessionInUrl=true lets Supabase parse the OAuth hash itself. Wait for
-  // the SDK to persist that session before SoundWave loads protected data.
-  const session=await waitForAuthSession(8000);
-  if(!session)throw Error('Google returned to SoundWave, but Supabase did not create a session. Check the Supabase redirect URL and Google OAuth callback settings.');
+  if(oauthError){const err=new Error(oauthError);err.code=params.get('error_code')||'oauth_error';cleanOAuthUrl();throw err;}
+  const hasCode=params.has('code');
+  const expected=params.get('oauth')==='google'||sessionStorage.getItem('soundwave-oauth-return')==='google';
+  if(!hasCode&&!expected)return null;
+  const session=await waitForAuthSession(12000);
+  if(!session){const err=new Error('Google returned to SoundWave, but no Supabase session was created. Verify the Supabase Site URL/Redirect URLs and the Google OAuth callback URI.');err.code='oauth_session_missing';throw err;}
   cleanOAuthUrl();
   return session;
 }
@@ -2546,7 +2586,8 @@ async function boot(){
  captureMayaReturn();
  try{
    let oauthSession=null;
-   if(/access_token=|error_description=/i.test(String(location.hash||''))||sessionStorage.getItem('soundwave-oauth-return')==='google'){
+   const oauthParams=new URLSearchParams(location.search);
+   if(oauthParams.has('code')||oauthParams.has('oauth')||oauthParams.has('error')||/access_token=|error_description=/i.test(String(location.hash||''))||sessionStorage.getItem('soundwave-oauth-return')==='google'){
      oauthSession=await completeOAuthReturn();
    }
    let result=oauthSession?{data:{session:oauthSession},error:null}:await db.auth.getSession();
@@ -2561,7 +2602,15 @@ async function boot(){
    }
    await routeLoad();
    if(state.user){setTimeout(()=>acceptPendingSubscriptionInvite(),120);schedulePendingPaymentVerification(180);}
- }catch(e){console.error(e);state.error=humanErr(e);authView();toast(state.error,true);}
+ }catch(e){
+   console.error(e);state.error=humanErr(e);
+   let session=null;try{session=(await db.auth.getSession()).data?.session||null;}catch{}
+   if(session?.user){
+     state.user=session.user;
+     try{await ensureOAuthProfile(state.user);await loadData();}catch(dataErr){console.error('Authenticated, but app data initialization failed',dataErr);state.error=`Signed in, but SoundWave could not load all account data: ${humanErr(dataErr)}`;}
+     render();toast(state.error,true);
+   }else{authView();toast(state.error,true);}
+ }
  db.auth.onAuthStateChange((event,session)=>{
    setTimeout(()=>{action(async()=>{
      const newUser=session?.user||null;if(newUser?.id===state.user?.id)return;
