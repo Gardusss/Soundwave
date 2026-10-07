@@ -1773,3 +1773,155 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .discover-filter-chip:hover,
   .library-filter-row .filter-pill:hover{transform:none}
 }
+
+/* 2026-10-07 discovery/library filter + podcast studio polish */
+.library-filter-row{
+  position:relative;
+  padding:6px 8px 10px;
+  gap:6px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+}
+.library-filter-row .filter-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:34px;
+  padding:0 11px;
+  background:#242424;
+  border:1px solid #343434;
+  color:#d7d7d7;
+  box-shadow:none;
+}
+.library-filter-row .filter-pill:hover{background:#303030;border-color:#484848}
+.library-filter-row .filter-pill.active{background:#f4f4f4;color:#111;border-color:#f4f4f4}
+.filter-count{
+  display:inline-grid;
+  place-items:center;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  border-radius:999px;
+  background:#ffffff14;
+  color:inherit;
+  font-size:10px;
+  font-weight:850;
+  line-height:1;
+}
+.filter-pill.active .filter-count,.discover-filter-chip.active .filter-count{background:#00000013}
+.library-art.playlist-library-art{background:#232323}
+.library-art.playlist-library-art .cover-img{border-radius:inherit}
+
+.discover-filter-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 24px;
+  min-width:0;
+}
+.discover-filter-label{
+  color:#aaa;
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.2px;
+  flex:0 0 auto;
+}
+.discover-filter-bar{
+  margin:0;
+  padding:3px;
+  gap:4px;
+  width:max-content;
+  max-width:100%;
+  border:1px solid #363636;
+  border-radius:999px;
+  background:#171717c9;
+  box-shadow:0 7px 24px #00000022;
+}
+.discover-filter-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:38px;
+  padding:0 14px;
+  background:transparent;
+  border:0;
+  color:#cfcfcf;
+  box-shadow:none;
+}
+.discover-filter-chip svg{width:16px;height:16px}
+.discover-filter-chip:hover{background:#2b2b2b;transform:none}
+.discover-filter-chip.active{background:#f4f4f4;color:#111;box-shadow:0 2px 8px #0005}
+.discover-filter-content{animation:discover-filter-in .18s ease both}
+@keyframes discover-filter-in{from{opacity:.45;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+.podcast-studio-grid{
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  justify-content:stretch;
+  gap:18px;
+}
+.podcast-studio-card{
+  max-width:none;
+  padding:12px;
+  gap:12px;
+  background:linear-gradient(180deg,#202321,#181a19);
+  border-color:#343a35;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.podcast-studio-card:hover{
+  transform:translateY(-2px);
+  border-color:#4a514c;
+  background:linear-gradient(180deg,#252925,#1b1d1c);
+  box-shadow:0 14px 34px rgba(0,0,0,.28);
+}
+.podcast-card-art-wrap{position:relative;min-width:0}
+.podcast-card-art{max-width:none;border-radius:12px;background:#242424}
+.podcast-card-art svg{width:54px;height:54px;opacity:.8}
+.podcast-card-state{
+  position:absolute;
+  top:10px;
+  right:10px;
+  min-height:27px;
+  padding:0 10px;
+  border:1px solid #ffffff18;
+  box-shadow:0 4px 16px #0008;
+  backdrop-filter:blur(10px);
+}
+.podcast-card-copy{display:flex;flex-direction:column;gap:5px;min-height:112px}
+.podcast-card-category{
+  color:#9aa39d;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+.podcast-card-title{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font:800 18px Outfit,sans-serif;
+  letter-spacing:-.25px;
+}
+.podcast-card-copy p{-webkit-line-clamp:3;min-height:58px;margin:1px 0 0}
+.podcast-card-actions{grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:8px}
+.podcast-card-actions .button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 11px}
+.podcast-card-actions .button svg{width:16px;height:16px}
+.podcast-card-actions .danger-soft{color:#ffb9c0;border-color:#5b373c;background:#2a2022}
+.podcast-card-actions .danger-soft:hover{background:#38272a}
+
+@media (max-width:700px){
+  .discover-filter-wrap{align-items:flex-start;flex-direction:column;gap:7px;margin-bottom:16px}
+  .discover-filter-bar{width:100%;overflow-x:auto;justify-content:flex-start;border-radius:14px}
+  .discover-filter-chip{flex:0 0 auto;min-height:40px}
+  .podcast-studio-grid{grid-template-columns:1fr!important}
+  .podcast-studio-card{padding:10px}
+  .podcast-card-art{aspect-ratio:16/10}
+  .podcast-card-copy{min-height:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .discover-filter-content,.podcast-studio-card{animation:none;transition:none}
+  .podcast-studio-card:hover{transform:none}
+}
