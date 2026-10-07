@@ -606,6 +606,22 @@ function addToQueue(id) {
   p.order.splice(p.pos + 1, 0, id);
   refreshRail(); toast('Added to queue');
 }
+
+function relatedSongsAfterQueue(player){
+  const current=songById(player?.id);
+  const genreId=Number(current?.genre_id||0);
+  const already=new Set((player?.queue||[]).map(Number));
+  let pool=(state.songs||[]).filter(s=>s?.is_active!==false&&s.audio_path&&!already.has(Number(s.song_id))&&(genreId?Number(s.genre_id)===genreId:true));
+  if(!pool.length) pool=(state.songs||[]).filter(s=>s?.is_active!==false&&s.audio_path&&!already.has(Number(s.song_id)));
+  return shuffled(pool).slice(0,20).map(s=>Number(s.song_id));
+}
+async function continueWithRelatedSongs(player){
+  const related=relatedSongsAfterQueue(player);
+  if(!related.length)return false;
+  await playSong(related[0],related,{order:related,pos:0,fromSkip:true});
+  toast('Playing similar music');
+  return true;
+}
 async function skip(dir, auto = false) {
   const p = state.player, audio = document.getElementById('sw-audio');
   if (!p || !audio) return;
@@ -614,7 +630,10 @@ async function skip(dir, auto = false) {
   if (auto && prefs.repeat === 'one') { audio.currentTime = 0; await audio.play().catch(() => {}); return; }
   let pos = p.pos + dir;
   if (pos >= p.order.length) {
-    if (auto && prefs.repeat !== 'all') { audio.currentTime = 0; audio.pause(); return; }
+    if (auto && prefs.repeat !== 'all') {
+      if(await continueWithRelatedSongs(p))return;
+      audio.currentTime = 0; audio.pause(); return;
+    }
     if (prefs.shuffle) p.order = shuffled(p.queue);
     pos = 0;
   }
@@ -695,7 +714,7 @@ function bindPlayerBar(audio, details, token) {
   }); audio.addEventListener('loadedmetadata', sync); audio.addEventListener('durationchange', sync);
   audio.onplay = () => { sync(); markPlaying(); if (live()) details.createPromise = createListening(); };
   audio.onpause = () => { sync(); markPlaying(); if (live()) void saveListening(false); };
-  audio.onended = () => { sync(); markPlaying(); if (live()) { void saveListening(true); if (details.kind === 'song') action(() => skip(1, true)); } };
+  audio.onended = () => { sync(); markPlaying(); if (live()) action(async()=>{ await saveListening(true); if(details.kind==='song') await skip(1,true); }); };
   audio.onerror = async () => {
     if (!live() || details.retried || details.offline || details.kind !== 'song') { if (live()) toast('This track could not be played.', true); return; }
     details.retried = true;
@@ -814,18 +833,21 @@ async function refreshStreamMetrics(){
     const ps=await db.rpc('profile_stats');
     if(!ps.error)state.profileStats=Array.isArray(ps.data)?ps.data[0]:ps.data;
     if(state.artist&&state.ownedSongs.length){
-      const songIds=state.ownedSongs.map(s=>s.song_id);
-      const [ar,ss,roy]=await Promise.all([
-        db.from('listening_history').select('user_id,song_id,stream_date,duration_played_seconds,completion_status').in('song_id',songIds).gte('stream_date',since30).order('stream_date',{ascending:true}).limit(4000),
+      const songIds=state.ownedSongs.map(s=>Number(s.song_id));
+      const [serverRows,ss,roy]=await Promise.all([
+        fetchArtistServerStreams(30),
         db.rpc('artist_studio_stats'),
         db.rpc('artist_royalty_summary')
       ]);
-      if(!ar.error){
+      if(serverRows){
+        state.artistThirtyDay=serverRows;
+      }else{
+        const ar=await db.from('listening_history').select('stream_id,user_id,song_id,stream_date,duration_played_seconds,completion_status').in('song_id',songIds).gte('stream_date',since30).order('stream_date',{ascending:true}).limit(4000);
         const cachedArtist=readAllCachedHistories().filter(r=>songIds.includes(Number(r.song_id))&&new Date(r.stream_date).getTime()>=new Date(since30).getTime());
-        state.artistThirtyDay=uniqueStreamRows([...(ar.data||[]),...cachedArtist]).filter(isQualifiedStream);
-        const listeners=new Map();state.artistThirtyDay.forEach(r=>listeners.set(String(r.user_id),(listeners.get(String(r.user_id))||0)+1));
-        state.artistTopListeners=[...listeners.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([uid,count])=>({uid,count,name:state.socialProfiles[uid]?.display_name||`Listener ${uid.slice(0,6)}`}));
+        state.artistThirtyDay=uniqueStreamRows([...(ar.error?[]:(ar.data||[])),...cachedArtist]).filter(isQualifiedStream);
       }
+      const listeners=new Map();state.artistThirtyDay.forEach(r=>listeners.set(String(r.user_id),(listeners.get(String(r.user_id))||0)+1));
+      state.artistTopListeners=[...listeners.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([uid,count])=>({uid,count,name:state.socialProfiles[uid]?.display_name||`Listener ${String(uid).slice(0,6)}`}));
       if(!ss.error)state.studioStats=Array.isArray(ss.data)?ss.data[0]:ss.data;
       if(!roy.error)state.royaltySummary=Array.isArray(roy.data)?roy.data[0]:roy.data;
     }
@@ -1847,7 +1869,7 @@ function plans(){
    const action=isCurrent?`<button class="button secondary" disabled>${icon('check')} Current plan</button>`:price<=0?`<button class="button secondary" disabled>Free access</button>`:`<button class="button" data-maya-plan="${p.plan_id}">${icon('forward')} Continue to Maya Sandbox</button>`;
    return `<article class="plan-card ${isCurrent?'current-plan':''}"><span>${esc(p.plan_name)}</span><strong>₱${price.toFixed(0)}<small>/month</small></strong><p>${p.max_members} ${Number(p.max_members)===1?'member':'members'}</p><small class="plan-meta">${Number(p.max_members)>1?'Best for shared listening':'Great for personal listening'}</small>${action}</article>`;
  }).join('');
- const manageSection=current?`<section class="subscription-layout"><article class="subscription-panel emphasis"><div class="subscription-panel-head"><div><span class="eyebrow">ACTIVE SUBSCRIPTION</span><h3>${esc(current.plan_name||'Premium')}</h3></div><span class="status-pill active">${esc(relationship)}</span></div><div class="subscription-stat-grid"><div><small>Status</small><strong>Premium active</strong></div><div><small>Downloads</small><strong>${state.offlineDownloads.length}</strong></div><div><small>Period</small><strong>${esc(current.start_date||'—')} → ${esc(current.end_date||'—')}</strong></div></div>${sharedMemberInfo}${relationship==='Owner'||relationship==='Admin'||maxMembers>1?`<div class="subscription-share-box"><div><strong>Plan sharing</strong><p>${maxMembers>1?`This plan supports up to ${maxMembers} members. ${availableSeats?`${availableSeats} seat${availableSeats===1?'':'s'} still available.`:'All seats are currently used.'}`:'This plan is intended for one member only.'}</p></div>${maxMembers>1&&isPlanOwner?`<button type="button" class="button secondary" id="invite-plan-member" ${availableSeats<1?'disabled':''}>${icon('users')} ${availableSeats>0?'Invite member':'Plan full'}</button>`:''}</div>`:''}</article><article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">MEMBERS</span><h3>${usedSeats} / ${maxMembers} seats used</h3></div></div>${sharedMemberRows}<p class="footnote">Additional users are linked through <code>subscription_member</code>. Owners can share multi-member plans; members receive Premium benefits under the same subscription.</p></article>${paymentRows?`<article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">PAYMENTS</span><h3>Recent payment records</h3></div></div><div class="subscription-payment-list">${paymentRows}</div></article>`:''}</section>`:`<section class="subscription-layout"><article class="subscription-panel maya-sandbox-info"><div class="subscription-panel-head"><div><span class="eyebrow">MAYA SANDBOX</span><h3>Instant Premium activation without real money</h3></div><span class="sandbox-badge">Test mode</span></div><div class="subscription-flow"><div><strong>1. Choose a paid plan</strong><p>SoundWave creates a Maya Sandbox checkout using the selected plan price from Supabase.</p></div><div><strong>2. Complete the sandbox checkout</strong><p>You are redirected to Maya's hosted test checkout. No real money is processed.</p></div><div><strong>3. Server verifies the payment</strong><p>A Supabase Edge Function verifies the Maya transaction instead of trusting the browser redirect.</p></div><div><strong>4. Premium activates automatically</strong><p>The subscription and payment records are created, then SoundWave reloads your Premium entitlement.</p></div></div></article></section>`;
+ const manageSection=current?`<section class="subscription-minimal"><article class="subscription-current-card"><div class="subscription-current-main"><div><span class="eyebrow">YOUR PLAN</span><h3>${esc(current.plan_name||'Premium')}</h3><p>${esc(relationship)} · active until ${esc(current.end_date||'—')}</p></div><span class="status-pill active">${icon('check')} Active</span></div><div class="subscription-compact-stats"><span><small>Downloads</small><strong>${state.offlineDownloads.length}</strong></span><span><small>Seats</small><strong>${usedSeats}/${maxMembers}</strong></span><span><small>Renews / ends</small><strong>${esc(String(current.end_date||'—').slice(0,10))}</strong></span></div>${sharedMemberInfo}${maxMembers>1&&isPlanOwner?`<div class="subscription-inline-action"><span>${availableSeats?`${availableSeats} shared seat${availableSeats===1?'':'s'} available`:'All shared seats are in use'}</span><button type="button" class="button secondary sm" id="invite-plan-member" ${availableSeats<1?'disabled':''}>${icon('users')} ${availableSeats>0?'Invite member':'Plan full'}</button></div>`:''}</article><details class="subscription-details"><summary>Members <span>${usedSeats}/${maxMembers}</span></summary><div class="subscription-details-body">${sharedMemberRows}</div></details>${paymentRows?`<details class="subscription-details"><summary>Payment history <span>${(state.paymentRows||[]).length}</span></summary><div class="subscription-details-body subscription-payment-list">${paymentRows}</div></details>`:''}</section>`:`<section class="subscription-layout"><article class="subscription-panel maya-sandbox-info"><div class="subscription-panel-head"><div><span class="eyebrow">MAYA SANDBOX</span><h3>Instant Premium activation without real money</h3></div><span class="sandbox-badge">Test mode</span></div><div class="subscription-flow"><div><strong>1. Choose a paid plan</strong><p>SoundWave creates a Maya Sandbox checkout using the selected plan price from Supabase.</p></div><div><strong>2. Complete the sandbox checkout</strong><p>You are redirected to Maya's hosted test checkout. No real money is processed.</p></div><div><strong>3. Server verifies the payment</strong><p>A Supabase Edge Function verifies the Maya transaction instead of trusting the browser redirect.</p></div><div><strong>4. Premium activates automatically</strong><p>The subscription and payment records are created, then SoundWave reloads your Premium entitlement.</p></div></div></article></section>`;
  if(current && state.mayaPaymentNotice?.type==='pending'){
    clearPendingMayaReturn();
    state.mayaPaymentNotice={type:'success',message:'Your subscription is active. Premium benefits are ready to use.'};
@@ -1997,7 +2019,7 @@ function studio(){if(!hasArtistAccess())return discoverPage();
  <dialog class="sw-modal studio-dialog" id="new-album-modal"><div class="modal-head"><div><span class="eyebrow">NEW RELEASE</span><h2>Create an album or single</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close new release dialog">${icon('close')}</button></div><form id="albumform"><label class="cover-drop creator-cover-drop" id="cover-drop" for="albumcover"><span id="cover-preview">${icon('album')}</span><strong>Choose cover art</strong><small>Optional • JPG, PNG or WebP • 5 MB max</small><input type="file" id="albumcover" accept="image/png,image/jpeg,image/webp" hidden></label><label class="single-field">Release type<select id="releasetype"><option value="Album">Album</option><option value="Single">Single</option></select></label><label class="single-field">Release title<input id="albumtitle" required maxlength="160" placeholder="Give your release a name"></label><label class="single-field">Description<textarea id="albumdesc" maxlength="1200" placeholder="Describe this release"></textarea></label><label class="single-field">Release date<input id="releasedate" type="date" required value="${new Date().toISOString().slice(0,10)}"></label><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button" data-busy>Create album</button></div></form></dialog>
  <dialog class="sw-modal studio-dialog wizard-dialog" id="new-song-modal"><div class="modal-head"><div><span class="eyebrow wizard-eyebrow">STEP 1 OF 4</span><h2>Upload a track</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close upload track dialog">${icon('close')}</button></div><form id="songform">${wizardNav(['Album','Audio','Details','Review'])}<section class="upload-step" data-step="1"><div class="step-icon">${icon('album')}</div><h3>Choose where this track lives</h3><p class="step-desc">Every track belongs to an album. Pick one below, or create a new one first.</p><div class="album-picks">${validAlbums.map((a,i)=>`<label class="album-pick"><input type="radio" name="albumchoice" value="${a.album_id}" ${i===0?'checked':''}><span style="background:${grad(i)}">${icon('album')}</span><strong>${escapeHtml(a.album_title)}</strong>${icon('check')}</label>`).join('')||'<p class="notice">You do not have an album yet. Create one first, then come back to upload.</p>'}</div><button type="button" class="button secondary" data-switch-modal="new-album-modal">${icon('plus')} Create an album</button></section><section class="upload-step" data-step="2" hidden><div class="step-icon">${icon('upload')}</div><h3>Add your audio file</h3><p class="step-desc">Drag your finished track into the drop card, or click to browse.</p>${audioDropHtml('song')}</section><section class="upload-step" data-step="3" hidden><div class="step-icon">${icon('settings')}</div><h3>Track details</h3><label class="single-field">Song title<input id="songtitle" maxlength="160" placeholder="Track title"></label><label class="single-field">Description<textarea id="songdesc" maxlength="1200" placeholder="Tell listeners about this song"></textarea></label><label class="cover-drop song-cover-drop" for="songcover"><span id="song-cover-preview">${icon('album')}</span><strong>Song cover art</strong><small>Optional · JPG, PNG or WebP · 5 MB max</small><input id="songcover" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="single-field">Genre<select id="songgenre">${opts(state.genres,'genre_id','genre_name')}</select></label></section><section class="upload-step review-step" data-step="4" hidden><div class="step-icon">${icon('check')}</div><h3>Review before publishing</h3><p class="step-desc">Confirm the release, file and metadata before SoundWave uploads anything.</p><div id="song-final"></div><div class="notice">Publishing uses your existing Supabase storage and song insert workflow. Keep this dialog open until the upload completes.</div></section><div class="dialog-actions"><button type="button" class="button secondary wiz-back" hidden>Back</button><button type="button" class="button wiz-next" ${validAlbums.length?'':'disabled'}>Continue</button><button type="submit" class="button wiz-finish" data-busy hidden>Publish song</button></div></form></dialog>
  <dialog class="sw-modal" id="edit-song-modal"><div class="modal-head"><div><span class="eyebrow">YOUR RELEASES</span><h2>Edit song details</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close edit release dialog">${icon('close')}</button></div><form class="form" id="editsong"><label class="single-field">Select song<select id="owned-song" required>${opts(ownedSongs,'song_id','song_title')}</select></label><label class="single-field">New song title<input id="owned-song-title" required maxlength="155" placeholder="New title"></label><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button" data-busy>Save changes</button></div></form></dialog>`,'Artist Studio','Release, manage and understand your music.');
- const setArtistView=(view)=>{state.artistStudioView=view;document.querySelectorAll('[data-artist-view-btn]').forEach(b=>b.classList.toggle('active',b.dataset.artistViewBtn===view));document.querySelectorAll('[data-artist-view]').forEach(s=>s.hidden=s.dataset.artistView!==view);};
+ const setArtistView=(view)=>{state.artistStudioView=view;document.querySelectorAll('[data-artist-view-btn]').forEach(b=>b.classList.toggle('active',b.dataset.artistViewBtn===view));document.querySelectorAll('[data-artist-view]').forEach(s=>s.hidden=s.dataset.artistView!==view);if(view==='analytics')void refreshCrossDeviceMetrics();};
  document.querySelectorAll('[data-artist-view-btn]').forEach(b=>b.onclick=()=>setArtistView(b.dataset.artistViewBtn));
  document.querySelectorAll('[data-artist-open]').forEach(b=>b.onclick=()=>setArtistView(b.dataset.artistOpen));
  // Step-by-step upload: each step only shows what is needed for it.
