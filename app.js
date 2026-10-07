@@ -198,6 +198,25 @@ function followerText(artistId) {
   const n = state.followerCounts?.[Number(artistId)];
   return n == null ? '' : `${n} ${n === 1 ? 'follower' : 'followers'}`;
 }
+function mergeFollowerCountsPayload(payload, target = {}) {
+  if (payload == null) return target;
+  if (typeof payload === 'string') {
+    try { return mergeFollowerCountsPayload(JSON.parse(payload), target); } catch { return target; }
+  }
+  if (Array.isArray(payload)) { payload.forEach((row) => mergeFollowerCountsPayload(row, target)); return target; }
+  if (typeof payload !== 'object') return target;
+  const artistId = Number(payload.artist_id ?? payload.artistid ?? payload.artistId ?? payload.id);
+  const rawCount = payload.follower_count ?? payload.followers_count ?? payload.followerCount ?? payload.followers ?? payload.count ?? payload.total_followers ?? payload.total;
+  const count = Number(rawCount);
+  if (Number.isFinite(artistId) && Number.isFinite(count)) target[artistId] = Math.max(0, count);
+  for (const key of ['data','rows','counts','result','artists']) {
+    if (payload[key] != null) mergeFollowerCountsPayload(payload[key], target);
+  }
+  for (const [key, value] of Object.entries(payload)) {
+    if (/^\d+$/.test(key) && Number.isFinite(Number(value))) target[Number(key)] = Math.max(0, Number(value));
+  }
+  return target;
+}
 function followBtn(a, cls = '') {
   if (!a || isOwnArtist(a)) return '';
   const on = isFollowing(a.artist_id);
@@ -261,7 +280,9 @@ function albumTile(a) {
 }
 function artistCard(a, i = 0, o = {}) {
   const songs = songsByArtist(a.artist_id);
-  const followerCount = state.socialRpc?.counts ? Number(state.followerCounts?.[Number(a.artist_id)] || 0) : null;
+  const ownVerified = isOwnArtist(a) && state.socialRpc?.mine;
+  const hasVerifiedCount = state.socialRpc?.counts || ownVerified;
+  const followerCount = hasVerifiedCount && state.followerCounts?.[Number(a.artist_id)] != null ? Number(state.followerCounts[Number(a.artist_id)]) : null;
   const followerLabel = followerCount == null ? 'Follower count unavailable' : `${followerCount.toLocaleString()} ${followerCount === 1 ? 'follower' : 'followers'}`;
   const rank = Number(o?.rank || 0);
   return `<article class="artist-card clickable ${o?.showFollowers ? 'ranked-artist-card' : ''}" tabindex="0" role="link" data-open-artist="${a.artist_id}" ${songs.length ? `data-queue="${ids(songs).join(',')}"` : ''}>${rank ? `<span class="artist-rank" aria-label="Rank ${rank}">#${rank}</span>` : ''}<span class="artist-round" style="background:${grad(i)}">${esc(a.artist_name?.[0] || 'A')}${songs.length ? `<button type="button" class="hover-play" data-play="${songs[0].song_id}" aria-label="Play ${esc(a.artist_name)}">${icon('play')}</button>` : ''}</span><strong>${esc(a.artist_name)}</strong><small>Artist</small>${o?.showFollowers ? `<span class="artist-follower-proof" data-follower-count="${a.artist_id}">${esc(followerLabel)}</span>` : (followerCount != null ? `<small data-follower-count="${a.artist_id}">${esc(followerLabel)}</small>` : '')}${o && o.follow === true ? followBtn(a, 'sm') : ''}</article>`;
@@ -670,30 +691,39 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
  state.artistFollowers=[];state.socialProfiles={};state.followerCounts={};state.socialRpc={counts:false,mine:false,profiles:false};
  const [fcnt,fmine,fprof]=await Promise.all([db.rpc('get_artist_follower_counts'),state.artist?db.rpc('get_my_artist_followers'):Promise.resolve({data:[],error:null}),db.rpc('get_social_profiles')]);
  if(!fcnt.error){
-   const rows=Array.isArray(fcnt.data)?fcnt.data:(fcnt.data?[fcnt.data]:[]);
-   rows.forEach(r=>{
-     const artistId=Number(r.artist_id ?? r.artistid ?? r.id);
-     const count=Number(r.follower_count ?? r.followers ?? r.count ?? 0);
-     if(Number.isFinite(artistId)) state.followerCounts[artistId]=Number.isFinite(count)?count:0;
-   });
-   state.socialRpc.counts=true;
- }else console.info('Follower-count RPC unavailable; trying RLS-safe table counts:',fcnt.error.message);
- // Some deployed projects expose favorite_artist under RLS but do not grant EXECUTE
- // on get_artist_follower_counts. Fall back to exact per-artist counts so Discover
- // can still show auditable follower numbers without inventing data.
- if(!state.socialRpc.counts || !Object.keys(state.followerCounts).length){
-   const countResults=await Promise.all((state.artists||[]).map(async a=>{
-     const r=await db.from('favorite_artist').select('artist_id',{count:'exact',head:true}).eq('artist_id',a.artist_id);
-     return {artist_id:Number(a.artist_id),count:r.error?null:Number(r.count||0),error:r.error};
-   }));
-   const readable=countResults.filter(x=>!x.error && x.count!=null);
-   if(readable.length){
-     readable.forEach(x=>{state.followerCounts[x.artist_id]=x.count;});
+   const parsed=mergeFollowerCountsPayload(fcnt.data,{});
+   if(Object.keys(parsed).length){
+     state.followerCounts=parsed;
      state.socialRpc.counts=true;
-     state.socialRpc.countSource='favorite_artist';
+     state.socialRpc.countSource='rpc';
    }
- } else state.socialRpc.countSource='rpc';
- if(!fmine.error){state.socialRpc.mine=true;state.artistFollowers=fmine.data||[];}else console.info('Artist followers unavailable:',fmine.error.message);
+ }else console.info('Follower-count RPC unavailable:',fcnt.error.message);
+ // Safe fallback: only trust a direct favorite_artist aggregate when the session can
+ // demonstrably see rows belonging to other users. This avoids displaying false 0s
+ // when RLS exposes only the signed-in user's own favorite_artist rows.
+ if(!state.socialRpc.counts){
+   const allFav=await db.from('favorite_artist').select('user_id,artist_id');
+   if(!allFav.error){
+     const rows=allFav.data||[];
+     const seesOtherUsers=rows.some(r=>String(r.user_id)!==String(state.user.id));
+     if(seesOtherUsers){
+       const counts={};
+       rows.forEach(r=>{const id=Number(r.artist_id);if(Number.isFinite(id))counts[id]=(counts[id]||0)+1;});
+       state.followerCounts=counts;
+       state.socialRpc.counts=true;
+       state.socialRpc.countSource='favorite_artist';
+     }
+   }
+ }
+ if(!fmine.error){
+   state.socialRpc.mine=true;
+   state.artistFollowers=Array.isArray(fmine.data)?fmine.data:(fmine.data?[fmine.data]:[]);
+   // get_my_artist_followers is authoritative for the signed-in artist even when
+   // global follower counts are hidden by RLS. Keep the artist's own profile accurate.
+   if(state.artist?.artist_id!=null){
+     state.followerCounts[Number(state.artist.artist_id)]=state.artistFollowers.length;
+   }
+ }else console.info('Artist followers unavailable:',fmine.error.message);
  if(!fprof.error){state.socialRpc.profiles=true;(fprof.data||[]).forEach(p=>{state.socialProfiles[String(p.user_id)]=p;});}
  state.artistFollowers.forEach(r=>{if(r.display_name&&!state.socialProfiles[String(r.follower_user_id)])state.socialProfiles[String(r.follower_user_id)]={user_id:r.follower_user_id,display_name:r.display_name};});
  // Premium entitlement is primarily derived from the user's active subscription.
@@ -1401,7 +1431,7 @@ function admin(){if(!hasAdminAccess())return discoverPage();
  const table=(heads,rows,emptyHtml)=>rows?`<div class="admin-table-wrap"><table class="admin-table"><thead><tr>${heads.map(([k,l])=>`<th><button type="button" data-admin-sort="${k}">${l}${k==='name'?' ↕':''}</button></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`:emptyHtml;
  const paymentCards=requests.map(r=>`<article class="payment-request-card"><div class="entity-cell"><span class="member-avatar">${esc((r.display_name||'U')[0].toUpperCase())}</span><div><strong>${esc(r.display_name||String(r.user_id).slice(0,8))}</strong><small>${esc(r.plan_name||'Subscription plan')}</small></div></div><dl><div><dt>Amount</dt><dd>${r.amount!=null?`₱${Number(r.amount).toFixed(2)}`:'—'}</dd></div><div><dt>Method</dt><dd>${esc(r.payment_method||'—')}</dd></div><div><dt>Reference</dt><dd>${esc(r.reference_number||'—')}</dd></div><div><dt>Status</dt><dd>${esc(r.status||'Pending')}</dd></div></dl>${String(r.status||'').toLowerCase()==='pending'?`<div class="payment-actions"><button class="button reject-btn" data-review-request="${r.request_id}" data-request-name="${esc(r.display_name||'this user')}" data-approve="false">Reject</button><button class="button approve-btn" data-review-request="${r.request_id}" data-request-name="${esc(r.display_name||'this user')}" data-approve="true">Approve</button></div>`:''}</article>`).join('');
  shell(`<section class="workspace-hero moderation-hero"><div><span class="eyebrow">ADMIN WORKSPACE</span><h2>Moderation Center</h2><p>Review accounts, catalog activity and payment requests without losing context.</p></div><span class="hero-vinyl">${icon('shield')}</span></section>
- <section class="admin-overview"><button data-admin-target="accounts"><small>Active accounts</small><strong>${activeUsers}</strong><span>Review accounts</span></button><button data-admin-target="artists"><small>Artists</small><strong>${artists.length}</strong><span>Catalog owners</span></button><button data-admin-target="songs"><small>Songs</small><strong>${songs.length}</strong><span>Tracks in catalog</span></button><button data-admin-target="podcasts"><small>Podcasts</small><strong>${pods.length}</strong><span>Published shows</span></button><button data-admin-target="payments"><small>Pending payments</small><strong>${pending}</strong><span>Needs a decision</span></button></section>
+ <section class="admin-overview"><button type="button" data-admin-target="accounts" aria-label="Open Accounts moderation"><small>Active accounts</small><strong>${activeUsers}</strong><span>Review accounts</span></button><button type="button" data-admin-target="artists" aria-label="Open Artists moderation"><small>Artists</small><strong>${artists.length}</strong><span>Catalog owners</span></button><button type="button" data-admin-target="songs" aria-label="Open Songs moderation"><small>Songs</small><strong>${songs.length}</strong><span>Tracks in catalog</span></button><button type="button" data-admin-target="podcasts" aria-label="Open Podcasts moderation"><small>Podcasts</small><strong>${pods.length}</strong><span>Published shows</span></button><button type="button" data-admin-target="payments" aria-label="Open Payments moderation"><small>Pending payments</small><strong>${pending}</strong><span>Needs a decision</span></button></section>
  ${adminChartsHtml(users)}
  <nav class="admin-tabbar" aria-label="Moderation sections"><button class="${state.adminTab==='accounts'?'active':''}" data-admin-tab="accounts">Accounts</button><button class="${state.adminTab==='artists'?'active':''}" data-admin-tab="artists">Artists</button><button class="${state.adminTab==='songs'?'active':''}" data-admin-tab="songs">Songs</button><button class="${state.adminTab==='podcasts'?'active':''}" data-admin-tab="podcasts">Podcasts</button><button class="${state.adminTab==='payments'?'active':''}" data-admin-tab="payments">Payments</button></nav>
  <section class="admin-panel" data-admin-panel="accounts" ${state.adminTab!=='accounts'?'hidden':''}>${table([['name','Account'],['type','Type'],['joined','Joined'],['status','Status'],['actions','Actions']],accountRows,empty('◎','No account data','Account moderation data will appear when the existing admin RPC returns rows.'))}</section>
@@ -1410,7 +1440,14 @@ function admin(){if(!hasAdminAccess())return discoverPage();
  <section class="admin-panel" data-admin-panel="podcasts" ${state.adminTab!=='podcasts'?'hidden':''}>${table([['name','Podcast'],['category','Category'],['episodes','Episodes'],['status','Status'],['actions','Actions']],podRows,empty('◉','No podcasts to review','Published shows will appear here.'))}</section>
  <section class="admin-panel" data-admin-panel="payments" ${state.adminTab!=='payments'?'hidden':''}><div class="payment-grid">${paymentCards||empty('₱','No payment requests','There are no subscription requests waiting for review.')}</div></section>
  <dialog class="sw-modal confirm-dialog" id="admin-confirm-dialog"><div class="modal-head"><div><span class="eyebrow">CONFIRM ACTION</span><h2 id="admin-confirm-title">Are you sure?</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close confirmation">${icon('close')}</button></div><p id="admin-confirm-message" class="confirm-message"></p><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button type="button" class="button" id="admin-confirm-action">Confirm</button></div></dialog>`,'Moderation Center','Protected actions remain backed by your existing admin RPCs.');
- const switchTab=(tab)=>{state.adminTab=tab;document.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('active',x.dataset.adminTab===tab));document.querySelectorAll('[data-admin-panel]').forEach(p=>p.hidden=p.dataset.adminPanel!==tab);};
+ const switchTab=(tab,{scroll=true}={})=>{
+   state.adminTab=tab;
+   document.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('active',x.dataset.adminTab===tab));
+   document.querySelectorAll('.admin-overview [data-admin-target]').forEach(x=>{const on=x.dataset.adminTarget===tab;x.classList.toggle('active',on);x.setAttribute('aria-pressed',String(on));});
+   document.querySelectorAll('[data-admin-panel]').forEach(p=>p.hidden=p.dataset.adminPanel!==tab);
+   if(scroll) document.querySelector('.admin-tabbar')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+ };
+ switchTab(state.adminTab,{scroll:false});
  document.querySelectorAll('[data-admin-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.adminTab));
  document.querySelectorAll('.admin-overview [data-admin-target]').forEach(b=>b.onclick=()=>switchTab(b.dataset.adminTarget));
  const confirmDialog=$('#admin-confirm-dialog'),confirmAction=$('#admin-confirm-action');let pendingAction=null;
