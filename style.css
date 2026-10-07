@@ -1643,3 +1643,68 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .top-listen-btn{width:36px;padding:0;border-radius:50%}
   .top-listen-btn span{display:none}
 }
+
+/* Admin overview cards are interactive navigation */
+.admin-overview button{
+  cursor:pointer;
+  position:relative;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.admin-overview button::after{
+  content:'›';
+  position:absolute;
+  right:var(--space-2);
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+  font-size:22px;
+  font-weight:800;
+}
+.admin-overview button:hover,
+.admin-overview button:focus-visible{
+  transform:translateY(-2px);
+  border-color:#5a625d;
+  background:#202421;
+  box-shadow:0 10px 24px #0005;
+}
+.admin-overview button.active{
+  border-color:var(--role-accent,#1ed760);
+  background:color-mix(in srgb,#1a1d1b 86%,var(--role-accent,#1ed760) 14%);
+}
+.admin-overview button.active::after{color:var(--role-accent,#1ed760)}
+
+/* Compact, product-like Listen switch beside the role badge */
+.top-listen-btn{
+  height:34px!important;
+  min-height:34px!important;
+  padding:0 12px!important;
+  border:1px solid #2f6d43!important;
+  border-radius:999px!important;
+  background:#132017!important;
+  color:#8ff0ad!important;
+  box-shadow:none!important;
+  font-size:12px!important;
+  line-height:1!important;
+  letter-spacing:.01em;
+}
+.top-listen-btn:hover,
+.top-listen-btn:focus-visible{
+  background:#183020!important;
+  border-color:#1ed760!important;
+  color:#caffd8!important;
+}
+.top-listen-btn svg{width:15px!important;height:15px!important}
+
+@media (max-width:700px){
+  .top-listen-btn{
+    width:34px!important;
+    min-width:34px!important;
+    padding:0!important;
+  }
+  .admin-overview button::after{right:var(--space-1)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .admin-overview button{transition:none!important}
+  .admin-overview button:hover{transform:none!important}
+}
