@@ -2542,3 +2542,72 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
 @media (prefers-reduced-motion:reduce){
   .library-filter-row .filter-pill,.library-filter-row .filter-pill .pill-label,.podcast-episode-row,.episode-play-overlay,.episode-listen-btn{transition:none!important}
 }
+
+/* v10 moderation scale-up */
+.moderation-commandbar{
+  position:sticky;
+  top:72px;
+  z-index:8;
+  display:grid;
+  grid-template-columns:minmax(260px,1fr) auto auto auto;
+  align-items:center;
+  gap:10px;
+  margin:20px 0 12px;
+  padding:12px;
+  border:1px solid #2b332e;
+  border-radius:16px;
+  background:#121613f2;
+  backdrop-filter:blur(12px);
+}
+.moderation-search{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:42px;
+  padding:0 14px;
+  border:1px solid #333a35;
+  border-radius:999px;
+  background:#1c211d;
+  color:#aeb6b0;
+}
+.moderation-search input{
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  font:inherit;
+}
+.moderation-search input::placeholder{color:#8d958f}
+#admin-status-filter{
+  min-height:42px;
+  padding:0 36px 0 14px;
+  border:1px solid #333a35;
+  border-radius:999px;
+  background:#1c211d;
+  color:#fff;
+}
+#admin-priority-filter{min-height:42px;border-radius:999px;white-space:nowrap}
+#admin-priority-filter.active{background:#193322;border-color:#2b7545;color:#95f5b3}
+.moderation-visible-count{font-size:12px;color:#9ca59e;white-space:nowrap;text-align:right}
+.admin-row-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+.admin-promote{display:inline-flex;align-items:center;gap:7px;background:#1e6d3d!important;color:#fff!important;border-color:#2b8d52!important}
+.admin-promote:hover{background:#258249!important}
+.admin-promote svg{width:16px;height:16px}
+.status-pill.admin-access{background:#173622;color:#91efae;border:1px solid #275a38}
+.admin-role-note{display:block;margin-top:3px;color:#86dca0;font-size:11px;font-weight:700}
+
+@media (max-width:900px){
+  .moderation-commandbar{position:static;grid-template-columns:1fr 1fr;margin-top:14px}
+  .moderation-search{grid-column:1/-1}
+  .moderation-visible-count{text-align:left}
+  .admin-row-actions{justify-content:flex-start}
+}
+@media (max-width:560px){
+  .moderation-commandbar{grid-template-columns:1fr}
+  .moderation-search{grid-column:auto}
+  #admin-status-filter,#admin-priority-filter{width:100%}
+  .admin-row-actions .button{width:100%;justify-content:center}
+}
