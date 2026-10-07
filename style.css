@@ -3058,3 +3058,37 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
 .maya-pay-button{background:linear-gradient(135deg,#34b99e,#1ed760)!important;color:#07120b!important}
 .maya-pay-button:disabled{opacity:.65;cursor:wait}
 @media(max-width:560px){.maya-order-summary{grid-template-columns:46px minmax(0,1fr)}.maya-order-summary>strong:last-child{grid-column:2;justify-self:start}.maya-mark{width:46px;height:46px;border-radius:14px}.maya-checkout-dialog .dialog-actions{display:grid;grid-template-columns:1fr}.maya-checkout-dialog .button{width:100%;justify-content:center}}
+
+/* v21 payment-return stability + shared Premium seats */
+.payment-return-notice{
+  display:grid;
+  grid-template-columns:40px minmax(0,1fr) auto;
+  align-items:center;
+  gap:14px;
+  margin:0 0 18px;
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#181b19;
+}
+.payment-return-notice>span{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.07)}
+.payment-return-notice>span svg{width:20px;height:20px}
+.payment-return-notice strong{display:block;color:#fff;margin-bottom:3px}
+.payment-return-notice p{margin:0;color:#bcc5bf;line-height:1.45;font-size:13px}
+.payment-return-notice.pending{border-color:rgba(244,190,72,.32);background:linear-gradient(90deg,rgba(244,190,72,.08),#181b19 60%)}
+.payment-return-notice.success{border-color:rgba(30,215,96,.38);background:linear-gradient(90deg,rgba(30,215,96,.10),#181b19 60%)}
+.payment-return-notice.error{border-color:rgba(255,108,120,.34);background:linear-gradient(90deg,rgba(255,108,120,.09),#181b19 60%)}
+.subscription-member-chip{position:relative}
+.subscription-member-chip.owner{border-color:rgba(30,215,96,.25);background:rgba(30,215,96,.06)}
+.subscription-member-chip .icon-quiet{margin-left:auto;flex:0 0 auto}
+#sub-invite-result input{margin-top:8px;font-size:13px}
+.premium-benefit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:8px 0 18px}
+.premium-benefit-grid>div{display:grid;gap:7px;padding:16px;border:1px solid #303633;border-radius:18px;background:#181b19}
+.premium-benefit-grid svg{width:22px;height:22px;color:#1ed760}
+.premium-benefit-grid strong{font-size:15px}
+.premium-benefit-grid small{color:#aeb7b1;line-height:1.45}
+@media(max-width:760px){
+  .payment-return-notice{grid-template-columns:36px minmax(0,1fr);align-items:start}
+  .payment-return-notice .button{grid-column:1/-1;width:100%}
+  .premium-benefit-grid{grid-template-columns:1fr}
+}
