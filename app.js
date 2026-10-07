@@ -344,17 +344,17 @@ function shell(content, title, desc) {
   const roleKey = hasAdminAccess() ? (hasArtistAccess() ? 'artist-admin' : 'admin') : hasArtistAccess() ? 'artist' : 'listener';
   document.body.dataset.role = roleKey;
   const roleMenuItems = hasAdminAccess() && hasArtistAccess()
-    ? `<button data-nav="studio">${icon('upload')} Artist Studio</button><button data-nav="admin">${icon('shield')} Moderation</button><button data-nav="discover">${icon('home')} Discover music</button>`
+    ? `<button data-nav="studio">${icon('upload')} Artist Studio</button><button data-nav="admin">${icon('shield')} Moderation</button>`
     : hasAdminAccess()
-      ? `<button data-nav="admin">${icon('shield')} Moderation</button><button data-nav="discover">${icon('home')} Discover music</button>`
+      ? `<button data-nav="admin">${icon('shield')} Moderation</button>`
       : hasArtistAccess()
-        ? `<button data-nav="studio">${icon('upload')} Artist Studio</button><button data-nav="discover">${icon('home')} Discover music</button>`
+        ? `<button data-nav="studio">${icon('upload')} Artist Studio</button>`
         : `<button data-nav="discover">${icon('home')} Discover</button>`;
   const mobileDashboard = hasArtistAccess() ? ['studio','upload','Studio'] : hasAdminAccess() ? ['admin','shield','Admin'] : ['discover','home','Discover'];
   const homeTarget = primaryDashboard();
   const homeLabel = hasArtistAccess() ? 'Artist Studio' : hasAdminAccess() ? 'Moderation' : 'Discover';
   const profileMenu = `<div class="profile-menu" id="profile-menu" hidden>${roleMenuItems}<span class="profile-menu-sep" aria-hidden="true"></span><button data-nav="profile">${icon('users')} Profile</button><button data-nav="${followNav()}">${icon('users')} ${followLabel()}</button><button data-nav="podcast-studio">${icon('mic')} Podcast Studio</button>${isPremiumUser() ? `<button data-nav="downloads">${icon('download')} Downloads</button>` : ''}<button data-nav="history">${icon('clock')} Recently played</button><span class="profile-menu-sep" aria-hidden="true"></span><button id="profile-signout">${icon('forward')} Log out</button></div>`;
-  $('#app').innerHTML = `<div class="app-top"><div class="app-top-left"><button type="button" class="top-logo home-btn" data-nav="${homeTarget}" aria-label="Open ${homeLabel}">${icon('home')}</button><button type="button" class="history-btn" id="nav-back" aria-label="Go back" ${state.hist.i > 0 ? '' : 'disabled'}>${icon('back')}</button><button type="button" class="history-btn" id="nav-forward" aria-label="Go forward" ${state.hist.i < state.hist.max ? '' : 'disabled'}>${icon('forward')}</button><label class="global-search">${icon('search')}<input id="global-search" type="search" autocomplete="off" spellcheck="false" placeholder="What do you want to play?" aria-label="Search SoundWave" value="${esc(state.searchQuery || '')}"></label></div><div class="top-actions"><span class="role-badge">${esc(role)}</span><div class="profile-wrap"><button type="button" class="avatar top-avatar" id="profile-toggle" aria-label="Open profile menu" title="${esc(display)}">${state.profilePhotoUrl?`<img src="${esc(state.profilePhotoUrl)}" alt="${esc(display)}">`:esc(display[0]?.toUpperCase() || 'S')}</button>${profileMenu}</div></div></div>
+  $('#app').innerHTML = `<div class="app-top"><div class="app-top-left"><button type="button" class="top-logo home-btn" data-nav="${homeTarget}" aria-label="Open ${homeLabel}">${icon('home')}</button><button type="button" class="history-btn" id="nav-back" aria-label="Go back" ${state.hist.i > 0 ? '' : 'disabled'}>${icon('back')}</button><button type="button" class="history-btn" id="nav-forward" aria-label="Go forward" ${state.hist.i < state.hist.max ? '' : 'disabled'}>${icon('forward')}</button><label class="global-search">${icon('search')}<input id="global-search" type="search" autocomplete="off" spellcheck="false" placeholder="What do you want to play?" aria-label="Search SoundWave" value="${esc(state.searchQuery || '')}"></label></div><div class="top-actions">${(hasArtistAccess()||hasAdminAccess())?`<button type="button" class="top-listen-btn" data-nav="discover" aria-label="Listen to music">${icon('music')}<span>Listen</span></button>`:''}<span class="role-badge">${esc(role)}</span><div class="profile-wrap"><button type="button" class="avatar top-avatar" id="profile-toggle" aria-label="Open profile menu" title="${esc(display)}">${state.profilePhotoUrl?`<img src="${esc(state.profilePhotoUrl)}" alt="${esc(display)}">`:esc(display[0]?.toUpperCase() || 'S')}</button>${profileMenu}</div></div></div>
 <div class="workspace"><aside class="sidebar ${state.libraryExpanded ? '' : 'library-collapsed'}" aria-label="Your library"><div class="library-head"><button type="button" class="library-toggle" id="library-toggle" aria-expanded="${state.libraryExpanded}" title="${state.libraryExpanded ? 'Collapse' : 'Expand'} your library">${icon('library')}<span>Your Library</span></button><button type="button" class="library-create-btn" data-create-playlist aria-label="Create playlist" title="Create playlist">${icon('plus')}</button></div><div class="library-tools" id="library-tools">${libraryToolsHtml()}</div><div class="library-scroll" id="library-list">${libraryListHtml()}</div></aside>
 <main class="main" id="main-content" style="--tint:${tint}"><div class="dashboard-content"><div class="page-intro"><h1 class="page-title">${esc(title)}</h1></div><div class="page-body">${content}</div></div></main>
 <aside class="context-rail" id="context-rail" aria-label="Now playing">${railHtml()}</aside></div>
@@ -669,7 +669,30 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
  // Artist followers (people who tapped Follow on an artist). Needs the RPCs in sql/RUN_ME_likes_and_followers.sql.
  state.artistFollowers=[];state.socialProfiles={};state.followerCounts={};state.socialRpc={counts:false,mine:false,profiles:false};
  const [fcnt,fmine,fprof]=await Promise.all([db.rpc('get_artist_follower_counts'),state.artist?db.rpc('get_my_artist_followers'):Promise.resolve({data:[],error:null}),db.rpc('get_social_profiles')]);
- if(!fcnt.error){state.socialRpc.counts=true;(fcnt.data||[]).forEach(r=>{state.followerCounts[Number(r.artist_id)]=Number(r.follower_count)||0;});}else console.info('Follower counts unavailable (run sql/RUN_ME_likes_and_followers.sql):',fcnt.error.message);
+ if(!fcnt.error){
+   const rows=Array.isArray(fcnt.data)?fcnt.data:(fcnt.data?[fcnt.data]:[]);
+   rows.forEach(r=>{
+     const artistId=Number(r.artist_id ?? r.artistid ?? r.id);
+     const count=Number(r.follower_count ?? r.followers ?? r.count ?? 0);
+     if(Number.isFinite(artistId)) state.followerCounts[artistId]=Number.isFinite(count)?count:0;
+   });
+   state.socialRpc.counts=true;
+ }else console.info('Follower-count RPC unavailable; trying RLS-safe table counts:',fcnt.error.message);
+ // Some deployed projects expose favorite_artist under RLS but do not grant EXECUTE
+ // on get_artist_follower_counts. Fall back to exact per-artist counts so Discover
+ // can still show auditable follower numbers without inventing data.
+ if(!state.socialRpc.counts || !Object.keys(state.followerCounts).length){
+   const countResults=await Promise.all((state.artists||[]).map(async a=>{
+     const r=await db.from('favorite_artist').select('artist_id',{count:'exact',head:true}).eq('artist_id',a.artist_id);
+     return {artist_id:Number(a.artist_id),count:r.error?null:Number(r.count||0),error:r.error};
+   }));
+   const readable=countResults.filter(x=>!x.error && x.count!=null);
+   if(readable.length){
+     readable.forEach(x=>{state.followerCounts[x.artist_id]=x.count;});
+     state.socialRpc.counts=true;
+     state.socialRpc.countSource='favorite_artist';
+   }
+ } else state.socialRpc.countSource='rpc';
  if(!fmine.error){state.socialRpc.mine=true;state.artistFollowers=fmine.data||[];}else console.info('Artist followers unavailable:',fmine.error.message);
  if(!fprof.error){state.socialRpc.profiles=true;(fprof.data||[]).forEach(p=>{state.socialProfiles[String(p.user_id)]=p;});}
  state.artistFollowers.forEach(r=>{if(r.display_name&&!state.socialProfiles[String(r.follower_user_id)])state.socialProfiles[String(r.follower_user_id)]={user_id:r.follower_user_id,display_name:r.display_name};});
