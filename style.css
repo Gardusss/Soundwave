@@ -3596,3 +3596,105 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
 }
 
 .deactivated-card .inline{justify-content:center;flex-wrap:wrap}
+
+/* v32 artist catalog, player balance, and site scrolling */
+html{scroll-behavior:smooth}
+body{scroll-behavior:smooth}
+.main,.sidebar,.context-rail,.library-scroll,.dashboard-content{scroll-behavior:smooth}
+.main,.sidebar,.context-rail,.library-scroll{
+  scrollbar-width:thin;
+  scrollbar-color:#4a534d transparent;
+}
+.main::-webkit-scrollbar,.sidebar::-webkit-scrollbar,.context-rail::-webkit-scrollbar,.library-scroll::-webkit-scrollbar{width:8px;height:8px}
+.main::-webkit-scrollbar-track,.sidebar::-webkit-scrollbar-track,.context-rail::-webkit-scrollbar-track,.library-scroll::-webkit-scrollbar-track{background:transparent}
+.main::-webkit-scrollbar-thumb,.sidebar::-webkit-scrollbar-thumb,.context-rail::-webkit-scrollbar-thumb,.library-scroll::-webkit-scrollbar-thumb{background:#3b433e;border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+.main::-webkit-scrollbar-thumb:hover,.sidebar::-webkit-scrollbar-thumb:hover,.context-rail::-webkit-scrollbar-thumb:hover,.library-scroll::-webkit-scrollbar-thumb:hover{background:#667168;background-clip:padding-box}
+
+/* Release selector: equal cards, stable artwork, visible selected state. */
+.studio-release-grid{
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.studio-release-card{
+  max-width:none;
+  min-height:320px;
+  padding:12px;
+  border-radius:20px;
+  background:linear-gradient(180deg,#191d1a,#121512);
+  transition:border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.studio-release-card:hover{transform:translateY(-2px);border-color:#465047}
+.studio-release-card.selected-release{
+  border-color:rgba(30,215,96,.7);
+  background:linear-gradient(180deg,rgba(30,215,96,.10),#121512 34%);
+  box-shadow:0 0 0 1px rgba(30,215,96,.12) inset,0 12px 30px rgba(0,0,0,.22);
+}
+.studio-release-main{width:100%;min-width:0;text-align:left;background:transparent;border:0;color:inherit;padding:0;cursor:pointer}
+.studio-album-art{
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+  height:auto!important;
+  border-radius:16px!important;
+  overflow:hidden;
+  background:#252a27;
+}
+.studio-album-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.studio-release-copy{min-height:76px!important;padding:10px 2px 4px!important}
+.studio-release-copy .card-title-line{align-items:flex-start;gap:8px}
+.studio-release-copy strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.studio-deactivate{margin-top:auto;width:100%;min-height:40px}
+.studio-release-card.selected-release .studio-release-main::after{
+  content:'Selected';display:inline-flex;margin-top:8px;padding:4px 8px;border-radius:999px;background:#1ed7601f;color:#9cf0ba;border:1px solid #1ed76048;font-size:10px;font-weight:800;
+}
+.catalog-track-heading{margin-top:26px;padding-top:18px;border-top:1px solid #ffffff10}
+.catalog-song-empty{grid-column:1/-1;padding:28px;border:1px dashed #364038;border-radius:18px;background:#151815}
+
+/* Desktop player follows the reference: song left, transport centered, utilities right. */
+@media (min-width:901px){
+  .custom-playbar{
+    height:96px;
+    padding:10px 18px;
+    display:grid;
+    grid-template-columns:minmax(240px,1fr) minmax(430px,620px) minmax(240px,1fr)!important;
+    align-items:center;
+    gap:20px;
+  }
+  .player-song{justify-self:start;width:min(100%,360px)}
+  .player-center{
+    position:static!important;
+    left:auto!important;
+    transform:none!important;
+    width:100%!important;
+    justify-self:center;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:7px;
+    z-index:auto!important;
+  }
+  .play-controls{justify-content:center;gap:16px;width:100%}
+  .play-controls .icon-quiet{width:36px;height:36px;min-width:36px;min-height:36px}
+  .player-main-play{width:46px;height:46px;min-width:46px;min-height:46px;background:#fff;color:#080808;box-shadow:0 6px 18px #0009}
+  .player-main-play svg{width:21px;height:21px;fill:currentColor}
+  .player-timeline{width:100%;max-width:620px;margin:0 auto;gap:10px}
+  .player-timeline span{min-width:34px;font-variant-numeric:tabular-nums}
+  .player-right{justify-self:end;justify-content:flex-end;width:min(100%,320px);gap:10px}
+  .player-right .icon-quiet{width:34px;height:34px;min-width:34px;min-height:34px}
+  .player-right>input{width:110px}
+}
+
+/* Keep transport compact and centered on phones. */
+@media (max-width:900px){
+  .studio-release-grid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(152px,44vw);grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:8px;margin-inline:0}
+  .studio-release-card{scroll-snap-align:start;min-height:0;padding:10px;border-radius:18px}
+  .studio-release-copy{min-height:64px!important}
+  .studio-deactivate{min-height:38px}
+  .catalog-track-heading{margin-top:18px;padding-top:14px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html,.main,.sidebar,.context-rail,.library-scroll,.dashboard-content{scroll-behavior:auto!important}
+  .studio-release-card{transition:none}
+}
