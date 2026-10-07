@@ -1262,7 +1262,8 @@ html,body{max-width:100%;overflow-x:hidden}
 .library-filters{display:none!important}
 @media (max-width:700px){
   html,body{width:100%;max-width:100%;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  #app{width:100%;max-width:100%;min-height:100dvh;overflow:visible}
+  #app{width:100%;max-width:100%;min-height:100dvh;overflow:visible!important}
+  body{position:static!important;height:auto!important;min-height:100dvh;overscroll-behavior-y:auto;touch-action:pan-y}
   .app-top{height:var(--space-5);padding:0 var(--space-1);gap:var(--space-1)}
   .app-top-left{flex:1;min-width:0;gap:var(--space-1)}
   .top-logo{width:var(--space-4);height:var(--space-4);flex:0 0 var(--space-4)}
@@ -1272,10 +1273,26 @@ html,body{max-width:100%;overflow-x:hidden}
   .top-actions{margin-left:auto;gap:var(--space-1)}
   .role-badge{max-width:112px;overflow:hidden;text-overflow:ellipsis}
 
-  .workspace,.workspace:has(.library-collapsed),body.rail-hidden .workspace{display:block;width:100%;max-width:100%;padding:0}
+  .workspace,.workspace:has(.library-collapsed),body.rail-hidden .workspace{display:block;width:100%;max-width:100%;height:auto!important;min-height:0!important;padding:0;overflow:visible!important}
   .workspace .sidebar,.workspace .context-rail{display:none!important}
-  .workspace .main{width:100%;max-width:100%;height:auto!important;min-height:calc(100dvh - 117px);border-radius:0;overflow:visible!important}
-  .dashboard-content{width:100%;max-width:100%;min-height:100%;padding:var(--space-2) var(--space-2) calc(69px + var(--space-3) + env(safe-area-inset-bottom,0))}
+  /* Mobile owns its own vertical scroll container. This avoids desktop fixed-height rules trapping the page. */
+  .workspace .main{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:calc(100dvh - var(--space-5) - 69px)!important;
+    min-height:0!important;
+    max-height:none!important;
+    border-radius:0;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y;
+    scrollbar-width:none;
+  }
+  .workspace .main::-webkit-scrollbar{display:none}
+  .dashboard-content{width:100%;max-width:100%;min-height:max-content;padding:var(--space-2) var(--space-2) calc(69px + var(--space-3) + env(safe-area-inset-bottom,0))}
   body:has(#soundwave-player) .dashboard-content{padding-bottom:calc(69px + 72px + var(--space-3) + env(safe-area-inset-bottom,0))}
   .page-intro{margin:0 0 var(--space-2)}
   .page-title{font-size:var(--type-5);line-height:1.15}
