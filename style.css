@@ -3565,3 +3565,34 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .wizard-dialog .upload-step{padding:12px}
   .history-toolbar{align-items:flex-start;flex-direction:column}
 }
+
+/* v31 integrity + creator polish */
+.playlist-cover-drop{min-height:150px;margin-bottom:14px;background:linear-gradient(145deg,#171b18,#101412);border:1px dashed #455049}
+.playlist-cover-drop>span{width:104px;height:104px;border-radius:16px;overflow:hidden;display:grid;place-items:center;background:#232823}
+.playlist-cover-drop>span>*{width:100%;height:100%;object-fit:cover}
+#playlist-edit-dialog{width:min(94vw,600px)}
+#playlist-edit-dialog .compact-form{display:grid;gap:14px}
+#playlist-edit-dialog textarea{min-height:96px}
+#playlist-edit-dialog select{appearance:auto;background:#111712;color:#fff;border:1px solid #3d4940}
+#playlist-edit-dialog option{background:#171b18;color:#fff}
+.field-help.availability{display:block;min-height:17px;margin-top:6px}
+.field-help.availability.good{color:#70e99d}.field-help.availability.bad{color:#ff8e9d}
+.field-valid{border-color:#35c76f!important;box-shadow:0 0 0 1px rgba(53,199,111,.18)}
+.field-invalid{border-color:#ff6b7e!important;box-shadow:0 0 0 1px rgba(255,107,126,.18)}
+
+.studio-release-grid{align-items:stretch;grid-auto-rows:1fr}
+.studio-release-card{height:100%;display:flex;flex-direction:column}
+.studio-release-main{display:flex;flex-direction:column;flex:1}
+.studio-release-copy{min-height:78px;display:flex!important;flex-direction:column;justify-content:flex-start}
+.studio-release-card>.button,.studio-release-card .release-edit-icon{flex-shrink:0}
+.song-manager-grid,.admin-song-manager{align-items:stretch}
+.song-manager-card,.admin-song-card{height:100%}
+
+@media (min-width:901px){
+  .custom-playbar{position:fixed}
+  .player-center{position:absolute;left:50%;transform:translateX(-50%);width:min(560px,44vw);z-index:2}
+  .play-controls{width:100%;justify-content:center}
+  .player-main-play{width:38px;height:38px}
+}
+
+.deactivated-card .inline{justify-content:center;flex-wrap:wrap}
