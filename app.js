@@ -80,7 +80,7 @@ function persistPlayerSnapshot(data = state.player, resumeAt = null) {
     savedAt: new Date().toISOString()
   });
 }
-Object.assign(state,{insightHistory:[],listeningStats:null,topWeekSongs:[],friendActivity:[],friendNow:[],artistThirtyDay:[],artistTopListeners:[],adminAnalyticsHistory:[],recentSearches:[],playlistPresence:[],competitionLoaded:false,podcastStudioHistory:[],podcastRecSignals:{categories:{},shows:[]},discoverExpanded:{albums:false,curated:false}});
+Object.assign(state,{insightHistory:[],listeningStats:null,topWeekSongs:[],friendActivity:[],friendNow:[],artistThirtyDay:[],artistTopListeners:[],adminAnalyticsHistory:[],analyticsSongNames:{},recentSearches:[],playlistPresence:[],competitionLoaded:false,podcastStudioHistory:[],podcastRecSignals:{categories:{},shows:[]},discoverExpanded:{albums:false,curated:false}});
 const nice = (n) => Number.isFinite(Number(n)) ? `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}` : '—';
 const ANALYTICS_WINDOW_DAYS = 30;
 const val = (id) => document.getElementById(id)?.value?.trim();
@@ -177,6 +177,7 @@ function afterRender() {
   document.body.classList.toggle('rail-hidden', !!prefs.railHidden);
   if (!state.user) return;
   syncHearts(); markPlaying();
+  if (state.page === 'artist-detail') bindArtistScrollBehavior();
   const h = pageToHash();
   if (!state.routeReady) { state.routeReady = true; window.history.replaceState({ i: state.hist.i }, '', h); }
   else if (location.hash !== h) { state.hist.i++; state.hist.max = state.hist.i; window.history.pushState({ i: state.hist.i }, '', h); }
@@ -1324,11 +1325,17 @@ function artistDetail() {
   const albums = catalogAlbums().filter((a) => Number(a.artist?.artist_id) === Number(artist.artist_id));
   const own = isOwnArtist(artist), fc = followerText(artist.artist_id);
   state.tint = tintFor(artist.artist_id);
-  shell(`<section class="artist-profile-hero"><span class="artist-profile-avatar" style="background:${grad(artist.artist_id)}">${esc(artist.artist_name?.[0] || 'A')}</span><div><span class="coll-kind">Artist</span><h1 class="coll-title">${esc(artist.artist_name)}</h1><p class="coll-sub">${fc ? `<strong data-follower-count="${artist.artist_id}">${fc}</strong> · ` : ''}${albums.length} ${albums.length === 1 ? 'release' : 'releases'} · ${releases.length} ${releases.length === 1 ? 'song' : 'songs'}${artist.country ? ' · ' + esc(artist.country) : ''}</p></div></section>
-<div class="coll-actions">${releases.length ? `<button type="button" class="sw-big-play" data-play-ids="${ids(releases).join(',')}" aria-label="Play ${esc(artist.artist_name)}">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle">${icon('shuffle')}</button>` : ''}${own ? `<button type="button" class="follow-btn" data-nav="followers">View your followers</button>` : followBtn(artist)}</div>
-${releases.length ? `<section><div class="section-heading"><h2>Popular</h2></div>${trackTable(releases.slice(0, 10), { queue: ids(releases), showAlbum: false })}</section>` : ''}
-${albums.length ? `<section class="shelf-section"><div class="section-heading"><h2>Discography</h2></div><div class="shelf">${albums.map(albumTile).join('')}</div></section>` : '<div class="empty">No published releases yet.</div>'}
-${artist.bio ? `<section class="about-card"><h2>About</h2><p>${esc(artist.bio)}</p></section>` : ''}`, '', '');
+  shell(`<div class="artist-sticky-bar" id="artist-sticky-bar"><span class="artist-sticky-avatar" style="background:${grad(artist.artist_id)}">${esc(artist.artist_name?.[0] || 'A')}</span><strong>${esc(artist.artist_name)}</strong>${releases.length ? `<button type="button" class="artist-sticky-play" data-play-ids="${ids(releases).join(',')}" aria-label="Play ${esc(artist.artist_name)}">${icon('play')}</button>` : ''}</div><section class="artist-profile-hero" id="artist-profile-hero"><span class="artist-profile-avatar" style="background:${grad(artist.artist_id)}">${esc(artist.artist_name?.[0] || 'A')}</span><div><span class="coll-kind">Artist</span><h1 class="coll-title">${esc(artist.artist_name)}</h1><p class="coll-sub">${fc ? `<strong data-follower-count="${artist.artist_id}">${fc}</strong> · ` : ''}${albums.length} ${albums.length === 1 ? 'release' : 'releases'} · ${releases.length} ${releases.length === 1 ? 'song' : 'songs'}${artist.country ? ' · ' + esc(artist.country) : ''}</p></div></section>
+<div class="coll-actions artist-primary-actions">${releases.length ? `<button type="button" class="sw-big-play" data-play-ids="${ids(releases).join(',')}" aria-label="Play ${esc(artist.artist_name)}">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle">${icon('shuffle')}</button>` : ''}${own ? `<button type="button" class="follow-btn" data-nav="followers">View your followers</button>` : followBtn(artist)}</div>
+${releases.length ? `<section class="artist-section"><div class="section-heading"><h2>Popular</h2></div>${trackTable(releases.slice(0, 10), { queue: ids(releases), showAlbum: false })}</section>` : ''}
+${albums.length ? `<section class="shelf-section artist-section"><div class="section-heading"><h2>Discography</h2></div><div class="shelf">${albums.map(albumTile).join('')}</div></section>` : '<div class="empty">No published releases yet.</div>'}
+${artist.bio ? `<section class="about-card artist-section"><h2>About</h2><p>${esc(artist.bio)}</p></section>` : ''}`, '', '');
+}
+function bindArtistScrollBehavior(){
+  const main=document.querySelector('.main'),hero=document.getElementById('artist-profile-hero'),bar=document.getElementById('artist-sticky-bar');
+  if(!main||!hero||!bar)return;
+  const update=()=>{const threshold=Math.max(88,hero.offsetHeight*.58);bar.classList.toggle('show',main.scrollTop>threshold);document.body.classList.toggle('artist-scrolled',main.scrollTop>threshold);};
+  main.addEventListener('scroll',update,{passive:true});update();
 }
 function songRows(rows, showAdd = false, queueIds = null) { return trackTable(rows, { queue: queueIds?.length ? queueIds : ids(rows) }); }
 function recommendationShelf(){
@@ -2275,7 +2282,8 @@ function weeklyTopHtml(){if(!state.topWeekSongs.length)return '';return `<sectio
 function chartBars(items,{label='name',value='value',maxItems=6}={}){const rows=(items||[]).slice(0,maxItems),max=Math.max(1,...rows.map(x=>Number(x[value])||0));return `<div class="rank-bars">${rows.map((x,i)=>`<div class="rank-bar"><div><span>${i+1}</span><strong>${esc(x[label]||'Unknown')}</strong><b>${Number(x[value])||0}</b></div><i><s style="width:${Math.max(4,((Number(x[value])||0)/max)*100)}%"></s></i></div>`).join('')||'<p class="muted small">No stream data is visible yet.</p>'}</div>`;}
 function roleDistributionHtml(users=[]){const counts={Listener:0,Artist:0,Admin:0};for(const u of users){const t=String(u.account_type||'Listener');counts[t]=(counts[t]||0)+1;}if(hasAdminAccess())counts.Admin=Math.max(counts.Admin,1);const total=Math.max(1,Object.values(counts).reduce((a,b)=>a+b,0));return `<div class="role-distribution">${Object.entries(counts).map(([k,v])=>`<div><span><i class="role-dot role-${k.toLowerCase()}"></i>${k}</span><strong>${v}</strong><small>${Math.round(v/total*100)}%</small></div>`).join('')}</div>`;}
 function artistChartData(){const bySong=new Map(),byAlbum=new Map();for(const r of state.artistThirtyDay||[]){bySong.set(Number(r.song_id),(bySong.get(Number(r.song_id))||0)+1);const song=songById(r.song_id),al=song?.album?.album_title||'Unknown release';byAlbum.set(al,(byAlbum.get(al)||0)+1);}const topSongs=[...bySong.entries()].map(([id,value])=>({name:songById(id)?.song_title||`Song ${id}`,value,id})).sort((a,b)=>b.value-a.value);const releases=[...byAlbum.entries()].map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);return {topSongs,releases,most:topSongs[0]||null,unique:new Set((state.artistThirtyDay||[]).map(r=>String(r.user_id))).size};}
-function adminChartData(){const rows=state.adminAnalyticsHistory||[],days=Array(30).fill(0),bySong=new Map(),byArtist=new Map();for(const r of rows){const diff=Math.floor((Date.now()-new Date(r.stream_date).getTime())/86400000);if(diff>=0&&diff<30)days[29-diff]++;bySong.set(Number(r.song_id),(bySong.get(Number(r.song_id))||0)+1);const song=songById(r.song_id),aid=song?.album?.artist?.artist_id;if(aid)byArtist.set(Number(aid),(byArtist.get(Number(aid))||0)+1);}const topSongs=[...bySong.entries()].map(([id,value])=>({name:songById(id)?.song_title||`Song ${id}`,value})).sort((a,b)=>b.value-a.value);const topArtists=[...byArtist.entries()].map(([id,value])=>({name:state.artists.find(a=>Number(a.artist_id)===id)?.artist_name||`Artist ${id}`,value})).sort((a,b)=>b.value-a.value);return {days,topSongs,topArtists,most:topSongs[0]||null,total:rows.length,unique:new Set(rows.map(r=>String(r.user_id))).size};}
+function analyticsSongTitle(id){return songById(id)?.song_title||state.analyticsSongNames?.[Number(id)]||'Inactive or unavailable track';}
+function adminChartData(){const rows=state.adminAnalyticsHistory||[],days=Array(30).fill(0),bySong=new Map(),byArtist=new Map();for(const r of rows){const diff=Math.floor((Date.now()-new Date(r.stream_date).getTime())/86400000);if(diff>=0&&diff<30)days[29-diff]++;bySong.set(Number(r.song_id),(bySong.get(Number(r.song_id))||0)+1);const song=songById(r.song_id),aid=song?.album?.artist?.artist_id;if(aid)byArtist.set(Number(aid),(byArtist.get(Number(aid))||0)+1);}const topSongs=[...bySong.entries()].map(([id,value])=>({name:analyticsSongTitle(id),value})).sort((a,b)=>b.value-a.value);const topArtists=[...byArtist.entries()].map(([id,value])=>({name:state.artists.find(a=>Number(a.artist_id)===id)?.artist_name||`Artist ${id}`,value})).sort((a,b)=>b.value-a.value);return {days,topSongs,topArtists,most:topSongs[0]||null,total:rows.length,unique:new Set(rows.map(r=>String(r.user_id))).size};}
 function artistChartsHtml(){const d=artistChartData(),days=Array(30).fill(0);for(const r of state.artistThirtyDay||[]){const x=Math.floor((Date.now()-new Date(r.stream_date).getTime())/86400000);if(x>=0&&x<30)days[29-x]++;}return `<section class="analytics-suite artist-suite">${state.analyticsSyncError?`<div class="notice compact-notice">Analytics refresh failed. Showing the last successfully loaded server data.</div>`:''}<div class="section-heading"><div><span class="eyebrow">PERFORMANCE</span><h2>Music analytics</h2></div><span class="muted small">Last 30 days</span></div><div class="chart-grid"><article class="chart-card chart-wide"><div class="chart-head"><div><small>Stream trend</small><strong>${state.artistThirtyDay.length}</strong></div><span>30 days</span></div>${sparkline(days)}</article><article class="chart-card"><div class="chart-head"><div><small>Most streamed song</small><strong class="chart-title">${esc(d.most?.name||'No streams yet')}</strong></div><span>${d.most?.value||0} plays</span></div>${chartBars(d.topSongs)}</article><article class="chart-card"><div class="chart-head"><div><small>Streams by release</small><strong>${d.releases.length}</strong></div><span>releases</span></div>${chartBars(d.releases)}</article><article class="chart-card"><div class="chart-head"><div><small>Unique listeners</small><strong>${d.unique}</strong></div><span>visible listeners</span></div><div class="metric-ring"><span>${d.unique}</span><small>people</small></div></article></div></section>`;}
 function adminChartsHtml(users=[]){const d=adminChartData();return `<section class="analytics-suite admin-suite">${state.analyticsSyncError?`<div class="notice compact-notice">Analytics refresh failed. Showing the last successfully loaded server data.</div>`:''}<div class="section-heading"><div><span class="eyebrow">PLATFORM ANALYTICS</span><h2>What is happening on SoundWave</h2></div><span class="muted small">Qualified streams · 30s+ or completed</span></div><div class="chart-grid"><article class="chart-card chart-wide"><div class="chart-head"><div><small>Streams</small><strong>${d.total}</strong></div><span>last 30 days</span></div>${sparkline(d.days)}</article><article class="chart-card"><div class="chart-head"><div><small>Most streamed songs</small><strong class="chart-title">${esc(d.most?.name||'No streams yet')}</strong></div><span>${d.most?.value||0} plays</span></div>${chartBars(d.topSongs)}</article><article class="chart-card"><div class="chart-head"><div><small>Top artists</small><strong>${d.topArtists.length}</strong></div><span>by streams</span></div>${chartBars(d.topArtists)}</article><article class="chart-card"><div class="chart-head"><div><small>Account mix</small><strong>${users.length}</strong></div><span>accounts</span></div>${roleDistributionHtml(users)}</article></div></section>`;}
 function sparkline(rows){const pts=rows.length?rows:[0];const max=Math.max(1,...pts);return `<svg class="sparkline" viewBox="0 0 360 95" preserveAspectRatio="none" aria-label="30 day streams"><polyline points="${pts.map((v,i)=>`${(i/(pts.length-1||1))*360},${88-(v/max)*72}`).join(' ')}" fill="none" vector-effect="non-scaling-stroke"></polyline></svg>`;}
@@ -2307,12 +2315,21 @@ async function fetchArtistServerStreams(days=ANALYTICS_WINDOW_DAYS){
 async function fetchAdminServerStreams(days=ANALYTICS_WINDOW_DAYS){
   if(!hasAdminAccess())return null;
   let rpc=await db.rpc('admin_stream_rows_v26',{p_days:days});
-  if(!rpc.error){state.analyticsSyncError='';return normalizeAnalyticsRpcRows(rpc.data)??[];}
-  console.warn('v26 admin analytics RPC unavailable:',rpc.error);
-  rpc=await db.rpc('admin_stream_rows',{p_days:days});
-  if(rpc.error){state.analyticsSyncError=humanErr(rpc.error);console.warn('Admin analytics sync failed:',rpc.error);return null;}
+  let rows=null;
+  if(!rpc.error) rows=normalizeAnalyticsRpcRows(rpc.data)??[];
+  else{
+    console.warn('v26 admin analytics RPC unavailable:',rpc.error);
+    rpc=await db.rpc('admin_stream_rows',{p_days:days});
+    if(rpc.error){state.analyticsSyncError=humanErr(rpc.error);console.warn('Admin analytics sync failed:',rpc.error);return null;}
+    rows=normalizeAnalyticsRpcRows(rpc.data)??[];
+  }
   state.analyticsSyncError='';
-  return normalizeAnalyticsRpcRows(rpc.data)??[];
+  const missing=[...new Set(rows.map(r=>Number(r.song_id)).filter(id=>id&&!songById(id)&&!state.analyticsSongNames?.[id]))];
+  if(missing.length){
+    const meta=await db.from('song').select('song_id,song_title').in('song_id',missing).limit(500);
+    if(!meta.error){state.analyticsSongNames={...(state.analyticsSongNames||{}),...Object.fromEntries((meta.data||[]).map(s=>[Number(s.song_id),s.song_title]))};}
+  }
+  return rows;
 }
 async function refreshCrossDeviceMetrics({renderIfNeeded=true}={}){
   if(!state.user)return;
@@ -2334,11 +2351,13 @@ async function refreshCrossDeviceMetrics({renderIfNeeded=true}={}){
     if(changed&&renderIfNeeded&&['artist-dashboard','studio','admin','admin-dashboard','album-detail'].includes(state.page))render();
   }catch(e){console.warn('Cross-device analytics refresh failed',e);}
 }
+function hasOpenFileWorkflow(){return !!document.querySelector('dialog[open], input[type="file"]:focus');}
 function bindCrossDeviceRefresh(){
   if(state.crossDeviceRefreshBound)return;
   state.crossDeviceRefreshBound=true;
-  window.addEventListener('focus',()=>{void refreshCrossDeviceMetrics();});
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void refreshCrossDeviceMetrics();});
+  let lastHiddenAt=0;
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')lastHiddenAt=Date.now();else if(!hasOpenFileWorkflow()&&Date.now()-lastHiddenAt>1200)void refreshCrossDeviceMetrics();});
+  window.addEventListener('focus',()=>{setTimeout(()=>{if(!hasOpenFileWorkflow())void refreshCrossDeviceMetrics();},500);});
 }
 function setupRealtime(){
  if(!db||!state.user)return;
@@ -2562,7 +2581,7 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); state.installEvent = e; const b = document.getElementById('install-app'); if (b) b.hidden = false; });
 window.addEventListener('appinstalled', () => { state.installEvent = null; const b = document.getElementById('install-app'); if (b) b.hidden = true; });
 initMediaKeys();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=31').catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=33').catch(()=>{});
 boot();
 
 /* Card hover effects: cursor spotlight + subtle 3D tilt (works for cards rendered later too) */
