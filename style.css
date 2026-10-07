@@ -3215,3 +3215,254 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .analytics-suite .chart-card,.analytics-suite .chart-card.chart-wide{min-height:118px!important;padding:8px!important}
   .profile-stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* v28 mobile auth + app-wide compact card rails */
+.auth-email-toggle{display:none}
+.auth-show-note{color:#c5cce6}
+
+@media(max-width:760px){
+  /* Mobile auth: SoundWave hero + rounded auth sheet */
+  .auth-wrap.auth-v28{
+    display:block!important;
+    min-height:100dvh;
+    background:#0a0d0b;
+    overflow-x:hidden;
+  }
+  .auth-v28 .auth-show{
+    min-height:300px;
+    padding:22px 20px 72px!important;
+    justify-content:flex-start;
+    gap:36px;
+    background:
+      radial-gradient(circle at 88% 12%,rgba(255,92,120,.28),transparent 28%),
+      radial-gradient(circle at 16% 82%,rgba(30,215,96,.26),transparent 36%),
+      linear-gradient(145deg,#351525 0%,#10231a 52%,#09100c 100%)!important;
+  }
+  .auth-v28 .auth-show .brand{
+    font-size:22px!important;
+    position:relative;
+    z-index:2;
+  }
+  .auth-v28 .brand-icon{
+    background:#1ed760;
+    color:#07120b;
+    box-shadow:0 0 0 5px rgba(30,215,96,.12);
+  }
+  .auth-mobile-hero-copy{position:relative;z-index:2;max-width:430px}
+  .auth-v28 .auth-show h1{
+    font-size:clamp(35px,10vw,54px)!important;
+    line-height:.96;
+    letter-spacing:-2.2px!important;
+    margin:10px 0 12px;
+    max-width:360px;
+  }
+  .auth-v28 .auth-show p{font-size:14px!important;line-height:1.5;margin:0;max-width:330px}
+  .auth-v28 .auth-show-note{display:none}
+  .auth-v28 .auth-waveform{opacity:.18!important;transform:scale(.78);transform-origin:left bottom}
+  .auth-v28 .note-particles{opacity:.18!important}
+  .auth-v28 .auth-panel{
+    display:block!important;
+    margin-top:-40px;
+    padding:22px 18px 30px!important;
+    border-radius:32px 32px 0 0;
+    background:linear-gradient(180deg,#171c19 0%,#101311 100%)!important;
+    position:relative;
+    z-index:4;
+    min-height:calc(100dvh - 260px);
+    box-shadow:0 -18px 50px rgba(0,0,0,.32);
+  }
+  .auth-v28 .auth-box{width:100%!important;max-width:440px!important;margin:0 auto}
+  .auth-mobile-heading{text-align:left;margin-bottom:14px}
+  .auth-v28 .auth-mobile-heading h2{font-size:30px!important;margin:4px 0 6px!important;letter-spacing:-1px!important}
+  .auth-v28 .auth-mobile-heading p{margin:0;font-size:13px}
+  .auth-v28 .auth-google,
+  .auth-v28 .auth-email-toggle{
+    display:flex!important;
+    width:100%;
+    min-height:50px;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    border-radius:16px!important;
+    margin:10px 0 0!important;
+    font-size:15px;
+  }
+  .auth-v28 .auth-google{background:#f6f7f6!important;border-color:#f6f7f6!important;color:#111!important}
+  .auth-v28 .auth-email-toggle{background:#202622!important;border:1px solid #35423a!important;color:#fff!important}
+  .auth-v28 .auth-email-toggle svg{width:17px;height:17px}
+  .auth-v28 .auth-separator{margin:14px 0 8px!important;font-size:11px;color:#7f8d84}
+  .auth-v28 .auth-email-shell{display:none}
+  .auth-v28 .auth-email-shell.open{display:block;animation:authSheetOpen .22s ease-out}
+  @keyframes authSheetOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .auth-v28 .auth-mode{margin:10px 0 14px!important;padding:4px!important;border-radius:14px!important;background:#0e1210!important}
+  .auth-v28 .auth-mode .button{min-height:40px;border-radius:11px!important;font-size:13px}
+  .auth-v28 .auth-box .field{gap:6px}
+  .auth-v28 .auth-box .field input,
+  .auth-v28 .auth-box .field select{
+    min-height:48px;
+    border-radius:14px!important;
+    padding:11px 13px!important;
+    font-size:16px;
+    background:#151a17!important;
+    border-color:#303b34!important;
+  }
+  .auth-v28 .auth-email-submit{min-height:48px;border-radius:14px!important;background:#1ed760!important;color:#07120b!important}
+  .auth-v28 .auth-legal{margin:14px 2px 0;font-size:10px;line-height:1.45;color:#7f8b83}
+
+  /* Compact app shell spacing */
+  .dashboard-content{padding-inline:10px!important;padding-top:8px!important}
+  .section-heading{margin:16px 0 9px!important}
+  .section-heading h2{font-size:21px!important}
+  .workspace-hero,.hero{padding:16px!important;border-radius:20px!important;min-height:0!important}
+  .workspace-hero h2,.hero h2{font-size:27px!important}
+  .workspace-hero p,.hero p{font-size:12px!important;line-height:1.45!important}
+
+  /* App-wide horizontal card rails instead of tall stacks */
+  .creator-summary-grid,
+  .admin-summary-grid,
+  .podcast-studio-grid,
+  .studio-release-grid,
+  .cover-grid.podcast-show-grid,
+  body[data-page="artists"] .artist-grid,
+  body[data-page="music"] #search-results .shelf,
+  body[data-page="playlists"] .shelf.wrap,
+  body[data-page="podcasts"] .cover-grid,
+  .discover-expanded{
+    display:grid!important;
+    grid-auto-flow:column!important;
+    grid-template-columns:none!important;
+    grid-auto-columns:minmax(148px,44vw)!important;
+    gap:10px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x proximity;
+    overscroll-behavior-inline:contain;
+    padding:2px 2px 10px!important;
+    margin-inline:0!important;
+    scrollbar-width:none;
+  }
+  .creator-summary-grid::-webkit-scrollbar,
+  .admin-summary-grid::-webkit-scrollbar,
+  .podcast-studio-grid::-webkit-scrollbar,
+  .studio-release-grid::-webkit-scrollbar,
+  .cover-grid.podcast-show-grid::-webkit-scrollbar,
+  body[data-page="artists"] .artist-grid::-webkit-scrollbar,
+  body[data-page="playlists"] .shelf.wrap::-webkit-scrollbar,
+  body[data-page="podcasts"] .cover-grid::-webkit-scrollbar{display:none}
+  .creator-summary-grid>*,.admin-summary-grid>*,.podcast-studio-grid>*,.studio-release-grid>*,.cover-grid.podcast-show-grid>*,body[data-page="artists"] .artist-grid>*,body[data-page="playlists"] .shelf.wrap>*,body[data-page="podcasts"] .cover-grid>*{scroll-snap-align:start}
+
+  /* Creator overview cards become mini-cards */
+  .creator-summary-grid>article,
+  .admin-summary-card{
+    min-height:150px!important;
+    padding:12px!important;
+    border-radius:16px!important;
+  }
+  .creator-summary-grid h3,.admin-summary-card h3{font-size:16px!important;line-height:1.15;margin:5px 0!important}
+  .creator-summary-grid p,.admin-summary-card p{font-size:11px!important;line-height:1.35!important;min-height:0!important;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .creator-summary-grid .button,.admin-summary-card .button{min-height:36px!important;padding:8px 10px!important;font-size:10px!important;width:100%;margin-top:6px}
+
+  /* Studio KPIs always dense */
+  .studio-stat-strip.three,.studio-stat-strip.four,.admin-overview{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  .studio-stat-strip>div,.studio-stat-strip>button,.admin-overview>button{
+    min-height:82px!important;
+    padding:10px!important;
+    border-radius:14px!important;
+  }
+  .studio-stat-strip strong,.admin-overview strong{font-size:21px!important;margin:3px 0!important}
+  .studio-stat-strip small,.studio-stat-strip span,.admin-overview small,.admin-overview span{font-size:9px!important}
+
+  /* Podcast cards: landscape compact slider cards */
+  .podcast-studio-grid{grid-auto-columns:minmax(235px,72vw)!important}
+  .podcast-studio-card{
+    display:grid!important;
+    grid-template-columns:82px minmax(0,1fr)!important;
+    grid-template-areas:"art copy" "actions actions";
+    gap:9px!important;
+    width:auto!important;
+    max-width:none!important;
+    min-height:148px!important;
+    padding:10px!important;
+    border-radius:16px!important;
+  }
+  .podcast-card-art-wrap{grid-area:art}
+  .podcast-card-art{aspect-ratio:1!important;width:82px!important;height:82px!important;border-radius:13px!important}
+  .podcast-card-copy{grid-area:copy;min-height:0!important;gap:3px!important}
+  .podcast-card-title{font-size:15px!important}
+  .podcast-card-copy p{font-size:10px!important;line-height:1.3!important;min-height:0!important;-webkit-line-clamp:2!important}
+  .podcast-card-metrics{margin-top:5px!important;padding-top:5px!important;gap:4px!important}
+  .podcast-card-metrics span{font-size:9px!important;padding:4px 6px!important}
+  .podcast-card-actions{grid-area:actions;grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .podcast-card-actions .button{min-height:34px!important;font-size:9px!important;padding:6px!important}
+
+  /* Listener podcast/show cards: smaller, swipeable */
+  .cover-grid.podcast-show-grid,body[data-page="podcasts"] .cover-grid{grid-auto-columns:minmax(145px,43vw)!important}
+  .cover-card{padding:9px!important;border-radius:16px!important}
+  .cover-card .cover-art{border-radius:13px!important;margin-bottom:8px!important}
+  .cover-card strong{font-size:13px!important;white-space:normal!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:2.3em}
+  .cover-card small{font-size:10px!important}
+
+  /* Library cards remain compact, but swipe instead of tall stacking */
+  body[data-page="playlists"] .shelf.wrap{grid-auto-columns:minmax(140px,42vw)!important}
+  body[data-page="playlists"] .release-tile{min-height:0!important;padding:9px!important;border-radius:16px!important}
+  body[data-page="playlists"] .release-art{border-radius:13px!important;margin-bottom:8px!important}
+
+  /* Plans: horizontal rail on phone */
+  .plan-grid{
+    display:grid!important;
+    grid-auto-flow:column!important;
+    grid-template-columns:none!important;
+    grid-auto-columns:minmax(190px,64vw)!important;
+    overflow-x:auto!important;
+    gap:10px!important;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    padding-bottom:8px;
+  }
+  .plan-grid::-webkit-scrollbar{display:none}
+  .plan-card{scroll-snap-align:start;min-height:190px!important;padding:13px!important;border-radius:17px!important}
+  .plan-card strong{font-size:24px!important}.plan-card p{font-size:14px!important}.plan-card .plan-meta{font-size:10px!important}
+
+  /* Profile: richer compact card */
+  .profile-card-v26{
+    position:relative;
+    padding:13px!important;
+    border-radius:20px!important;
+    background:
+      radial-gradient(circle at 90% 0,rgba(255,88,119,.20),transparent 34%),
+      radial-gradient(circle at 0 100%,rgba(30,215,96,.16),transparent 34%),
+      linear-gradient(145deg,#292d3c,#151918 62%)!important;
+  }
+  .profile-card-v26:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;border:1px solid rgba(255,255,255,.04)}
+  .profile-identity-row{grid-template-columns:58px minmax(0,1fr) auto!important;gap:9px!important}
+  .profile-avatar-v26{width:58px!important;height:58px!important;font-size:25px!important;box-shadow:0 0 0 2px #1ed760,0 8px 18px rgba(0,0,0,.3)!important}
+  .profile-identity-copy h2{font-size:24px!important;margin:1px 0 4px!important}
+  .profile-stat-row{display:flex!important;gap:6px!important;overflow-x:auto!important;scrollbar-width:none;padding-bottom:2px}
+  .profile-stat-row::-webkit-scrollbar{display:none}
+  .profile-stat-row button{flex:1 0 68px!important;min-width:68px!important;padding:7px 5px!important;background:rgba(0,0,0,.18)!important;border:1px solid rgba(255,255,255,.05)!important}
+  .profile-stat-row strong{font-size:17px!important}.profile-stat-row span{font-size:8px!important}
+  .profile-action-grid-v26{
+    display:grid!important;
+    grid-auto-flow:column!important;
+    grid-template-columns:none!important;
+    grid-auto-columns:minmax(135px,41vw)!important;
+    overflow-x:auto!important;
+    gap:7px!important;
+    scroll-snap-type:x proximity;
+    scrollbar-width:none;
+  }
+  .profile-action-grid-v26::-webkit-scrollbar{display:none}
+  .profile-action-grid-v26 button{scroll-snap-align:start;min-height:58px!important;padding:9px!important}
+
+  /* Dialogs and forms should not feel like desktop cards */
+  .sw-modal{border-radius:22px!important}
+}
+
+@media(max-width:390px){
+  .creator-summary-grid,.admin-summary-grid{grid-auto-columns:minmax(138px,46vw)!important}
+  .podcast-studio-grid{grid-auto-columns:minmax(220px,76vw)!important}
+  .plan-grid{grid-auto-columns:minmax(180px,72vw)!important}
+}
