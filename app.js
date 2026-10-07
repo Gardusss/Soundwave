@@ -1140,7 +1140,15 @@ function podcastRecommendationCard(pick,i=0){
 function discoverFilterChips(){
   return `<div class="discover-filter-wrap"><div class="discover-filter-bar" role="tablist" aria-label="Filter Discover">${[['all','All'],['music','Music'],['podcasts','Podcasts']].map(([key,label])=>`<button type="button" class="discover-filter-chip ${state.discoverFilter===key?'active':''}" data-discover-filter="${key}" role="tab" aria-selected="${state.discoverFilter===key}"><span>${label}</span></button>`).join('')}</div></div>`;
 }
+function hasListeningActivity(){
+  return (state.history||[]).some(r=>Number(r.song_id)) || (state.podcastHistory||[]).some(r=>Number(r.episode_id));
+}
+function newListenerDashboard(){
+  state.tint='#1d362b';
+  shell(`<section class="new-listener-dashboard"><div class="new-listener-copy"><span class="eyebrow">WELCOME TO SOUNDWAVE</span><h2>Discover music.</h2><p>Your recommendations will appear here after you start listening. For now, explore the SoundWave catalog and find your first track.</p><div class="new-listener-actions"><button type="button" class="button" data-nav="music">${icon('search')} Discover music</button></div></div><div class="new-listener-art" aria-hidden="true"><span>${icon('music')}</span><i></i><i></i><i></i></div></section>`,'Discover music','Start listening to build your SoundWave recommendations.');
+}
 function discoverPage(){
+  if(!hasArtistAccess()&&!hasAdminAccess()&&!hasListeningActivity()) return newListenerDashboard();
   const all=[...catalogAlbums()].filter(a=>a?.artist && a.is_active!==false && a.artist?.is_active!==false && a.songs?.some(s=>s.is_active!==false)).sort((a,b)=>String(b.release_date||'').localeCompare(String(a.release_date||''))||Number(b.album_id)-Number(a.album_id));
   const uniqueByArtist=(rows,limit=7)=>{const seen=new Set(),out=[];for(const a of rows){const id=Number(a.artist?.artist_id);if(!id||seen.has(id))continue;seen.add(id);out.push(a);if(out.length===limit)break;}return out;};
   const available=uniqueByArtist(all,all.length||1);
