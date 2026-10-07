@@ -2901,3 +2901,146 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .new-listener-copy{text-align:center;margin:auto}
   .new-listener-actions{justify-content:center}
 }
+
+/* v17 mobile card optimization */
+@media (max-width: 640px){
+  .dashboard-content{
+    padding: var(--space-2) var(--space-2) calc(112px + env(safe-area-inset-bottom,0px));
+  }
+  body[data-page="playlists"] .dashboard-content,
+  body[data-page="discover"] .dashboard-content,
+  body[data-page="podcasts"] .dashboard-content{
+    padding-bottom: calc(128px + env(safe-area-inset-bottom,0px));
+  }
+  .section-heading{margin:var(--space-3) 0 var(--space-2)}
+  .section-heading h2{font-size:clamp(24px,6vw,30px)}
+
+  .shelf.wrap{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+    align-items:stretch;
+  }
+  body[data-page="playlists"] .release-tile,
+  body[data-page="playlists"] .create-tile,
+  body[data-page="discover"] .release-tile,
+  body[data-page="discover"] .cover-card,
+  body[data-page="discover"] .artist-card{
+    border-radius:20px;
+  }
+  body[data-page="playlists"] .release-tile,
+  body[data-page="playlists"] .create-tile{
+    min-height:unset;
+    padding:12px;
+    background:linear-gradient(180deg,#1d1f1f 0%,#141616 100%);
+    box-shadow:0 10px 26px rgba(0,0,0,.22);
+  }
+  body[data-page="playlists"] .release-art,
+  body[data-page="playlists"] .create-tile .release-art{
+    margin-bottom:10px;
+    border-radius:18px;
+    aspect-ratio:1/1;
+  }
+  body[data-page="playlists"] .release-art .placeholder-art.large,
+  body[data-page="playlists"] .release-art .real-cover.large,
+  body[data-page="playlists"] .release-art img{
+    border-radius:18px;
+  }
+  body[data-page="playlists"] .create-tile{
+    justify-content:flex-start;
+    gap:6px;
+    border:1px solid rgba(30,215,96,.18);
+    background:linear-gradient(180deg,rgba(30,215,96,.10) 0%, rgba(23,25,24,1) 100%);
+  }
+  body[data-page="playlists"] .create-tile .placeholder-art{
+    background:linear-gradient(135deg,#242829,#1c1f1f)!important;
+  }
+  body[data-page="playlists"] .release-tile strong,
+  body[data-page="playlists"] .create-tile strong{
+    font-size:15px;
+    line-height:1.2;
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    min-height:2.4em;
+  }
+  body[data-page="playlists"] .release-tile small,
+  body[data-page="playlists"] .create-tile small{
+    font-size:12px;
+    line-height:1.35;
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    min-height:2.7em;
+    margin-top:2px;
+  }
+
+  body[data-page="discover"] .shelf{
+    grid-auto-columns:minmax(148px,42vw);
+    gap:12px;
+    padding-bottom:4px;
+  }
+  body[data-page="discover"] .release-tile,
+  body[data-page="discover"] .cover-card,
+  body[data-page="discover"] .artist-card{
+    padding:12px;
+    background:linear-gradient(180deg,#1c1d1d 0%,#141515 100%);
+    box-shadow:0 10px 22px rgba(0,0,0,.18);
+  }
+  body[data-page="discover"] .release-tile strong,
+  body[data-page="discover"] .cover-card strong,
+  body[data-page="discover"] .artist-card strong{
+    font-size:15px;
+    line-height:1.25;
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    min-height:2.5em;
+  }
+  body[data-page="discover"] .release-tile small,
+  body[data-page="discover"] .cover-card small,
+  body[data-page="discover"] .artist-card small{
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    line-height:1.35;
+    min-height:2.5em;
+  }
+  .quick-grid{grid-template-columns:1fr!important}
+  .quick-tile{
+    min-height:72px;
+    border-radius:18px;
+    background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,255,255,.07));
+  }
+  .tile-cover{width:72px;height:72px;flex-basis:72px}
+  .mobile-create-playlist{
+    min-height:46px;
+    padding:0 16px;
+    right:12px;
+    bottom:calc(69px + 12px + env(safe-area-inset-bottom,0px));
+  }
+  .mobile-create-playlist span{font-size:14px}
+}
+
+/* v18 track-table enhancements + payment guide styling */
+.tracks.has-extra .tracks-head,
+.tracks.has-extra .track{grid-template-columns:44px minmax(180px,5fr) minmax(120px,3fr) minmax(110px,2fr) 40px 56px 72px}
+.tracks.no-album.has-extra .tracks-head,
+.tracks.no-album.has-extra .track{grid-template-columns:44px minmax(180px,1fr) minmax(96px,150px) 40px 56px 72px}
+.t-extra{color:var(--sp-sub);font-size:var(--type-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tracks-head .t-extra{font-size:var(--type-1);letter-spacing:.8px;text-transform:uppercase}
+.t-extra-streams{text-align:right}
+.stream-pill{display:inline-flex;align-items:center;justify-content:flex-end;min-width:56px;padding:6px 10px;border-radius:999px;background:rgba(30,215,96,.10);border:1px solid rgba(30,215,96,.28);color:#dfffea;font-weight:800;font-variant-numeric:tabular-nums}
+.album-stream-note{margin:0 0 8px;padding:0 8px}
+.subscription-flow{display:grid;gap:14px}
+.subscription-flow>div{padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.02)}
+@media (max-width: 1024px){
+  .tracks.has-extra .tracks-head,.tracks.has-extra .track,.tracks.no-album.has-extra .tracks-head,.tracks.no-album.has-extra .track{grid-template-columns:40px minmax(0,1fr) minmax(90px,140px) 38px 56px 64px}
+  .tracks.has-extra .t-album{display:none}
+}
+@media (max-width: 760px){
+  .track .t-extra,.tracks-head .t-extra{display:none!important}
+}
