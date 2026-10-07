@@ -3824,3 +3824,81 @@ dialog[open] input[type="file"]{pointer-events:none}
 @media (max-width:720px){
   .upload-wizard-dialog .album-picks{grid-template-columns:1fr}
 }
+
+/* v36: polished create/edit surfaces + low-profile modal scrolling */
+:is(.sw-modal,.wizard-dialog,.creator-dialog,.release-create-dialog,.edit-surface-dialog){
+  scrollbar-width:none;
+  overscroll-behavior:contain;
+}
+:is(.sw-modal,.wizard-dialog,.creator-dialog,.release-create-dialog,.edit-surface-dialog)::-webkit-scrollbar{width:0;height:0}
+:is(.wizard-dialog,.release-create-dialog,.edit-surface-dialog){
+  box-shadow:0 28px 90px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.04) inset;
+}
+:is(.wizard-dialog,.edit-surface-dialog) .modal-close,
+.release-create-dialog .modal-close{backdrop-filter:blur(8px);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.05)}
+
+.edit-surface-dialog{
+  width:min(900px,94vw)!important;
+  max-width:900px!important;
+  max-height:90dvh;
+  padding:0!important;
+  overflow:auto;
+  background:#202321;
+  border:1px solid #444a46;
+  border-radius:24px;
+}
+.edit-surface-head{
+  position:sticky;top:0;z-index:5;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+  padding:24px 28px 18px;
+  background:linear-gradient(180deg,rgba(32,35,33,.98),rgba(32,35,33,.92));
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.edit-surface-head h2{margin:3px 0 5px;font-size:clamp(28px,4vw,38px)}
+.edit-surface-head p{margin:0;color:#aeb6b0;font-size:13px;line-height:1.5}
+.edit-surface-form{padding:24px 28px 0}
+.edit-surface-grid{display:grid;grid-template-columns:minmax(220px,290px) minmax(0,1fr);gap:26px;align-items:start}
+.edit-fields{display:flex;flex-direction:column;gap:6px;min-width:0}
+.edit-fields.single-column{max-width:620px;margin:0 auto;width:100%}
+.edit-surface-dialog .single-field{margin:0 0 14px}
+.edit-surface-dialog .single-field input,
+.edit-surface-dialog .single-field select,
+.edit-surface-dialog .single-field textarea{
+  width:100%;background:#141815;border:1px solid #3b443e;border-radius:14px;color:#fff;padding:14px 15px;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+}
+.edit-surface-dialog .single-field textarea{min-height:125px;resize:vertical}
+.edit-surface-dialog .single-field :is(input,select,textarea):focus{outline:none;border-color:#1ed760;box-shadow:0 0 0 3px rgba(30,215,96,.10);background:#171d19}
+.edit-cover-drop{margin:0!important;min-height:280px!important;border-radius:20px!important;background:linear-gradient(180deg,#141916,#101310)!important}
+.edit-cover-drop>span{width:150px;height:150px;border-radius:18px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#596c98,#448e79)}
+.edit-cover-drop>span img{width:100%;height:100%;object-fit:cover}
+.edit-cover-drop>span svg{width:48px;height:48px}
+.edit-surface-actions{
+  position:sticky;bottom:0;z-index:5;margin:20px -28px 0!important;padding:16px 28px!important;
+  background:linear-gradient(0deg,rgba(32,35,33,.99),rgba(32,35,33,.94));
+  backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.08)
+}
+
+/* Create/upload dialogs: sticky chrome, smoother progression, no exposed browser scrollbar. */
+.upload-wizard-dialog .modal-head{position:sticky;top:0;z-index:6;background:rgba(32,35,33,.96);backdrop-filter:blur(16px);padding-top:10px}
+.upload-wizard-dialog .wizard-steps{position:sticky;top:78px;z-index:5;background:rgba(32,35,33,.96);backdrop-filter:blur(16px);padding:8px 0 14px;margin-bottom:12px}
+.upload-wizard-dialog form>.dialog-actions{position:sticky;bottom:0;z-index:6;margin-left:-2px;margin-right:-2px;background:linear-gradient(0deg,#202321 78%,rgba(32,35,33,.92));backdrop-filter:blur(14px)}
+.upload-wizard-dialog .upload-step{margin-bottom:8px}
+.upload-wizard-dialog .cover-drop,.upload-wizard-dialog .audio-drop{border-width:1.5px}
+.upload-wizard-dialog .cover-drop:hover,.upload-wizard-dialog .audio-drop:hover{transform:translateY(-1px)}
+
+.release-create-dialog .release-dialog-head{position:sticky;top:0;z-index:6;background:rgba(32,35,33,.96);backdrop-filter:blur(18px)}
+.release-create-dialog .release-dialog-actions{position:sticky;bottom:0;z-index:6;margin-left:-28px!important;margin-right:-28px!important;margin-bottom:-28px!important;padding:16px 28px!important;background:rgba(32,35,33,.97);backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.08)}
+
+@media(max-width:720px){
+  .edit-surface-dialog{width:calc(100vw - 18px)!important;max-width:calc(100vw - 18px)!important;max-height:calc(100dvh - 18px)!important;border-radius:22px}
+  .edit-surface-head{padding:18px 16px 14px}
+  .edit-surface-form{padding:16px 16px 0}
+  .edit-surface-grid{grid-template-columns:1fr;gap:16px}
+  .edit-cover-drop{min-height:210px!important}
+  .edit-cover-drop>span{width:118px;height:118px}
+  .edit-surface-actions{margin:16px -16px 0!important;padding:13px 16px!important}
+  .release-create-dialog .release-dialog-actions{margin-left:-18px!important;margin-right:-18px!important;margin-bottom:-18px!important;padding:13px 18px!important}
+  .upload-wizard-dialog .wizard-steps{top:70px}
+}
