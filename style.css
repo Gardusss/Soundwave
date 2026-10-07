@@ -779,6 +779,13 @@ h1,h2,h3,h4,.page-title,.coll-title,.rail h3,.hero h2,.auth-show h1,.auth-box h2
 /* A. The player bar and the "Now playing" panel only exist while something is playing */
 body.is-idle #soundwave-player{display:none}
 body.is-idle .context-rail{display:none!important}
+/* With no active media, reclaim the desktop player reservation so no black strip remains below the workspace. */
+@media (min-width:701px){
+  body.is-idle .workspace{min-height:calc(100dvh - 65px);padding-bottom:0}
+  body.is-idle .workspace .sidebar,
+  body.is-idle .workspace .main,
+  body.is-idle .workspace .context-rail{height:calc(100dvh - 65px)}
+}
 
 
 
@@ -1361,77 +1368,4 @@ html,body{max-width:100%;overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
   .release-tile:hover,.artist-card:hover,.cover-card:hover{transform:none!important;box-shadow:none}
-}
-
-/* ===== CLEAN HOME + MOBILE PLAYER REFINEMENT ===== */
-.player-song.mobile-player-open{appearance:none;border:0;background:transparent;color:inherit;text-align:left;width:100%;padding:0;cursor:pointer}
-.listening-snapshot{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-2) 0 var(--space-3);padding:var(--space-2) var(--space-3);border:1px solid var(--edge);border-radius:var(--radius-3);background:linear-gradient(110deg,#171b18,#121412)}
-.listening-snapshot h2{margin:2px 0 0;font:800 var(--type-4) Outfit,sans-serif}
-.snapshot-metrics{display:flex;align-items:center;gap:var(--space-3);margin-left:auto}
-.snapshot-metrics>span{display:grid;gap:2px;min-width:72px}
-.snapshot-metrics strong{font:800 var(--type-5) Outfit,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.snapshot-metrics small{color:var(--muted);font-size:var(--type-1)}
-.listening-insights-modal{width:min(880px,calc(100vw - var(--space-5)))}
-.mobile-now-playing{display:none}
-
-@media (max-width:700px){
-  /* Mobile library is intentionally dense: two useful cards per row instead of one oversized column. */
-  .shelf.wrap{display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:var(--space-2)!important;overflow:visible!important;width:100%;margin:0;padding:0}
-  .shelf.wrap .release-tile,.shelf.wrap .artist-card,.shelf.wrap .cover-card{width:100%;max-width:100%;min-width:0;padding:var(--space-1)}
-  .shelf.wrap .release-art{width:100%;aspect-ratio:1}
-  .shelf.wrap .release-tile strong,.shelf.wrap .artist-card strong{font-size:var(--type-3)}
-  .shelf.wrap .release-tile small,.shelf.wrap .artist-card small{font-size:var(--type-1)}
-
-  /* Home dashboard: compact snapshot rather than a full analytics dashboard. */
-  .listening-snapshot{display:grid;grid-template-columns:1fr auto;gap:var(--space-2);padding:var(--space-2);margin:var(--space-1) 0 var(--space-3)}
-  .snapshot-metrics{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-1);width:100%;margin:0}
-  .snapshot-metrics>span{min-width:0;padding:var(--space-1);border-radius:var(--radius-2);background:#ffffff08}
-  .snapshot-metrics strong{font-size:var(--type-4)}
-  .listening-snapshot .button{align-self:start}
-
-  /* Spotify-style compact player: artwork + title + like + play, immediately above the dock. */
-  .custom-playbar{display:flex!important;align-items:center;gap:var(--space-1);height:64px!important;min-height:64px!important;padding:var(--space-1)!important;background:#1b1d1c;border:1px solid #ffffff10;border-radius:var(--radius-2) var(--radius-2) 0 0;box-shadow:0 -8px 24px #0007}
-  .player-song.mobile-player-open{display:flex;align-items:center;gap:var(--space-1);flex:1 1 auto;min-width:0}
-  .player-thumb{width:48px!important;height:48px!important;flex:0 0 48px!important;border-radius:var(--radius-1);overflow:hidden}
-  .player-song-text strong{font-size:var(--type-3);line-height:1.2}
-  .player-song-text small{font-size:var(--type-2);line-height:1.2;color:var(--muted)}
-  .custom-playbar>.player-heart{display:grid!important;flex:0 0 var(--space-4);width:var(--space-4);height:var(--space-4)}
-  .player-center{display:contents!important}
-  .player-center .play-controls{display:flex;flex:0 0 var(--space-4);width:var(--space-4);height:var(--space-4);align-items:center;justify-content:center}
-  .player-center .play-controls #sw-prev,.player-center .play-controls #sw-next,.player-center .play-controls .mode,.mini-visualizer,.player-right,.player-timeline{display:none!important}
-  .player-main-play{width:var(--space-4)!important;height:var(--space-4)!important;background:#fff!important;color:#101010!important}
-  .idle-playbar .player-heart{display:none!important}
-
-  /* Full-screen mobile Now Playing, opened by tapping the mini-player. */
-  .mobile-now-playing{position:fixed;display:flex;flex-direction:column;inset:0;z-index:120;width:100vw;max-width:100vw;height:100dvh;padding:calc(var(--space-2) + env(safe-area-inset-top,0)) var(--space-3) calc(var(--space-3) + env(safe-area-inset-bottom,0));background:radial-gradient(circle at 50% 15%,#48645b 0,#25342f 30%,#111714 70%);transform:translateY(105%);opacity:0;pointer-events:none;transition:transform .42s var(--sw-spring),opacity .25s ease;overflow-y:auto}
-  .mobile-now-playing.open{transform:translateY(0);opacity:1;pointer-events:auto}
-  body.mobile-player-opened{overflow:hidden}
-  .mobile-now-head{display:grid;grid-template-columns:var(--space-4) 1fr var(--space-4);align-items:center;gap:var(--space-1);text-align:center}
-  .mobile-now-head>div{display:grid;gap:2px;min-width:0}
-  .mobile-now-head small{font-size:var(--type-1);font-weight:800;letter-spacing:.08em;color:#d6ddd8}
-  .mobile-now-head strong{font-size:var(--type-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mobile-now-close{display:grid;place-items:center;width:var(--space-4);height:var(--space-4);border:0;background:transparent;color:#fff}
-  .mobile-now-art{width:min(100%,430px);aspect-ratio:1;margin:auto auto var(--space-4);border-radius:var(--radius-2);overflow:hidden;background:#252a27;box-shadow:0 24px 60px #0009}
-  .mobile-now-art>*{width:100%!important;height:100%!important;object-fit:cover;border-radius:0!important}
-  .mobile-now-copy{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
-  .mobile-now-copy>div{min-width:0;flex:1}
-  .mobile-now-copy h2{margin:0;font:800 var(--type-5) Outfit,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mobile-now-copy p{margin:4px 0 0;color:#d2d7d4;font-size:var(--type-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mobile-now-copy .heart-btn{width:var(--space-4);height:var(--space-4);flex:0 0 var(--space-4)}
-  .mobile-now-progress{display:grid;gap:var(--space-1)}
-  .mobile-now-progress input{width:100%}
-  .mobile-now-progress>div{display:flex;justify-content:space-between;color:#c6ccc8;font-size:var(--type-1)}
-  .mobile-now-controls{display:grid;grid-template-columns:var(--space-5) 72px var(--space-5);align-items:center;justify-content:center;gap:var(--space-4);margin-top:var(--space-2)}
-  .mobile-now-controls .icon-quiet{width:var(--space-5);height:var(--space-5);color:#fff}
-  .mobile-main-play{display:grid;place-items:center;width:72px;height:72px;border:0;border-radius:var(--radius-pill);background:#fff;color:#111}
-  .mobile-main-play svg{width:32px;height:32px}
-}
-
-@media (min-width:701px){
-  /* Desktop home should scan quickly: restrained spacing and fewer competing panels. */
-  .dashboard-content{max-width:1280px}
-  .home-chips{margin-bottom:var(--space-2)}
-  .shelf-section{margin-top:var(--space-3)}
-  .shelf-section .section-heading{margin:var(--space-3) 0 var(--space-1)}
-  .listening-snapshot{max-width:100%}
 }
