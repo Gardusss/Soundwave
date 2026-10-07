@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://azqbzyxknfdwfuqevbrd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OcR9EJnNuPqBWtZrmNVUdA_tt_CMCmR';
 const configured = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('YOUR_PROJECT') && !SUPABASE_KEY.includes('YOUR_PUBLISHABLE_KEY'));
 const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
+  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: false, flowType: 'pkce' }
 }) : null;
 /* ====== APP ====== */
 
@@ -1095,10 +1095,18 @@ function authView(register=false){
   $('#mode-login').onclick=()=>authView(false);
   $('#mode-register').onclick=()=>authView(true);
   $('#auth-google')?.addEventListener('click',()=>action(async()=>{
-    const redirectTo=`${window.location.origin}${window.location.pathname}#/discover`;
+    // OAuth callbacks must return to a real URL, not a hash route. The hash is
+    // restored after Supabase has exchanged the Google authorization code.
+    const redirectTo=`${window.location.origin}${window.location.pathname}?oauth=google`;
+    sessionStorage.setItem('soundwave-oauth-return','google');
     const { error } = await db.auth.signInWithOAuth({
       provider:'google',
-      options:{redirectTo,queryParams:{prompt:'select_account'},skipBrowserRedirect:false}
+      options:{
+        redirectTo,
+        scopes:'openid email profile',
+        queryParams:{prompt:'select_account'},
+        skipBrowserRedirect:false
+      }
     });
     if(error) throw error;
   }));
@@ -2503,28 +2511,58 @@ async function ensureOAuthProfile(user){
   const created=await db.from('users').insert(payload);
   if(created.error && !/duplicate|already exists|23505/i.test(String(created.error.message||''))) console.warn('Could not create OAuth listener profile',created.error);
 }
+async function waitForAuthSession(timeoutMs=5000){
+  const started=Date.now();
+  while(Date.now()-started<timeoutMs){
+    const {data,error}=await db.auth.getSession();
+    if(error)throw error;
+    if(data?.session?.user)return data.session;
+    await new Promise(resolve=>setTimeout(resolve,120));
+  }
+  return null;
+}
+function cleanOAuthUrl(){
+  const params=new URLSearchParams(location.search);
+  ['code','oauth','error','error_code','error_description'].forEach(k=>params.delete(k));
+  const q=params.toString();
+  window.history.replaceState(window.history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}#/discover`);
+  sessionStorage.removeItem('soundwave-oauth-return');
+}
 async function completeOAuthReturn(){
   const params=new URLSearchParams(location.search);
   const code=params.get('code');
+  const isGoogleReturn=params.get('oauth')==='google'||sessionStorage.getItem('soundwave-oauth-return')==='google';
   const oauthError=params.get('error_description')||params.get('error');
-  if(oauthError)throw Error(oauthError);
-  if(!code)return null;
-  const {data,error}=await db.auth.exchangeCodeForSession(code);
-  if(error)throw error;
-  ['code','error','error_code','error_description'].forEach(k=>params.delete(k));
-  const q=params.toString();
-  window.history.replaceState(window.history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}${location.hash||'#/discover'}`);
-  return data?.session||null;
+  if(oauthError){cleanOAuthUrl();throw Error(oauthError);}
+  if(code){
+    // Always exchange the callback code, even when local storage contains an
+    // older session. The account just selected in Google must win.
+    const {data,error}=await db.auth.exchangeCodeForSession(code);
+    if(error){cleanOAuthUrl();throw error;}
+    const session=data?.session||await waitForAuthSession();
+    cleanOAuthUrl();
+    if(!session)throw Error('Google sign-in finished but no SoundWave session was created. Please try again.');
+    return session;
+  }
+  if(isGoogleReturn){
+    const session=await waitForAuthSession(3500);
+    cleanOAuthUrl();
+    if(!session)throw Error('Google sign-in did not finish. Please try Continue with Google again.');
+    return session;
+  }
+  return null;
 }
 async function boot(){
  if(requireConfig())return;
  captureMayaReturn();
  try{
-   let result=await db.auth.getSession();if(result.error)throw result.error;
-   if(!result.data.session && new URLSearchParams(location.search).get('code')){
-     const oauthSession=await completeOAuthReturn();
-     if(oauthSession) result={data:{session:oauthSession},error:null};
+   const params=new URLSearchParams(location.search);
+   let oauthSession=null;
+   if(params.get('code')||params.get('oauth')==='google'||sessionStorage.getItem('soundwave-oauth-return')==='google'){
+     oauthSession=await completeOAuthReturn();
    }
+   let result=oauthSession?{data:{session:oauthSession},error:null}:await db.auth.getSession();
+   if(result.error)throw result.error;
    state.user=result.data.session?.user||null;state.hist.i=window.history.state?.i??0;state.hist.max=state.hist.i;
    if(state.user){
      await ensureOAuthProfile(state.user);
