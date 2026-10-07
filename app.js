@@ -866,7 +866,7 @@ function captureMayaReturn(){
   params.delete('maya');params.delete('rrn');
   sessionStorage.removeItem('soundwave-maya-reference');
   const query=params.toString();
-  history.replaceState(history.state||{},document.title,`${location.pathname}${query?`?${query}`:''}${location.hash||'#/plans'}`);
+  window.history.replaceState(window.history.state||{},document.title,`${location.pathname}${query?`?${query}`:''}${location.hash||'#/plans'}`);
   return payload;
 }
 function pendingMayaReturn(){
@@ -960,7 +960,7 @@ async function acceptPendingSubscriptionInvite(){
   try{
     const {data,error}=await db.rpc('accept_subscription_invite',{p_token:token});
     if(error)throw error;
-    params.delete('subscription_invite');const q=params.toString();history.replaceState(history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}#/plans`);
+    params.delete('subscription_invite');const q=params.toString();window.history.replaceState(window.history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}#/plans`);
     await loadData();state.page='plans';render();toast('Premium plan invitation accepted.');return true;
   }catch(e){console.error(e);toast(`Could not accept subscription invite: ${e?.message||'Please try again.'}`,true);return false;}
   finally{state.subscriptionInviteProcessing=false;}
