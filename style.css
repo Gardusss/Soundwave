@@ -3902,3 +3902,12 @@ dialog[open] input[type="file"]{pointer-events:none}
   .release-create-dialog .release-dialog-actions{margin-left:-18px!important;margin-right:-18px!important;margin-bottom:-18px!important;padding:13px 18px!important}
   .upload-wizard-dialog .wizard-steps{top:70px}
 }
+
+
+/* v39: explicit authentication feedback */
+.auth-form-alert{margin:0 0 12px;padding:11px 13px;border-radius:12px;border:1px solid rgba(255,120,135,.42);background:rgba(116,41,53,.32);color:#ffdce1;font-size:13px;line-height:1.45}
+.auth-form-alert[hidden]{display:none!important}
+.auth-field-error{min-height:0;color:#ff9aa8!important}
+.auth-panel .field-invalid{border-color:#ff7f91!important;box-shadow:0 0 0 3px rgba(255,95,117,.12)!important}
+.auth-panel .field-valid{border-color:#1ed760!important}
+.auth-google:disabled,.auth-email-submit:disabled{opacity:.65;cursor:wait}
