@@ -691,12 +691,15 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
  state.artistFollowers=[];state.socialProfiles={};state.followerCounts={};state.socialRpc={counts:false,mine:false,profiles:false};
  const [fcnt,fmine,fprof]=await Promise.all([db.rpc('get_artist_follower_counts'),state.artist?db.rpc('get_my_artist_followers'):Promise.resolve({data:[],error:null}),db.rpc('get_social_profiles')]);
  if(!fcnt.error){
+   // A successful count RPC is authoritative, including legitimate zero-follower artists.
+   // Seed every visible artist at zero, then merge the totals returned by Supabase.
    const parsed=mergeFollowerCountsPayload(fcnt.data,{});
-   if(Object.keys(parsed).length){
-     state.followerCounts=parsed;
-     state.socialRpc.counts=true;
-     state.socialRpc.countSource='rpc';
-   }
+   const complete={};
+   (state.artists||[]).forEach(a=>{const aid=Number(a.artist_id);if(Number.isFinite(aid))complete[aid]=0;});
+   Object.assign(complete,parsed);
+   state.followerCounts=complete;
+   state.socialRpc.counts=true;
+   state.socialRpc.countSource='rpc';
  }else console.info('Follower-count RPC unavailable:',fcnt.error.message);
  // Safe fallback: only trust a direct favorite_artist aggregate when the session can
  // demonstrably see rows belonging to other users. This avoids displaying false 0s
@@ -717,7 +720,13 @@ async function loadData(){if(!state.user)return;const id=state.user.id;const req
  }
  if(!fmine.error){
    state.socialRpc.mine=true;
-   state.artistFollowers=Array.isArray(fmine.data)?fmine.data:(fmine.data?[fmine.data]:[]);
+   const mineRows=Array.isArray(fmine.data)?fmine.data:(fmine.data?[fmine.data]:[]);
+   state.artistFollowers=mineRows.map(r=>({
+     ...r,
+     follower_user_id:r.follower_user_id??r.user_id??r.follower_id??null,
+     display_name:r.display_name??r.name??r.full_name??'SoundWave listener',
+     profile_photo_path:r.profile_photo_path??r.profile_photo_url??null
+   })).filter(r=>r.follower_user_id);
    // get_my_artist_followers is authoritative for the signed-in artist even when
    // global follower counts are hidden by RLS. Keep the artist's own profile accurate.
    if(state.artist?.artist_id!=null){
