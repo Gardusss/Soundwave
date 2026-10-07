@@ -1002,7 +1002,69 @@ async function finishInteractiveSignIn(session){
   setTimeout(()=>acceptPendingSubscriptionInvite(),120);
   schedulePendingPaymentVerification(180);
 }
-function authView(register=false){document.getElementById('soundwave-player')?.remove();$('#app').innerHTML=`<div class="auth-wrap"><div class="auth-show"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div><div class="eyebrow">Your sound. Your space.</div><h1>Everything sounds better together.</h1><p class="muted">Discover music, build playlists, release tracks and explore podcasts.</p></div><div class="small" style="color:#c5cce6">Music &amp; podcasts, all in one place.</div></div><div class="auth-panel"><div class="auth-box"><div class="eyebrow">Welcome to SoundWave</div><h2>${register?'Create an account':'Listen without limits.'}</h2><p class="muted">${register?'Choose your account type and create your profile.':'Sign in to explore your music and podcasts.'}</p><div class="auth-mode"><button class="button ${register?'secondary':''}" id="mode-login">Sign in</button><button class="button ${register?'':'secondary'}" id="mode-register">Register</button></div><button type="button" class="button secondary auth-google" id="auth-google"><span class="auth-google-mark">G</span><span>Continue with Google</span></button><div class="auth-separator"><span>or continue with email</span></div><form class="form" id="authform">${register?`<div class="field"><label>Display name</label><input id="display-name" required maxlength="90" placeholder="Alex Rivera"/></div><div class="field"><label>Account type</label><select id="account-type"><option value="Listener">Listener</option><option value="Artist">Artist</option></select></div><div class="field" id="artist-name-field" style="display:none"><label>Artist name</label><input id="artist-name" maxlength="100" placeholder="Your stage name"/></div>`:''}<div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="your@email.com"/></div><div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/></div><button class="button" data-busy>${register?'Create account':'Sign in'} →</button></form><p class="footnote">Registration uses Supabase Auth. Email confirmation may be required depending on your project settings. Google sign-in requires the Google provider to be enabled in Supabase.</p></div></div></div>`;enhanceAuth();$('#mode-login').onclick=()=>authView(false);$('#mode-register').onclick=()=>authView(true);$('#auth-google')?.addEventListener('click',()=>action(async()=>{const { error } = await db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } }); if(error) throw error; }));$('#account-type')?.addEventListener('change',e=>{const a=e.target.value==='Artist';$('#artist-name-field').style.display=a?'flex':'none';$('#artist-name').required=a;});$('#authform').onsubmit=e=>{e.preventDefault();action(async()=>{const email=val('auth-email'),password=$('#auth-password').value;if(!register){const r=await db.auth.signInWithPassword({email,password});if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}throw r.error;}await finishInteractiveSignIn(r.data?.session);toast('Signed in');return;}const account_type=val('account-type'),display_name=val('display-name'),artist_name=account_type==='Artist'?val('artist-name'):null;const data=check(await db.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin,data:{name:display_name,full_name:display_name,account_type,artist_name}}}));if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){toast('That email is already registered. Please sign in instead.',true);authView(false);return;}if(data.session){console.warn('Supabase returned a session straight after sign-up, so "Confirm email" is OFF for this project. Turn it on in Authentication > Sign In / Providers > Email.');toast('Registration complete');}else{confirmView(email);}});};}
+function authView(register=false){
+  document.getElementById('soundwave-player')?.remove();
+  const emailOpen=register?' open':'';
+  $('#app').innerHTML=`<div class="auth-wrap auth-v28">
+    <section class="auth-show">
+      <div class="brand"><span class="brand-icon">♫</span> SoundWave</div>
+      <div class="auth-mobile-hero-copy">
+        <div class="eyebrow">YOUR SOUND. YOUR SPACE.</div>
+        <h1>${register?'Create your SoundWave account.':'Everything sounds better together.'}</h1>
+        <p class="muted">Music, podcasts, playlists and creator tools in one place.</p>
+      </div>
+      <div class="small auth-show-note">Listen. Create. Share.</div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-box">
+        <div class="auth-mobile-heading">
+          <span class="eyebrow">SOUNDWAVE</span>
+          <h2>Log in or sign up</h2>
+          <p class="muted">Continue with Google or use your email.</p>
+        </div>
+        <button type="button" class="button secondary auth-google" id="auth-google"><span class="auth-google-mark">G</span><span>Continue with Google</span></button>
+        <button type="button" class="button secondary auth-email-toggle" id="auth-email-toggle">${icon('forward')}<span>Continue with email</span></button>
+        <div class="auth-separator"><span>or</span></div>
+        <div class="auth-email-shell${emailOpen}" id="auth-email-shell">
+          <div class="auth-mode"><button class="button ${register?'secondary':''}" id="mode-login">Sign in</button><button class="button ${register?'':'secondary'}" id="mode-register">Sign up</button></div>
+          <form class="form" id="authform">
+            ${register?`<div class="field"><label>Display name</label><input id="display-name" required maxlength="90" placeholder="Alex Rivera"/></div><div class="field"><label>Account type</label><select id="account-type"><option value="Listener">Listener</option><option value="Artist">Artist</option></select></div><div class="field" id="artist-name-field" style="display:none"><label>Artist name</label><input id="artist-name" maxlength="100" placeholder="Your stage name"/></div>`:''}
+            <div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@example.com"/></div>
+            <div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/></div>
+            <button class="button auth-email-submit" data-busy>${register?'Create account':'Sign in'}</button>
+          </form>
+        </div>
+        <p class="footnote auth-legal">By continuing, you agree to use SoundWave responsibly. Email confirmation may be required depending on your Supabase Auth settings.</p>
+      </div>
+    </section>
+  </div>`;
+  enhanceAuth();
+  const shell=$('#auth-email-shell');
+  $('#auth-email-toggle')?.addEventListener('click',()=>{
+    shell?.classList.toggle('open');
+    if(shell?.classList.contains('open')) setTimeout(()=>$('#auth-email')?.focus(),80);
+  });
+  $('#mode-login').onclick=()=>authView(false);
+  $('#mode-register').onclick=()=>authView(true);
+  $('#auth-google')?.addEventListener('click',()=>action(async()=>{
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    const { error } = await db.auth.signInWithOAuth({ provider:'google', options:{ redirectTo } });
+    if(error) throw error;
+  }));
+  $('#account-type')?.addEventListener('change',e=>{const a=e.target.value==='Artist';$('#artist-name-field').style.display=a?'flex':'none';$('#artist-name').required=a;});
+  $('#authform').onsubmit=e=>{e.preventDefault();action(async()=>{
+    const email=val('auth-email'),password=$('#auth-password').value;
+    if(!register){
+      const r=await db.auth.signInWithPassword({email,password});
+      if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}throw r.error;}
+      await finishInteractiveSignIn(r.data?.session);toast('Signed in');return;
+    }
+    const account_type=val('account-type'),display_name=val('display-name'),artist_name=account_type==='Artist'?val('artist-name'):null;
+    const data=check(await db.auth.signUp({email,password,options:{emailRedirectTo:`${window.location.origin}${window.location.pathname}`,data:{name:display_name,full_name:display_name,account_type,artist_name}}}));
+    if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){toast('That email is already registered. Please sign in instead.',true);authView(false);return;}
+    if(data.session){toast('Registration complete');await finishInteractiveSignIn(data.session);}else{confirmView(email);}
+  });};
+}
 async function loadData(){if(!state.user)return;const id=state.user.id;const requests=[
  db.from('users').select('user_id,display_name,account_type,is_active,profile_photo_path').eq('user_id',id).maybeSingle(),
  db.from('artist').select('artist_id,user_id,artist_name,is_active').eq('user_id',id).maybeSingle(),
