@@ -343,19 +343,19 @@ function shell(content, title, desc) {
   const tint = state.tint || '#202522'; state.tint = null;
   const roleKey = hasAdminAccess() ? (hasArtistAccess() ? 'artist-admin' : 'admin') : hasArtistAccess() ? 'artist' : 'listener';
   document.body.dataset.role = roleKey;
-  const dashboardButtons = hasAdminAccess() && hasArtistAccess()
-    ? `<button type="button" class="sidebar-role primary-role" data-nav="studio">${icon('upload')}<span>Artist Studio</span></button><button type="button" class="sidebar-role" data-nav="admin">${icon('shield')}<span>Moderation</span></button><button type="button" class="sidebar-role listen-role" data-nav="discover">${icon('home')}<span>Discover music</span></button>`
+  const roleMenuItems = hasAdminAccess() && hasArtistAccess()
+    ? `<button data-nav="studio">${icon('upload')} Artist Studio</button><button data-nav="admin">${icon('shield')} Moderation</button><button data-nav="discover">${icon('home')} Discover music</button>`
     : hasAdminAccess()
-      ? `<button type="button" class="sidebar-role primary-role" data-nav="admin">${icon('shield')}<span>Moderation</span></button><button type="button" class="sidebar-role listen-role" data-nav="discover">${icon('home')}<span>Discover music</span></button>`
+      ? `<button data-nav="admin">${icon('shield')} Moderation</button><button data-nav="discover">${icon('home')} Discover music</button>`
       : hasArtistAccess()
-        ? `<button type="button" class="sidebar-role primary-role" data-nav="studio">${icon('upload')}<span>Artist Studio</span></button><button type="button" class="sidebar-role listen-role" data-nav="discover">${icon('home')}<span>Discover music</span></button>`
-        : `<button type="button" class="sidebar-role primary-role" data-nav="discover">${icon('home')}<span>Discover</span></button>`;
+        ? `<button data-nav="studio">${icon('upload')} Artist Studio</button><button data-nav="discover">${icon('home')} Discover music</button>`
+        : `<button data-nav="discover">${icon('home')} Discover</button>`;
   const mobileDashboard = hasArtistAccess() ? ['studio','upload','Studio'] : hasAdminAccess() ? ['admin','shield','Admin'] : ['discover','home','Discover'];
   const homeTarget = primaryDashboard();
   const homeLabel = hasArtistAccess() ? 'Artist Studio' : hasAdminAccess() ? 'Moderation' : 'Discover';
-  const profileMenu = `<div class="profile-menu" id="profile-menu" hidden><button data-nav="profile">${icon('users')} Profile</button><button data-nav="${followNav()}">${icon('users')} ${followLabel()}</button>${isPremiumUser() ? `<button data-nav="downloads">${icon('download')} Downloads</button>` : ''}<button data-nav="history">${icon('clock')} Recently played</button><button id="profile-signout">${icon('forward')} Log out</button></div>`;
+  const profileMenu = `<div class="profile-menu" id="profile-menu" hidden>${roleMenuItems}<span class="profile-menu-sep" aria-hidden="true"></span><button data-nav="profile">${icon('users')} Profile</button><button data-nav="${followNav()}">${icon('users')} ${followLabel()}</button><button data-nav="podcast-studio">${icon('mic')} Podcast Studio</button>${isPremiumUser() ? `<button data-nav="downloads">${icon('download')} Downloads</button>` : ''}<button data-nav="history">${icon('clock')} Recently played</button><span class="profile-menu-sep" aria-hidden="true"></span><button id="profile-signout">${icon('forward')} Log out</button></div>`;
   $('#app').innerHTML = `<div class="app-top"><div class="app-top-left"><button type="button" class="top-logo home-btn" data-nav="${homeTarget}" aria-label="Open ${homeLabel}">${icon('home')}</button><button type="button" class="history-btn" id="nav-back" aria-label="Go back" ${state.hist.i > 0 ? '' : 'disabled'}>${icon('back')}</button><button type="button" class="history-btn" id="nav-forward" aria-label="Go forward" ${state.hist.i < state.hist.max ? '' : 'disabled'}>${icon('forward')}</button><label class="global-search">${icon('search')}<input id="global-search" type="search" autocomplete="off" spellcheck="false" placeholder="What do you want to play?" aria-label="Search SoundWave" value="${esc(state.searchQuery || '')}"></label></div><div class="top-actions"><span class="role-badge">${esc(role)}</span><div class="profile-wrap"><button type="button" class="avatar top-avatar" id="profile-toggle" aria-label="Open profile menu" title="${esc(display)}">${state.profilePhotoUrl?`<img src="${esc(state.profilePhotoUrl)}" alt="${esc(display)}">`:esc(display[0]?.toUpperCase() || 'S')}</button>${profileMenu}</div></div></div>
-<div class="workspace"><aside class="sidebar ${state.libraryExpanded ? '' : 'library-collapsed'}" aria-label="Your library"><div class="library-head"><button type="button" class="library-toggle" id="library-toggle" aria-expanded="${state.libraryExpanded}" title="${state.libraryExpanded ? 'Collapse' : 'Expand'} your library">${icon('library')}<span>Your Library</span></button><button type="button" class="library-create-btn" data-create-playlist aria-label="Create playlist" title="Create playlist">${icon('plus')}<span>Create</span></button></div><div class="library-tools" id="library-tools">${libraryToolsHtml()}</div><div class="library-scroll" id="library-list">${libraryListHtml()}</div><div class="sidebar-bottom">${dashboardButtons}<button type="button" class="sidebar-role" data-nav="${followNav()}">${icon('users')}<span>${followLabel()}</span></button>${isPremiumUser() ? `<button type="button" class="sidebar-role" data-nav="downloads">${icon('download')}<span>Downloads</span></button>` : ''}<button type="button" class="sidebar-role" data-nav="podcast-studio">${icon('mic')}<span>Podcast Studio</span></button></div></aside>
+<div class="workspace"><aside class="sidebar ${state.libraryExpanded ? '' : 'library-collapsed'}" aria-label="Your library"><div class="library-head"><button type="button" class="library-toggle" id="library-toggle" aria-expanded="${state.libraryExpanded}" title="${state.libraryExpanded ? 'Collapse' : 'Expand'} your library">${icon('library')}<span>Your Library</span></button><button type="button" class="library-create-btn" data-create-playlist aria-label="Create playlist" title="Create playlist">${icon('plus')}</button></div><div class="library-tools" id="library-tools">${libraryToolsHtml()}</div><div class="library-scroll" id="library-list">${libraryListHtml()}</div></aside>
 <main class="main" id="main-content" style="--tint:${tint}"><div class="dashboard-content"><div class="page-intro"><h1 class="page-title">${esc(title)}</h1></div><div class="page-body">${content}</div></div></main>
 <aside class="context-rail" id="context-rail" aria-label="Now playing">${railHtml()}</aside></div>
 <nav class="mobile-dock" aria-label="Mobile navigation">${[mobileDashboard, ['music', 'search', 'Search'], ['playlists', 'library', 'Library'], ['podcasts', 'mic', 'Podcasts'], ['profile', 'users', 'You']].map(([id, ico, label]) => `<button type="button" data-nav="${id}" class="${state.page === id ? 'active' : ''}">${icon(ico)}<small>${label}</small></button>`).join('')}</nav>${state.page==='playlists'?`<button type="button" class="mobile-create-playlist" data-create-playlist aria-label="Create playlist">${icon('plus')}<span>Create playlist</span></button>`:''}
@@ -413,8 +413,10 @@ function playerBarHtml(d) {
   const artistId = song?.album?.artist?.artist_id;
   const vol = prefs.muted ? 0 : Math.round(prefs.volume * 100);
   const thumb = idle ? icon('music') : podcast ? icon('mic') : albumArt(song, 'tiny');
+  const fullArt = podcast ? `<span class="mobile-now-placeholder">${icon('mic')}</span>` : albumArt(song, 'large');
+  const contextLabel = podcast ? 'Playing podcast' : 'Now playing';
   return `<div class="custom-playbar ${idle ? 'idle-playbar' : ''}">
- <div class="player-song"><span class="player-thumb ${idle ? 'idle-thumb' : ''}">${thumb}</span><div class="player-song-text"><strong>${esc(d?.title || 'SoundWave')}</strong><small>${idle ? 'Choose something to play' : artistId ? `<a href="#/artist-detail/${artistId}" data-open-artist="${artistId}">${esc(d.artist)}</a>` : esc(d.artist)}</small></div>${song ? heartBtn(song.song_id, 'player-heart') : ''}</div>
+ <div class="player-song"><div class="mobile-now-open" id="mobile-now-open" role="button" tabindex="0" aria-label="Open now playing details"><span class="player-thumb ${idle ? 'idle-thumb' : ''}">${thumb}</span><span class="player-song-text"><strong>${esc(d?.title || 'SoundWave')}</strong><small>${idle ? 'Choose something to play' : artistId ? `<a href="#/artist-detail/${artistId}" data-open-artist="${artistId}">${esc(d.artist)}</a>` : esc(d.artist)}</small></span></div>${song ? heartBtn(song.song_id, 'player-heart') : ''}</div>
  <div class="player-center"><div class="play-controls">
   ${podcast ? '' : `<button type="button" id="sw-shuffle" class="icon-quiet mode ${prefs.shuffle ? 'active' : ''}" aria-pressed="${prefs.shuffle}" aria-label="Shuffle" title="Shuffle" ${dis}>${icon('shuffle')}</button>`}
   <button type="button" id="sw-prev" class="icon-quiet" aria-label="${podcast ? 'Back 15 seconds' : 'Previous song'}" title="${podcast ? 'Back 15 seconds' : 'Previous'}" ${dis}>${podcast ? '<span class="skip-15">−15</span>' : icon('prev')}</button>
@@ -423,12 +425,12 @@ function playerBarHtml(d) {
   ${podcast ? '' : `<button type="button" id="sw-repeat" class="icon-quiet mode ${prefs.repeat !== 'off' ? 'active' : ''}" data-mode="${prefs.repeat}" aria-label="Repeat: ${prefs.repeat}" title="Repeat" ${dis}>${icon(prefs.repeat === 'one' ? 'repeat1' : 'repeat')}</button>`}
  </div><div class="player-timeline"><span id="sw-elapsed">0:00</span><input id="sw-seek" type="range" min="0" max="1000" value="0" style="--pct:0%" aria-label="Seek position" ${dis}><span id="sw-total">${nice(d?.duration || 0)}</span></div></div>
  <div class="player-right"><button type="button" id="sw-queue" class="icon-quiet ${state.railTab === 'queue' && !prefs.railHidden ? 'active' : ''}" aria-label="Queue" title="Queue">${icon('queue')}</button><button type="button" id="sw-mute" class="icon-quiet" aria-label="Mute" title="Mute">${icon(vol === 0 ? 'mute' : 'volume')}</button><input id="sw-volume" type="range" min="0" max="100" value="${vol}" style="--pct:${vol}%" aria-label="Volume"><button type="button" id="sw-view" class="icon-quiet ${prefs.railHidden ? '' : 'active'}" aria-label="Now playing view" title="Now playing view">${icon('library')}</button></div>
- ${idle ? '' : `<audio id="sw-audio" preload="metadata" src="${esc(d.url)}"></audio>`}</div>`;
+ ${idle ? '' : `<audio id="sw-audio" preload="metadata" src="${esc(d.url)}"></audio><section class="mobile-now-playing" id="mobile-now-playing" aria-hidden="true"><div class="mobile-now-bg" aria-hidden="true"></div><div class="mobile-now-head"><button type="button" id="mobile-now-close" class="mobile-now-icon" aria-label="Close now playing">${icon('back')}</button><strong>${contextLabel}</strong><button type="button" class="mobile-now-icon" id="mobile-now-more" aria-label="Open queue">${icon('queue')}</button></div><div class="mobile-now-art">${fullArt}</div><div class="mobile-now-copy"><div><h2>${esc(d.title)}</h2><p>${esc(d.artist)}</p></div>${song ? heartBtn(song.song_id, 'mobile-now-heart') : ''}</div><div class="mobile-now-progress"><input id="mobile-now-seek" type="range" min="0" max="1000" value="0" aria-label="Seek position"><div><span id="mobile-now-elapsed">0:00</span><span id="mobile-now-total">${nice(d.duration || 0)}</span></div></div><div class="mobile-now-controls"><button type="button" id="mobile-now-prev" aria-label="${podcast ? 'Back 15 seconds' : 'Previous song'}">${podcast ? '<span class="skip-15">−15</span>' : icon('prev')}</button><button type="button" id="mobile-now-toggle" class="mobile-now-play" aria-label="Pause">${icon('pause')}</button><button type="button" id="mobile-now-next" aria-label="${podcast ? 'Forward 15 seconds' : 'Next song'}">${podcast ? '<span class="skip-15">+15</span>' : icon('next')}</button></div></section>`}</div>`;
 }
 function stopAudio() {
   const audio = document.getElementById('sw-audio');
   if (audio) { void saveListening(audio.ended); audio.pause(); }
-  state.player = null; state.playerToken++;
+  state.player = null; state.playerToken++; document.body.classList.remove('mobile-player-open');
   document.title = 'SoundWave | Music for every moment';
   try { if ('mediaSession' in navigator) navigator.mediaSession.metadata = null; } catch {}
   const root = document.getElementById('soundwave-player');
@@ -519,15 +521,27 @@ function bindPlayerBar(audio, details, token) {
     if (!live() || !$('#sw-toggle')) return;
     $('#sw-toggle').innerHTML = icon(audio.paused ? 'play' : 'pause');
     $('#sw-toggle').setAttribute('aria-label', audio.paused ? 'Play' : 'Pause');
+    const mt = $('#mobile-now-toggle'); if (mt) { mt.innerHTML = icon(audio.paused ? 'play' : 'pause'); mt.setAttribute('aria-label', audio.paused ? 'Play' : 'Pause'); }
     $('#sw-total').textContent = nice(dur());
     if (!seeking) {
       const pct = dur() > 0 ? Math.min(1000, Math.floor((audio.currentTime / dur()) * 1000)) : 0;
       $('#sw-elapsed').textContent = nice(audio.currentTime);
       const sk = $('#sw-seek'); sk.value = String(pct); sk.style.setProperty('--pct', `${pct / 10}%`);
+      const msk = $('#mobile-now-seek'); if (msk) { msk.value = String(pct); msk.style.setProperty('--pct', `${pct / 10}%`); }
+      if ($('#mobile-now-elapsed')) $('#mobile-now-elapsed').textContent = nice(audio.currentTime);
+      if ($('#mobile-now-total')) $('#mobile-now-total').textContent = nice(dur());
     }
     try { if ('mediaSession' in navigator && dur() > 0) navigator.mediaSession.setPositionState({ duration: dur(), position: Math.min(audio.currentTime, dur()), playbackRate: audio.playbackRate }); } catch {}
   };
   $('#sw-toggle').onclick = () => { if (audio.paused) audio.play().catch((e) => toast(humanErr(e), true)); else audio.pause(); };
+  $('#mobile-now-open')?.addEventListener('click', (e) => { if (e.target.closest('.heart-btn') || e.target.closest('a')) return; const panel=$('#mobile-now-playing'); if(panel){panel.classList.add('open');panel.setAttribute('aria-hidden','false');document.body.classList.add('mobile-player-open');} });
+  $('#mobile-now-open')?.addEventListener('keydown', (e) => { if ((e.key==='Enter'||e.key===' ') && !e.target.closest('a')) { e.preventDefault(); $('#mobile-now-open').click(); } });
+  $('#mobile-now-close')?.addEventListener('click', () => { const panel=$('#mobile-now-playing'); if(panel){panel.classList.remove('open');panel.setAttribute('aria-hidden','true');document.body.classList.remove('mobile-player-open');} });
+  $('#mobile-now-toggle')?.addEventListener('click', () => { if (audio.paused) audio.play().catch((e) => toast(humanErr(e), true)); else audio.pause(); });
+  $('#mobile-now-prev')?.addEventListener('click', () => action(() => skip(-1)));
+  $('#mobile-now-next')?.addEventListener('click', () => action(() => skip(1)));
+  $('#mobile-now-more')?.addEventListener('click', () => { const panel=$('#mobile-now-playing'); panel?.classList.remove('open'); panel?.setAttribute('aria-hidden','true'); document.body.classList.remove('mobile-player-open'); state.railTab='queue'; toggleRail(false); refreshRail(); });
+  const mobileSeek=$('#mobile-now-seek'); if(mobileSeek){mobileSeek.oninput=(e)=>{seeking=true;const v=Number(e.target.value);e.target.style.setProperty('--pct',`${v/10}%`);if($('#mobile-now-elapsed'))$('#mobile-now-elapsed').textContent=nice((dur()*v)/1000)};mobileSeek.onchange=(e)=>{if(dur()>0)audio.currentTime=(dur()*Number(e.target.value))/1000;seeking=false;sync();};}
   $('#sw-prev').onclick = () => action(() => skip(-1));
   $('#sw-next').onclick = () => action(() => skip(1));
   $('#sw-shuffle')?.addEventListener('click', toggleShuffle);
