@@ -3466,3 +3466,64 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .podcast-studio-grid{grid-auto-columns:minmax(220px,76vw)!important}
   .plan-grid{grid-auto-columns:minmax(180px,72vw)!important}
 }
+
+/* v29 full UI polish */
+.field-help{display:block;margin-top:4px;color:#9da7a0;font-size:11px;font-weight:500;line-height:1.45}
+.follow-btn.on{background:#3a1717;border-color:#7e3636;color:#ffd8d8}
+.follow-btn.on:hover{background:#5a1f1f;border-color:#b94b4b;color:#fff}
+.follow-btn.on:before{content:'−';font-weight:900;margin-right:6px}
+
+/* Left sidebar motion: the active selection visibly travels with navigation. */
+.workspace .sidebar{position:sticky}
+.sidebar-motion-indicator{position:absolute;left:2px;width:3px;height:44px;border-radius:999px;background:var(--sp-green);opacity:0;transform:scaleY(.65);transform-origin:center;transition:top .34s cubic-bezier(.22,1,.36,1),height .34s cubic-bezier(.22,1,.36,1),opacity .18s,transform .24s;pointer-events:none;z-index:4}
+.sidebar-motion-indicator.visible{opacity:1;transform:scaleY(1)}
+.library-item,.filter-pill,.sidebar-role,.library-toggle{will-change:transform}
+.library-item.active{transform:translateX(5px);background:linear-gradient(90deg,#1ed76018,#ffffff0a)}
+.sidebar-click-pop{animation:sidebarClickPop .38s cubic-bezier(.2,.9,.2,1)}
+@keyframes sidebarClickPop{0%{transform:scale(.98)}55%{transform:translateX(7px) scale(1.01)}100%{transform:translateX(0) scale(1)}}
+
+/* Player controls: one visual rhythm instead of mixed tiny icon sizes. */
+.play-controls{gap:14px}
+.play-controls .icon-quiet{width:34px;height:34px;min-width:34px;min-height:34px;padding:0;border-radius:50%;display:grid;place-items:center;color:#b8beb9}
+.play-controls .icon-quiet:hover{background:#ffffff12;color:#fff}
+.play-controls .icon-quiet svg{width:18px;height:18px}
+.player-main-play{width:42px;height:42px;box-shadow:0 8px 24px #0008;transition:transform .18s ease,background .18s ease}
+.player-main-play svg{width:20px;height:20px}
+.player-main-play:hover{transform:scale(1.06);background:#fff}
+
+/* Upload/publishing polish */
+.wizard-dialog{width:min(96vw,680px)}
+.wizard-dialog .upload-step{padding:8px 2px 2px}
+.wizard-dialog .step-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#1ed76022,#7b61ff20);border:1px solid #ffffff12;display:grid;place-items:center;color:var(--sp-green);margin-bottom:10px}
+.wizard-dialog .step-icon svg{width:26px;height:26px}
+.audio-drop,.song-cover-drop{border:1px dashed #566158;background:linear-gradient(145deg,#181b19,#121413);transition:border-color .2s,background .2s,transform .2s}
+.audio-drop:hover,.song-cover-drop:hover,.audio-drop.drag-over{border-color:var(--sp-green);background:linear-gradient(145deg,#1b2720,#131714);transform:translateY(-1px)}
+.audio-summary{padding:10px 12px;border:1px solid #ffffff0d;border-radius:12px;background:#ffffff05}
+.album-pick{background:#171a18;border-color:#303732}
+.album-pick:has(input:checked){background:linear-gradient(90deg,#1ed76014,#ffffff05);box-shadow:inset 3px 0 0 var(--sp-green)}
+.review-step #song-final,.review-step #ep-final{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.review-step #song-final>*,.review-step #ep-final>*{min-width:0}
+.single-field input:invalid:not(:placeholder-shown),.single-field select:invalid{border-color:#a65858}
+
+/* Search artwork consistency for uploaded song/album images. */
+.search-section .songicon,.search-top .songicon,.track .songicon{border-radius:7px;background:#222;overflow:hidden}
+.search-section .songicon img,.search-top .songicon img,.track .songicon img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.search-section .release-art img,.top-card .top-art img{width:100%;height:100%;display:block;object-fit:cover}
+
+/* General consistency polish */
+.button,.filter-pill,.home-chips button,.follow-btn,.sw-quiet-action,.text-link{transition:background .2s,border-color .2s,color .2s,transform .2s}
+.button:active,.filter-pill:active,.home-chips button:active,.follow-btn:active,.sw-quiet-action:active{transform:scale(.97)}
+.section-heading>div>p{max-width:70ch}
+.status-pill{letter-spacing:.01em}
+
+@media (max-width:760px){
+  .wizard-dialog{width:calc(100vw - 20px)!important;max-width:calc(100vw - 20px)!important;padding:14px!important;border-radius:22px!important}
+  .wizard-dialog .wizard-steps{overflow-x:auto;scrollbar-width:none;gap:8px}
+  .wizard-dialog .wizard-steps::-webkit-scrollbar{display:none}
+  .audio-drop,.song-cover-drop{min-height:150px!important}
+  .review-step #song-final,.review-step #ep-final{grid-template-columns:1fr}
+  .dialog-actions{position:sticky;bottom:-14px;background:linear-gradient(180deg,transparent,#151715 22%);padding-top:20px;padding-bottom:8px;z-index:2}
+  .dialog-actions .button{min-height:46px;flex:1}
+  .play-controls .icon-quiet{width:38px;height:38px;min-width:38px;min-height:38px}
+  .player-main-play{width:46px;height:46px}
+}
