@@ -2302,3 +2302,78 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
 .library-list{
   padding-top:2px;
 }
+
+/* v7: compact one-row library filters + expandable discover shelves */
+.library-filter-row{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center;
+  gap:8px!important;
+  width:100%;
+  overflow:hidden!important;
+  padding:4px 8px 12px!important;
+}
+.library-filter-row .filter-pill{
+  width:auto!important;
+  min-width:0!important;
+  flex:1 1 0!important;
+  padding:0 9px!important;
+  min-height:38px;
+  justify-content:center!important;
+  border-radius:999px!important;
+  white-space:nowrap;
+}
+.library-filter-row .filter-pill .pill-label{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.library-filter-row .filter-count{display:none!important}
+
+.shelf.discover-expanded{
+  display:grid;
+  grid-auto-flow:row;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  grid-auto-columns:auto;
+  overflow:visible;
+  gap:var(--space-2);
+  padding-bottom:var(--space-2);
+}
+.podcast-recommend-card .reason-caption{
+  display:block;
+  margin-top:6px;
+  color:#8fd8a9;
+  font-size:11px;
+  line-height:1.3;
+  text-align:left;
+}
+@media (max-width:900px){
+  .shelf.discover-expanded{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media (max-width:520px){
+  .shelf.discover-expanded{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* v8 Podcast Studio analytics */
+.podcast-kpis{margin-bottom:24px}
+.podcast-analytics-suite{margin:0 0 34px}
+.podcast-card-metrics{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #ffffff12;color:#aeb7b0;font-size:12px}
+.podcast-card-metrics span{display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:999px;background:#ffffff0a;border:1px solid #ffffff0d}
+.podcast-card-metrics b{color:#fff;font-size:13px}
+.podcast-completion-card .metric-ring{margin-top:18px}
+@media (max-width:900px){
+  .podcast-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .podcast-analytics-suite .chart-grid{grid-template-columns:1fr!important}
+  .podcast-analytics-suite .chart-card{min-height:210px}
+}
+@media (max-width:520px){
+  .podcast-kpis{grid-template-columns:1fr 1fr!important;gap:8px}
+  .podcast-kpis>button{min-height:96px;padding:12px}
+  .podcast-kpis strong{font-size:26px}
+  .podcast-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .podcast-card-actions .button{width:100%;justify-content:center}
+}
