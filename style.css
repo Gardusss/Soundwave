@@ -3645,9 +3645,7 @@ body{scroll-behavior:smooth}
 .studio-release-copy .card-title-line{align-items:flex-start;gap:8px}
 .studio-release-copy strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .studio-deactivate{margin-top:auto;width:100%;min-height:40px}
-.studio-release-card.selected-release .studio-release-main::after{
-  content:'Selected';display:inline-flex;margin-top:8px;padding:4px 8px;border-radius:999px;background:#1ed7601f;color:#9cf0ba;border:1px solid #1ed76048;font-size:10px;font-weight:800;
-}
+.studio-release-card.selected-release .studio-release-main::after{content:none;display:none}
 .catalog-track-heading{margin-top:26px;padding-top:18px;border-top:1px solid #ffffff10}
 .catalog-song-empty{grid-column:1/-1;padding:28px;border:1px dashed #364038;border-radius:18px;background:#151815}
 
@@ -3750,4 +3748,79 @@ dialog[open] input[type="file"]{pointer-events:none}
 }
 @media (prefers-reduced-motion:reduce){
   .artist-sticky-bar,body[data-page="artist-detail"] .artist-profile-hero{transition:none!important}
+}
+
+/* v34 release creation redesign */
+.release-create-dialog{width:min(960px,94vw)!important;max-width:960px!important;padding:0!important;overflow:hidden;background:#202321;border:1px solid #434844}
+.release-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:26px 28px 20px;border-bottom:1px solid #3a3f3b;background:linear-gradient(135deg,#242a26,#202321)}
+.release-dialog-head h2{font:850 clamp(26px,3vw,36px) Outfit,system-ui;margin:4px 0 6px;letter-spacing:-.8px}
+.release-dialog-head p{margin:0;color:#aeb6b0;max-width:580px;line-height:1.5}
+.release-create-form{padding:24px 28px 28px}
+.release-create-grid{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:28px;align-items:start}
+.release-art-panel{position:sticky;top:0}
+.release-cover-drop{min-height:0!important;margin:0!important;padding:18px!important;border-radius:22px!important;background:linear-gradient(145deg,#171b18,#111411)!important}
+.release-cover-drop>span{width:100%!important;max-width:260px!important;aspect-ratio:1!important;border-radius:20px!important;background:linear-gradient(145deg,#334036,#202721)!important;box-shadow:0 16px 34px #0006}
+.release-cover-drop strong{margin-top:8px;font-size:17px}
+.release-cover-drop em{font-style:normal;color:#7f8981;font-size:11px}
+.release-art-tip{margin-top:12px;padding:13px 14px;border-radius:16px;background:#171a18;border:1px solid #313733;color:#aeb6b0;font-size:12px;line-height:1.45}
+.release-art-tip strong{display:block;color:#f2f5f2;margin-bottom:4px}
+.release-meta-panel{min-width:0}
+.release-type-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.release-type-switch label{cursor:pointer}
+.release-type-switch input{position:absolute;opacity:0;pointer-events:none}
+.release-type-switch span{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:14px;border:1px solid #424943;background:#171a18;color:#c3cbc5;font-weight:800;transition:.18s ease}
+.release-type-switch span svg{width:18px;height:18px}
+.release-type-switch input:checked+span{border-color:#1ed760;background:#1b2b21;color:#ecfff2;box-shadow:inset 0 0 0 1px #1ed76055}
+.release-create-dialog .single-field{margin:0 0 16px}
+.release-create-dialog .single-field>span.field-optional{float:right;color:#7f8981;font-weight:600;font-size:11px}
+.release-create-dialog .single-field input,.release-create-dialog .single-field select,.release-create-dialog .single-field textarea{background:#151916;border-color:#3e4640;border-radius:14px;padding:14px 15px;transition:border-color .18s,box-shadow .18s,background .18s}
+.release-create-dialog .single-field input:focus,.release-create-dialog .single-field select:focus,.release-create-dialog .single-field textarea:focus{background:#171d19;border-color:#1ed760;box-shadow:0 0 0 3px #1ed76018;outline:none}
+.release-create-dialog .field-help{font-weight:500;line-height:1.4;color:#88928b}
+.release-create-dialog .availability.ok{color:#5ee78e}
+.release-create-dialog .availability.bad{color:#ff8585}
+.release-form-note{margin-top:4px;padding:12px 14px;border-radius:14px;background:#171a18;border:1px solid #303632;color:#98a19a;font-size:12px}
+.release-dialog-actions{padding-top:18px;margin-top:18px;border-top:1px solid #343935}
+.release-dialog-actions .button{min-width:130px;justify-content:center}
+@media (max-width:760px){
+  .release-create-dialog{width:min(96vw,560px)!important;max-height:92dvh!important;overflow-y:auto}
+  .release-dialog-head{padding:20px 18px 16px}
+  .release-dialog-head p{font-size:13px}
+  .release-create-form{padding:18px}
+  .release-create-grid{grid-template-columns:1fr;gap:18px}
+  .release-art-panel{position:static}
+  .release-cover-drop{display:grid!important;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:14px;text-align:left!important;justify-items:start!important;align-items:center!important}
+  .release-cover-drop>span{grid-row:1/4;width:112px!important;height:112px!important}
+  .release-cover-drop strong{margin:0}
+  .release-type-switch span{min-height:46px}
+  .release-dialog-actions{position:sticky;bottom:-18px;background:#202321;padding:14px 0 0;z-index:3}
+}
+
+
+/* v35: unified upload surface redesign */
+.upload-surface-dialog .release-dialog-head,
+.upload-surface-form .release-form-note{background:linear-gradient(90deg,rgba(30,215,96,.10),rgba(123,97,255,.10))}
+.upload-surface-form .release-art-tip strong{display:block;margin-bottom:6px}
+.upload-surface-form .release-art-tip span{display:block;line-height:1.55;color:#bfc7c1}
+.upload-surface-grid .release-meta-panel{display:flex;flex-direction:column;gap:2px}
+.upload-wizard-dialog{width:min(94vw,700px)!important;max-width:700px!important}
+.upload-wizard-dialog .wizard-steps{margin-top:2px}
+.upload-wizard-dialog .wizard-steps li{background:#171b18;border:1px solid #2b302d;border-radius:999px;padding:10px 14px;font-weight:700}
+.upload-wizard-dialog .wizard-steps li.current{background:linear-gradient(90deg,rgba(30,215,96,.18),rgba(255,255,255,.05));border-color:#1ed76066}
+.upload-wizard-dialog .wizard-steps li.done{border-color:#35523f;color:#d9fbe5}
+.upload-wizard-dialog .upload-step{background:linear-gradient(180deg,#151917,#101311);border:1px solid #2d342f;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.upload-wizard-dialog .step-desc{margin:4px 0 14px;color:#afb7b1;line-height:1.55}
+.upload-wizard-dialog .notice{margin-top:14px;padding:14px 16px;border-radius:16px;border:1px solid rgba(94,231,142,.25);background:linear-gradient(180deg,rgba(30,215,96,.10),rgba(30,215,96,.05));color:#d8f7e3;line-height:1.5}
+.upload-wizard-dialog .upload-summary{margin:14px 0 0}
+.upload-wizard-dialog .single-field textarea{min-height:110px}
+.upload-wizard-dialog .cover-drop{min-height:170px;background:linear-gradient(180deg,#161b18,#131613)}
+.upload-wizard-dialog .audio-drop{min-height:210px;background:linear-gradient(180deg,#161b18,#131613)}
+.upload-wizard-dialog .album-picks{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));max-height:none;overflow:visible}
+.upload-wizard-dialog .album-pick{position:relative;display:grid;grid-template-columns:18px 48px minmax(0,1fr) auto;align-items:center;column-gap:12px;row-gap:2px;padding:14px;border-radius:18px;background:#151917;border:1px solid #313933}
+.upload-wizard-dialog .album-pick>span{grid-row:1 / span 2}
+.upload-wizard-dialog .album-pick strong{font-size:15px;min-width:0}
+.upload-wizard-dialog .album-pick small{grid-column:3;display:block;color:#9ba49d;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.upload-wizard-dialog .album-pick>svg{align-self:center}
+.upload-wizard-dialog .dialog-actions{padding-top:16px}
+@media (max-width:720px){
+  .upload-wizard-dialog .album-picks{grid-template-columns:1fr}
 }
