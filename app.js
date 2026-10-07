@@ -856,7 +856,7 @@ function confirmView(email) {
     timer = setInterval(() => { wait--; if (!document.body.contains(btn)) return clearInterval(timer); if (wait <= 0) { clearInterval(timer); btn.disabled = false; btn.textContent = 'Resend confirmation email'; } else btn.textContent = `Resend in ${wait}s`; }, 1000);
   });
 }
-const MAYA_RETURN_KEY='soundwave-pending-maya-return-v21';
+const MAYA_RETURN_KEY='soundwave-pending-maya-return-v22';
 function captureMayaReturn(){
   const params=new URLSearchParams(location.search);
   const result=params.get('maya');
@@ -873,6 +873,12 @@ function pendingMayaReturn(){
   try{return JSON.parse(sessionStorage.getItem(MAYA_RETURN_KEY)||'null');}catch{return null;}
 }
 function clearPendingMayaReturn(){try{sessionStorage.removeItem(MAYA_RETURN_KEY);}catch{}}
+function resolveMayaReturnFromActivePremium(message='Payment completed. Your Premium benefits are active.'){
+  if(!isPremiumUser())return false;
+  clearPendingMayaReturn();
+  state.mayaPaymentNotice={type:'success',message};
+  return true;
+}
 async function edgeFunctionMessage(error){
   try{
     const res=error?.context;
@@ -890,6 +896,13 @@ async function processPendingMayaReturn(){
   state.mayaReturnProcessing=true;
   try{
     state.page='plans';
+    // The subscription table / entitlement is the final source of truth inside SoundWave.
+    // If Premium is already active, a leftover Maya return token must never keep the UI
+    // stuck in a pending state or trigger repeated confirmation calls after login.
+    if(resolveMayaReturnFromActivePremium('Your Maya Sandbox payment has already been applied. Premium is active.')){
+      render();
+      return true;
+    }
     if(pending.result==='cancelled'){
       state.mayaPaymentNotice={type:'info',message:'Maya Sandbox checkout was cancelled. No subscription was activated.'};
       clearPendingMayaReturn();render();return true;
@@ -906,15 +919,22 @@ async function processPendingMayaReturn(){
     render();
     const {data,error}=await db.functions.invoke('maya-confirm-payment',{body:{reference:pending.reference}});
     if(error){
+      // Confirmation may race with the webhook. Reload entitlement before showing a warning.
+      try{await loadData();}catch{}
+      if(resolveMayaReturnFromActivePremium('Payment confirmed through your active subscription. Premium is ready.')){render();return true;}
       const msg=await edgeFunctionMessage(error);
       state.mayaPaymentNotice={type:'pending',message:`Payment verification is pending. Your account is still signed in. ${msg}`};
       render();return true;
     }
     if(data?.pending){
+      try{await loadData();}catch{}
+      if(resolveMayaReturnFromActivePremium('Payment confirmed through your active subscription. Premium is ready.')){render();return true;}
       state.mayaPaymentNotice={type:'pending',message:data?.message||'Maya is still finalizing the sandbox transaction. Retry verification in a moment.'};
       render();return true;
     }
     if(data?.error){
+      try{await loadData();}catch{}
+      if(resolveMayaReturnFromActivePremium('Payment confirmed through your active subscription. Premium is ready.')){render();return true;}
       state.mayaPaymentNotice={type:'pending',message:`Payment verification is pending. ${data.error}`};
       render();return true;
     }
@@ -1828,6 +1848,10 @@ function plans(){
    return `<article class="plan-card ${isCurrent?'current-plan':''}"><span>${esc(p.plan_name)}</span><strong>₱${price.toFixed(0)}<small>/month</small></strong><p>${p.max_members} ${Number(p.max_members)===1?'member':'members'}</p><small class="plan-meta">${Number(p.max_members)>1?'Best for shared listening':'Great for personal listening'}</small>${action}</article>`;
  }).join('');
  const manageSection=current?`<section class="subscription-layout"><article class="subscription-panel emphasis"><div class="subscription-panel-head"><div><span class="eyebrow">ACTIVE SUBSCRIPTION</span><h3>${esc(current.plan_name||'Premium')}</h3></div><span class="status-pill active">${esc(relationship)}</span></div><div class="subscription-stat-grid"><div><small>Status</small><strong>Premium active</strong></div><div><small>Downloads</small><strong>${state.offlineDownloads.length}</strong></div><div><small>Period</small><strong>${esc(current.start_date||'—')} → ${esc(current.end_date||'—')}</strong></div></div>${sharedMemberInfo}${relationship==='Owner'||relationship==='Admin'||maxMembers>1?`<div class="subscription-share-box"><div><strong>Plan sharing</strong><p>${maxMembers>1?`This plan supports up to ${maxMembers} members. ${availableSeats?`${availableSeats} seat${availableSeats===1?'':'s'} still available.`:'All seats are currently used.'}`:'This plan is intended for one member only.'}</p></div>${maxMembers>1&&isPlanOwner?`<button type="button" class="button secondary" id="invite-plan-member" ${availableSeats<1?'disabled':''}>${icon('users')} ${availableSeats>0?'Invite member':'Plan full'}</button>`:''}</div>`:''}</article><article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">MEMBERS</span><h3>${usedSeats} / ${maxMembers} seats used</h3></div></div>${sharedMemberRows}<p class="footnote">Additional users are linked through <code>subscription_member</code>. Owners can share multi-member plans; members receive Premium benefits under the same subscription.</p></article>${paymentRows?`<article class="subscription-panel"><div class="subscription-panel-head"><div><span class="eyebrow">PAYMENTS</span><h3>Recent payment records</h3></div></div><div class="subscription-payment-list">${paymentRows}</div></article>`:''}</section>`:`<section class="subscription-layout"><article class="subscription-panel maya-sandbox-info"><div class="subscription-panel-head"><div><span class="eyebrow">MAYA SANDBOX</span><h3>Instant Premium activation without real money</h3></div><span class="sandbox-badge">Test mode</span></div><div class="subscription-flow"><div><strong>1. Choose a paid plan</strong><p>SoundWave creates a Maya Sandbox checkout using the selected plan price from Supabase.</p></div><div><strong>2. Complete the sandbox checkout</strong><p>You are redirected to Maya's hosted test checkout. No real money is processed.</p></div><div><strong>3. Server verifies the payment</strong><p>A Supabase Edge Function verifies the Maya transaction instead of trusting the browser redirect.</p></div><div><strong>4. Premium activates automatically</strong><p>The subscription and payment records are created, then SoundWave reloads your Premium entitlement.</p></div></div></article></section>`;
+ if(current && state.mayaPaymentNotice?.type==='pending'){
+   clearPendingMayaReturn();
+   state.mayaPaymentNotice={type:'success',message:'Your subscription is active. Premium benefits are ready to use.'};
+ }
  const paymentNotice=state.mayaPaymentNotice?`<div class="payment-return-notice ${esc(state.mayaPaymentNotice.type||'info')}"><span>${state.mayaPaymentNotice.type==='success'?icon('check'):icon('clock')}</span><div><strong>${state.mayaPaymentNotice.type==='success'?'Premium activated':state.mayaPaymentNotice.type==='pending'?'Payment verification':'Checkout update'}</strong><p>${esc(state.mayaPaymentNotice.message||'')}</p></div>${state.mayaPaymentNotice.type==='pending'?`<button type="button" class="button secondary sm" id="retry-maya-payment">Retry verification</button>`:''}</div>`:'';
  shell(`${paymentNotice}${current?`<section class="workspace-hero premium-hero"><div><span class="eyebrow">SUBSCRIPTION</span><h2>${esc(current.plan_name||'Premium')} is active.</h2><p>${esc(relationship)} · ${esc(current.start_date||'')} → ${esc(current.end_date||'')}</p><div class="inline hero-inline-pills">${premiumAccountBadge(current.plan_name||'Premium')}</div></div><span class="hero-vinyl">✓</span></section>`:`<section class="workspace-hero premium-hero"><div><span class="eyebrow">MAYA SANDBOX</span><h2>Upgrade to SoundWave Premium.</h2><p>Test the complete checkout and automatic activation flow without processing real money.</p></div><span class="hero-vinyl">M</span></section>`}${manageSection}<div class="section-heading subscription-heading"><div><h2>Available plans</h2><small class="muted">Paid plans open Maya Checkout Sandbox.</small></div><span class="sandbox-badge">Sandbox</span></div><div class="plan-grid">${cards}</div>
  <dialog class="sw-modal maya-checkout-dialog" id="maya-checkout-dialog"><div class="modal-head"><div><span class="eyebrow">MAYA CHECKOUT SANDBOX</span><h2 id="maya-checkout-title">Confirm plan</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="maya-checkout-body"><div class="maya-order-summary"><span class="maya-mark">M</span><div><small>SoundWave Premium</small><strong id="maya-plan-name">Premium</strong><p id="maya-plan-members">1 member</p></div><strong id="maya-plan-price">₱0</strong></div><div class="maya-test-notice">${icon('shield')} <span><strong>Sandbox payment</strong><small>This is a test transaction. No real money will be charged.</small></span></div><ol class="maya-checkout-steps"><li><span>1</span>SoundWave creates a secure checkout session.</li><li><span>2</span>You finish payment on Maya's sandbox page.</li><li><span>3</span>SoundWave verifies the payment and activates Premium.</li></ol><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button type="button" class="button maya-pay-button" id="maya-start-checkout">Continue to Maya Sandbox</button></div><p class="footnote">Requires the Maya Sandbox SQL, Edge Functions, and Maya sandbox API keys included in this ZIP.</p></div></dialog>
