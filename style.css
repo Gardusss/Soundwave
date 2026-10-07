@@ -2611,3 +2611,63 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   #admin-status-filter,#admin-priority-filter{width:100%}
   .admin-row-actions .button{width:100%;justify-content:center}
 }
+
+/* v12 premium, downloads, admin layout */
+.premium-account-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(30,215,96,.42);background:rgba(30,215,96,.12);color:#dfffe8;
+  border-radius:999px;padding:9px 14px;font-weight:800;cursor:pointer
+}
+.premium-account-pill svg{width:16px;height:16px;color:#1ed760}
+.premium-account-pill:hover{background:rgba(30,215,96,.18);transform:translateY(-1px)}
+.hero-inline-pills{margin-top:12px}
+.track .t-text strong{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.track-state-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;
+  background:rgba(30,215,96,.12);border:1px solid rgba(30,215,96,.36);color:#b9f4c9
+}
+.track-state-badge svg,.track-download-icon svg{width:14px;height:14px;color:#1ed760}
+.track-download-icon{display:inline-flex;vertical-align:middle;margin-right:8px}
+.track.is-downloaded .t-text strong{color:#fff}
+.subscription-heading{margin-top:24px}
+.subscription-layout{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:18px}
+.subscription-panel{
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+  border:1px solid #2d332f;border-radius:20px;padding:18px
+}
+.subscription-panel.emphasis{border-color:rgba(30,215,96,.28);box-shadow:0 0 0 1px rgba(30,215,96,.08) inset}
+.subscription-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.subscription-panel h3{margin:4px 0 0;font-size:22px}
+.subscription-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.subscription-stat-grid>div,.subscription-flow>div,.subscription-payment-row,.subscription-member-chip{
+  background:#161917;border:1px solid #2a302c;border-radius:16px;padding:12px
+}
+.subscription-stat-grid small,.subscription-member-chip small,.subscription-payment-row small{display:block;color:#a8b2aa}
+.subscription-stat-grid strong{display:block;margin-top:6px;font-size:16px}
+.subscription-share-box,.subscription-shared-note{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px dashed #375542;background:#13211a;border-radius:16px;padding:14px;margin-top:14px}
+.subscription-shared-note{justify-content:flex-start;color:#d4e9d8}
+.subscription-members-list,.subscription-payment-list,.subscription-flow{display:grid;gap:10px}
+.subscription-member-chip{display:flex;align-items:center;gap:10px}
+.subscription-payment-row{display:grid;grid-template-columns:1.3fr auto auto;gap:12px;align-items:center}
+.plan-meta{display:block;color:#aab4ac;margin:6px 0 12px}
+.admin-view-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+.admin-view-tabs button{
+  border:1px solid #333a36;background:#171a18;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800
+}
+.admin-view-tabs button.active,.admin-view-tabs button:hover{background:#202521;border-color:#505a54}
+.admin-block{margin-bottom:18px}
+.admin-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.admin-summary-card{background:#161917;border:1px solid #2a302c;border-radius:20px;padding:18px}
+.admin-summary-card h3{margin:8px 0 10px;font-size:22px}
+.admin-summary-card p{color:#b2b8b4;line-height:1.5;min-height:66px}
+@media (max-width: 900px){
+  .subscription-stat-grid{grid-template-columns:1fr}
+  .subscription-share-box,.subscription-shared-note{align-items:flex-start;flex-direction:column}
+  .subscription-payment-row{grid-template-columns:1fr}
+}
+@media (max-width: 640px){
+  .premium-account-pill span{display:none}
+  .admin-view-tabs{overflow:auto;flex-wrap:nowrap;padding-bottom:4px}
+  .admin-view-tabs button{white-space:nowrap}
+}
