@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://azqbzyxknfdwfuqevbrd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OcR9EJnNuPqBWtZrmNVUdA_tt_CMCmR';
 const configured = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('YOUR_PROJECT') && !SUPABASE_KEY.includes('YOUR_PUBLISHABLE_KEY'));
 const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: false, flowType: 'pkce' }
+  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, flowType: 'implicit' }
 }) : null;
 /* ====== APP ====== */
 
@@ -387,7 +387,7 @@ function showCard(p, i = 0) {
   return `<button type="button" class="cover-card" data-open-show="${p.show_id}"><span class="cover-art" style="background:${grad(i)}">${art}</span><strong>${esc(p.show_title)}</strong><small>${esc(p.category || 'Podcast')}</small></button>`;
 }
 function toast(msg,error=false){ const el=document.createElement('div'); el.className=`toast ${error?'error':''}`; el.setAttribute('role',error?'alert':'status'); el.innerHTML=`<span class=\"toast-mark\">${error?'!':'✓'}</span><span>${esc(msg)}</span>`;document.body.append(el);requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),450)},5000); }
-function humanErr(e){const msg=e?.message || String(e||'');if(msg.includes('row-level security'))return 'That action is not available for this account.';if(/failed to fetch|network|offline/i.test(msg))return 'SoundWave cannot reach the server right now. Check your connection and try again.';if(/jwt|session|auth/i.test(msg))return 'Your session needs to be refreshed. Please sign in again.';return 'Something went wrong. Please try again.';}
+function humanErr(e){const msg=e?.message || String(e||'');if(msg.includes('row-level security'))return 'That action is not available for this account.';if(/failed to fetch|network|offline/i.test(msg))return 'SoundWave cannot reach the server right now. Check your connection and try again.';if(/provider|oauth|google|redirect|flow state|code verifier|invalid grant/i.test(msg))return `Google sign-in failed: ${msg}`;if(/jwt|session|auth/i.test(msg))return 'Your session needs to be refreshed. Please sign in again.';return 'Something went wrong. Please try again.';}
 function check(result){if(result.error) throw result.error;return result.data;}
 async function action(fn){if(state.loading)return;state.loading=true;showAsyncSkeleton();try{await fn();}catch(e){console.error(e);toast(humanErr(e),true);}finally{state.loading=false;hideAsyncSkeleton();document.querySelectorAll('[data-busy]').forEach(b=>b.disabled=false);}}
 function requireConfig(){if(configured)return false; $('#app').innerHTML=`<main class="main" style="max-width:820px;padding-top:90px"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div class="card"><span class="eyebrow">Setup required</span><h1 class="page-title">Connect your Supabase project</h1><p class="muted">Make a copy of <code>.env.example</code> named <code>.env</code> and add your real project URL and publishable key. Restart the development server.</p><pre style="overflow:auto;background:#0d1526;padding:20px;border-radius:13px">VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co\nVITE_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY</pre><p class="footnote">Never place your database password, secret key or service_role key in this application.</p></div></main>`;return true;}
@@ -1095,9 +1095,7 @@ function authView(register=false){
   $('#mode-login').onclick=()=>authView(false);
   $('#mode-register').onclick=()=>authView(true);
   $('#auth-google')?.addEventListener('click',()=>action(async()=>{
-    // OAuth callbacks must return to a real URL, not a hash route. The hash is
-    // restored after Supabase has exchanged the Google authorization code.
-    const redirectTo=`${window.location.origin}${window.location.pathname}?oauth=google`;
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
     sessionStorage.setItem('soundwave-oauth-return','google');
     const { error } = await db.auth.signInWithOAuth({
       provider:'google',
@@ -2511,54 +2509,44 @@ async function ensureOAuthProfile(user){
   const created=await db.from('users').insert(payload);
   if(created.error && !/duplicate|already exists|23505/i.test(String(created.error.message||''))) console.warn('Could not create OAuth listener profile',created.error);
 }
-async function waitForAuthSession(timeoutMs=5000){
+async function waitForAuthSession(timeoutMs=7000){
   const started=Date.now();
   while(Date.now()-started<timeoutMs){
     const {data,error}=await db.auth.getSession();
     if(error)throw error;
     if(data?.session?.user)return data.session;
-    await new Promise(resolve=>setTimeout(resolve,120));
+    await new Promise(resolve=>setTimeout(resolve,150));
   }
   return null;
 }
 function cleanOAuthUrl(){
-  const params=new URLSearchParams(location.search);
-  ['code','oauth','error','error_code','error_description'].forEach(k=>params.delete(k));
-  const q=params.toString();
-  window.history.replaceState(window.history.state||{},document.title,`${location.pathname}${q?`?${q}`:''}#/discover`);
+  const u=new URL(window.location.href);
+  ['code','oauth','error','error_code','error_description'].forEach(k=>u.searchParams.delete(k));
+  if(/^#(?:access_token|error|type|expires_in|provider_token)/i.test(u.hash||''))u.hash='#/discover';
+  window.history.replaceState(window.history.state||{},document.title,`${u.pathname}${u.search}${u.hash||'#/discover'}`);
   sessionStorage.removeItem('soundwave-oauth-return');
 }
 async function completeOAuthReturn(){
   const params=new URLSearchParams(location.search);
-  const code=params.get('code');
-  const isGoogleReturn=params.get('oauth')==='google'||sessionStorage.getItem('soundwave-oauth-return')==='google';
   const oauthError=params.get('error_description')||params.get('error');
   if(oauthError){cleanOAuthUrl();throw Error(oauthError);}
-  if(code){
-    // Always exchange the callback code, even when local storage contains an
-    // older session. The account just selected in Google must win.
-    const {data,error}=await db.auth.exchangeCodeForSession(code);
-    if(error){cleanOAuthUrl();throw error;}
-    const session=data?.session||await waitForAuthSession();
-    cleanOAuthUrl();
-    if(!session)throw Error('Google sign-in finished but no SoundWave session was created. Please try again.');
-    return session;
-  }
-  if(isGoogleReturn){
-    const session=await waitForAuthSession(3500);
-    cleanOAuthUrl();
-    if(!session)throw Error('Google sign-in did not finish. Please try Continue with Google again.');
-    return session;
-  }
-  return null;
+  const hash=String(location.hash||'');
+  const looksLikeOAuth=/access_token=|error_description=|type=recovery|type=signup/i.test(hash);
+  const expected=sessionStorage.getItem('soundwave-oauth-return')==='google';
+  if(!looksLikeOAuth&&!expected)return null;
+  // detectSessionInUrl=true lets Supabase parse the OAuth hash itself. Wait for
+  // the SDK to persist that session before SoundWave loads protected data.
+  const session=await waitForAuthSession(8000);
+  if(!session)throw Error('Google returned to SoundWave, but Supabase did not create a session. Check the Supabase redirect URL and Google OAuth callback settings.');
+  cleanOAuthUrl();
+  return session;
 }
 async function boot(){
  if(requireConfig())return;
  captureMayaReturn();
  try{
-   const params=new URLSearchParams(location.search);
    let oauthSession=null;
-   if(params.get('code')||params.get('oauth')==='google'||sessionStorage.getItem('soundwave-oauth-return')==='google'){
+   if(/access_token=|error_description=/i.test(String(location.hash||''))||sessionStorage.getItem('soundwave-oauth-return')==='google'){
      oauthSession=await completeOAuthReturn();
    }
    let result=oauthSession?{data:{session:oauthSession},error:null}:await db.auth.getSession();
