@@ -3698,3 +3698,56 @@ body{scroll-behavior:smooth}
   html,.main,.sidebar,.context-rail,.library-scroll,.dashboard-content{scroll-behavior:auto!important}
   .studio-release-card{transition:none}
 }
+
+/* v33 player centering, artist scroll behavior, upload stability */
+@media (min-width:901px){
+  .custom-playbar{
+    grid-template-columns:minmax(240px,1fr) minmax(420px,600px) minmax(240px,1fr)!important;
+  }
+  .player-center{justify-self:center!important}
+  .play-controls{position:relative;justify-content:center!important}
+  .mini-visualizer{display:none!important}
+  .player-main-play{margin-inline:2px}
+}
+
+/* Spotify-like artist scroll: hero recedes, compact identity bar sticks inside content. */
+body[data-page="artist-detail"] .dashboard-content{padding-top:0}
+.artist-sticky-bar{
+  position:sticky;
+  top:0;
+  z-index:18;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:58px;
+  margin:0 calc(-1 * clamp(var(--space-3),3vw,var(--space-5))) 0;
+  padding:8px clamp(var(--space-3),3vw,var(--space-5));
+  background:linear-gradient(180deg,rgba(18,22,20,.98),rgba(18,22,20,.92));
+  border-bottom:1px solid transparent;
+  backdrop-filter:blur(18px);
+  transform:translateY(-110%);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .22s ease,opacity .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.artist-sticky-bar.show{transform:none;opacity:1;pointer-events:auto;border-bottom-color:#ffffff12;box-shadow:0 8px 22px #0005}
+.artist-sticky-avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;font-weight:900;flex:0 0 38px}
+.artist-sticky-bar>strong{font:850 20px Outfit,system-ui,sans-serif;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.artist-sticky-play{margin-left:auto;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:var(--sp-green);color:#07120b}
+.artist-sticky-play svg{width:19px;height:19px;fill:currentColor}
+body[data-page="artist-detail"] .artist-profile-hero{transition:opacity .22s ease,transform .22s ease}
+body.artist-scrolled[data-page="artist-detail"] .artist-profile-hero{opacity:.3;transform:translateY(-8px)}
+body[data-page="artist-detail"] .artist-section{scroll-margin-top:76px}
+
+/* Keep file workflows visually stable while native pickers close/reopen. */
+dialog[open] .cover-drop,dialog[open] .audio-drop{isolation:isolate}
+dialog[open] input[type="file"]{pointer-events:none}
+
+@media (max-width:900px){
+  .artist-sticky-bar{margin-inline:-16px;padding-inline:16px;min-height:54px}
+  .artist-sticky-bar>strong{font-size:17px}
+  .artist-sticky-avatar{width:34px;height:34px;flex-basis:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  .artist-sticky-bar,body[data-page="artist-detail"] .artist-profile-hero{transition:none!important}
+}
