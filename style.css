@@ -2845,3 +2845,59 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
   .plan-grid{grid-template-columns:1fr}
   .plan-card{min-height:unset}
 }
+
+/* v16 first-time listener dashboard */
+.new-listener-dashboard{
+  min-height:min(620px,calc(100dvh - 210px));
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);
+  align-items:center;
+  gap:clamp(24px,5vw,72px);
+  padding:clamp(28px,5vw,72px);
+  border:1px solid #304a3b;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 80% 25%,rgba(30,215,96,.18),transparent 32%),
+    linear-gradient(135deg,#14241b 0%,#192d22 45%,#101411 100%);
+  overflow:hidden;
+}
+.new-listener-copy{position:relative;z-index:1;max-width:650px}
+.new-listener-copy h2{
+  margin:10px 0 14px;
+  font:900 clamp(46px,7vw,86px) Outfit,system-ui,sans-serif;
+  line-height:.95;
+  letter-spacing:-3px;
+}
+.new-listener-copy p{
+  max-width:580px;
+  margin:0;
+  color:#c7d3cb;
+  font-size:clamp(15px,1.4vw,19px);
+  line-height:1.65;
+}
+.new-listener-actions{display:flex;gap:12px;margin-top:26px}
+.new-listener-actions .button{min-height:50px;padding-inline:22px;border-radius:999px;display:inline-flex;align-items:center;gap:9px}
+.new-listener-art{
+  position:relative;
+  width:min(100%,420px);
+  aspect-ratio:1;
+  justify-self:end;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:radial-gradient(circle,#244f37 0 31%,#183426 32% 54%,#10231a 55% 100%);
+  box-shadow:0 30px 80px #0008,inset 0 0 0 1px #ffffff0d;
+}
+.new-listener-art>span{display:grid;place-items:center;width:34%;height:34%;border-radius:50%;background:#1ed760;color:#102016;box-shadow:0 0 50px rgba(30,215,96,.28)}
+.new-listener-art>span svg{width:46%;height:46%}
+.new-listener-art i{position:absolute;border-radius:50%;border:1px solid rgba(183,245,204,.12)}
+.new-listener-art i:nth-child(2){inset:14%}
+.new-listener-art i:nth-child(3){inset:27%}
+.new-listener-art i:nth-child(4){inset:40%}
+@media (max-width:800px){
+  .new-listener-dashboard{grid-template-columns:1fr;min-height:auto;padding:32px 22px}
+  .new-listener-copy h2{font-size:clamp(42px,14vw,64px);letter-spacing:-2px}
+  .new-listener-art{width:min(76vw,300px);justify-self:center;order:-1}
+  .new-listener-copy{text-align:center;margin:auto}
+  .new-listener-actions{justify-content:center}
+}
