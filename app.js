@@ -1,1390 +1,1553 @@
-:root{
-  --space-1:8px;--space-2:16px;--space-3:24px;--space-4:32px;--space-5:48px;
-  --radius-1:4px;--radius-2:8px;--radius-3:12px;--radius-pill:999px;
-  --type-1:11px;--type-2:13px;--type-3:15px;--type-4:18px;--type-5:24px;--type-6:32px;--type-7:44px;
-  --bg:#080a09;--panel:#131715;--panel2:#1c2220;--edge:#29332e;--muted:#a5ada8;--lime:#c4f252;--green:#1ed760;--text:#f8f9f8;--danger:#ff8a95;
-  --radius:var(--radius-3);font:var(--type-3) "DM Sans",sans-serif;color:var(--text);background:var(--bg);font-synthesis:none;
-}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--lime);outline-offset:3px}#app{min-height:100vh}::selection{background:#bdf04d;color:#101710}.shell{display:grid;grid-template-columns:266px minmax(0,1fr) 258px;gap:var(--space-1);padding:var(--space-1);min-height:100vh;padding-bottom:var(--space-5)}.sidebar,.rail,.main{border-radius:var(--radius-3);background:var(--panel)}.sidebar{padding:var(--space-3) var(--space-2) var(--space-2);height:calc(100vh - 119px);min-height:570px;position:sticky;top:9px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:var(--space-1);font:850 26px "Outfit",sans-serif;letter-spacing:-1.1px;padding:var(--space-1) var(--space-2) var(--space-4);white-space:nowrap}.brand-icon{width:34px;height:34px;background:var(--lime);color:#101711;display:grid;place-items:center;border-radius:var(--radius-2);font-size:var(--type-5);box-shadow:0 0 0 4px #d5fc4a0e}.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(140deg,var(--lime),#52875e);color:#122012;display:grid;place-items:center;font:900 18px Outfit;flex-shrink:0}.main{min-width:0;max-width:unset;width:100%;margin:0;padding:var(--space-3) clamp(var(--space-2),2.6vw,var(--space-5)) var(--space-5);min-height:calc(100vh - 119px);background:linear-gradient(180deg,#1d2e23 0,#131715 380px)}.rail{height:calc(100vh - 119px);position:sticky;top:9px;padding:var(--space-3) var(--space-2);overflow:auto}.rail h3{font:750 17px Outfit;margin:var(--space-1) 0 var(--space-2)}.page-title{font:850 clamp(28px,3vw,39px) Outfit;margin:var(--space-1) 0;letter-spacing:-1.1px}.pill{display:inline-flex;align-items:center;gap:var(--space-1);border:1px solid #54754b;border-radius:var(--radius-pill);background:#2a422d;color:#cbf4b2;font-size:var(--type-1);padding:var(--space-1) var(--space-1);font-weight:700;white-space:nowrap}.pill:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime)}.button{border:0;border-radius:var(--radius-3);background:var(--lime);color:#14200d;padding:var(--space-1) var(--space-2);font-weight:800;white-space:nowrap;transition:transform .15s,filter .15s}.button:hover{transform:translateY(-1px);filter:brightness(1.08)}.button.secondary{background:#2b342f;color:#f5fbf4;border:1px solid #3a483e}.button.danger{background:#542c30;color:#ffdbdf}.button:disabled{opacity:.55;cursor:not-allowed}.button.sm{padding:var(--space-1) var(--space-1);font-size:var(--type-1)}.eyebrow{letter-spacing:2px;text-transform:uppercase;color:var(--lime);font-size:var(--type-1);font-weight:850}.muted{color:var(--muted)}.small{font-size:var(--type-1)}.hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);border-radius:var(--radius-3);background:radial-gradient(ellipse at 80% 25%,#95bd75 0,transparent 48%),linear-gradient(115deg,#263f32 8%,#4e6250 100%);border:1px solid #5c7865;padding:clamp(var(--space-3),3.5vw,var(--space-5));min-height:248px;margin-bottom:var(--space-4)}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(95deg,#091b1770,transparent 70%);pointer-events:none}.hero>div{position:relative;z-index:1}.hero h2{font:850 clamp(29px,4vw,55px) Outfit;letter-spacing:-2px;line-height:1.05;margin:var(--space-1) 0;max-width:550px}.hero p{color:#e2f5e5;line-height:1.6;max-width:500px}.hero-art{font-size:var(--type-7);color:#172b1a;line-height:1;filter:drop-shadow(10px 12px 0 #a9e74b80);transform:rotate(-13deg)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)}.card{background:#1a211d;border:1px solid #303c33;border-radius:var(--radius-3);padding:var(--space-2);margin-bottom:var(--space-2);min-width:0}.card h3{font:750 18px Outfit;margin:0 0 var(--space-2)}.card p{line-height:1.55}.section-heading{display:flex;justify-content:space-between;align-items:center;margin:var(--space-3) 0 var(--space-2);gap:var(--space-1)}.section-heading h2{font:800 23px Outfit;letter-spacing:-.5px;margin:0}.songrow{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-1);border-radius:var(--radius-2);min-width:0;border-bottom:1px solid #ffffff0c}.songrow:hover{background:#ffffff0a}.songrow .songicon{width:47px;height:47px}.songicon,.cover-art{display:grid;place-items:center;color:#eaffbb;background:linear-gradient(135deg,#345f45,#86aa53 46%,#354a36);border-radius:var(--radius-2);font-size:var(--type-5);flex-shrink:0}.grow{flex:1;min-width:0}.grow strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--type-2)}.grow small{display:block;color:#9baa9f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:var(--space-1);font-size:var(--type-1)}.tag{padding:var(--space-1) var(--space-1);border-radius:var(--radius-3);color:#cbd9c9;background:#29372e;font-size:var(--type-1)}.songlist{background:#18211b;border-radius:var(--radius-3);padding:var(--space-1) var(--space-2)}.cover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:var(--space-2)}.cover-card{background:#202923;border:1px solid #344136;padding:var(--space-2);border-radius:var(--radius-3);text-align:left;color:white;min-width:0}.cover-card:hover{background:#2e3a30;transform:translateY(-1px)}.cover-art{width:100%;aspect-ratio:1;border-radius:var(--radius-2);margin-bottom:var(--space-1);font-size:var(--type-7);overflow:hidden}.cover-card strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-2)}.cover-card small{display:block;font-size:var(--type-1);margin:var(--space-1) 0;color:#aebdb2}.form{display:grid;gap:var(--space-2)}.form.two{grid-template-columns:repeat(2,minmax(0,1fr))}.field{display:flex;flex-direction:column;gap:var(--space-1);min-width:0}.field label{font-size:var(--type-1);color:#d5dfd6;font-weight:750}.field input,.field textarea,.field select{background:#242e27;color:#f1f7f0;border:1px solid #3b4c3e;border-radius:var(--radius-2);padding:var(--space-1) var(--space-2);width:100%;min-width:0;outline:none}.field select option{background:#243028}.field textarea{resize:vertical;min-height:82px}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--lime)}.field input::placeholder{color:#86968c}.empty{border:1px dashed #556256;background:#1a231d;border-radius:var(--radius-3);padding:var(--space-3);text-align:center;color:#aebcaf;line-height:1.5}.notice{border-radius:var(--radius-2);background:#26372a;border:1px solid #4a7254;padding:var(--space-2) var(--space-2);color:#c4ebc4;margin:0 0 var(--space-2);font-size:var(--type-1);line-height:1.65}.footnote{font-size:var(--type-1);color:#92a092;line-height:1.65;margin-top:var(--space-1)}.inline{display:flex;gap:var(--space-1);align-items:center;flex-wrap:wrap}.table{width:100%;border-collapse:collapse}.table td,.table th{text-align:left;padding:var(--space-1);border-bottom:1px solid #334136}.table th{text-transform:uppercase;color:#93a496;font-size:var(--type-1);letter-spacing:1px}.auth-wrap{min-height:100vh;display:grid;grid-template-columns:1.05fr 1fr;background:#0c110e}.auth-show{background:radial-gradient(circle at 70% 70%,#477442 0,transparent 45%),linear-gradient(140deg,#1b3b2b,#0b1711);padding:clamp(var(--space-3),5vw,var(--space-5));display:flex;justify-content:space-between;flex-direction:column}.auth-show h1{font:900 clamp(47px,5vw,90px) Outfit;line-height:.97;letter-spacing:-3px;max-width:640px}.auth-show p{font-size:var(--type-3);max-width:440px;line-height:1.65}.auth-panel{display:grid;place-items:center;padding:var(--space-4)}.auth-box{width:min(440px,100%)}.auth-box h2{font:850 38px Outfit;letter-spacing:-1.5px;margin:var(--space-1) 0}.auth-mode{display:flex;gap:var(--space-1);margin:var(--space-3) 0}.auth-mode .button{flex:1}.auth-show .brand{padding:0}.toast{position:fixed;right:20px;top:20px;z-index:90;background:#294a30;border:1px solid #91c77c;color:white;border-radius:var(--radius-2);padding:var(--space-2) var(--space-2);max-width:440px;box-shadow:0 10px 40px #0009}.toast.error{background:#573139;border-color:#d38181}.auth-show .brand{font-size:var(--type-5)}
-
-/* Capability-aware dashboard workspaces */
-
-
-
-
-
-
-
-
-
-
-
-/* ----------------------------------------------------------
-   SoundWave UX refresh · Listening-first, responsive layout
-   Existing Supabase actions and business rules remain intact.
-   ---------------------------------------------------------- */
-:root{--bg:#080908;--panel:#111311;--panel2:#191b19;--edge:#2b2e2b;--muted:#a6aba7;--lime:#1ed760;--green:#1db954;--radius:var(--radius-3);}
-body{background:var(--bg);color:#f5f6f4}
-button{transition:background-color .15s,border-color .15s,transform .15s}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #65efa0;outline-offset:2px}
-
-.shell{grid-template-columns:256px minmax(0,1fr);gap:var(--space-1);padding:var(--space-1);padding-bottom:var(--space-5);max-width:1920px;margin:auto}
-.sidebar,.main{background:#121412;border-radius:var(--radius-2)}
-.sidebar{height:calc(100dvh - 116px);min-height:530px;padding:var(--space-3) var(--space-2) var(--space-2);top:8px}
-.brand{font:850 26px "Outfit",sans-serif;letter-spacing:-1.15px;padding:0 var(--space-1) var(--space-4)}
-
-
-.brand-icon{background:var(--lime);color:#092414;border-radius:50%;width:33px;height:33px;box-shadow:none;font-weight:900}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.avatar,.top-avatar{background:#275d45;color:#d7ffdf;font-weight:900}
-.signout{border:0;border-radius:50%;background:#242a25;color:#c2ccc4;font-size:var(--type-4);width:37px;height:37px;flex-shrink:0}
-.signout span{display:none}.signout:hover{color:#fff;background:#3a423b}
-.main{padding:0 clamp(var(--space-2),3.3vw,var(--space-5)) var(--space-5);min-height:calc(100dvh - 116px);background:linear-gradient(180deg,#28382d 0,#1c211d 210px,#131613 440px);}
-
-
-
-
-
-
-.top-avatar{display:grid;place-items:center;border:0;border-radius:50%;width:35px;height:35px;font-size:var(--type-2)}
-.page-intro{margin:var(--space-1) 0 var(--space-3)}
-.page-title{font-size:clamp(30px,3.4vw,43px);letter-spacing:-1.4px;margin:var(--space-1) 0 0}
-
-.page-body{min-width:0}
-.rail{display:none}
-.hero{border:0;border-radius:var(--radius-3);background:radial-gradient(ellipse at 87% 26%,#64bb78 0%,transparent 43%),linear-gradient(115deg,#225939 8%,#25442f 75%);padding:clamp(var(--space-3),3.8vw,var(--space-5));min-height:225px;margin-bottom:var(--space-3)}
-.hero:after{background:linear-gradient(90deg,#112b1b8f,transparent 70%)}
-.hero h2{font:850 clamp(30px,4.1vw,57px) "Outfit",sans-serif;letter-spacing:-1.9px}
-.hero-art{color:#d1ffc4;font-size:var(--type-7);filter:drop-shadow(14px 22px 15px #0b221d91);opacity:.72}
-.eyebrow{color:#80f3a2;font-weight:850;font-size:var(--type-1);letter-spacing:1.6px}
-.section-heading{margin:var(--space-4) 0 var(--space-2)}.section-heading h2{font:800 23px Outfit}
-.button{background:var(--lime);color:#092313;font-weight:850;padding:var(--space-1) var(--space-2);border-radius:var(--radius-pill)}
-.button.secondary{background:#282e2a;border:1px solid #3b4640;color:#f3f5f3}
-.button.danger{background:#5b2c31;color:#ffe4e6}
-.button:hover{filter:brightness(1.12)}
-.card{background:#202522;border:1px solid #313b33;border-radius:var(--radius-3)}
-.grid{gap:var(--space-1)}.cover-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--space-1)}
-.cover-card{background:transparent;border:1px solid transparent;border-radius:var(--radius-2);padding:var(--space-1);text-align:left;transition:background .18s,transform .18s}
-.cover-card:hover,.cover-card:focus-visible{background:#282f2a;transform:translateY(-2px)}
-.cover-art{border-radius:var(--radius-1);font-size:var(--type-7);margin:0 0 var(--space-1);box-shadow:0 9px 24px #0003}
-.cover-card strong{font-size:var(--type-2);color:#f3f5f3}.cover-card small{font-size:var(--type-1);color:#a4b0a5;margin-top:var(--space-1)}
-.songlist{background:transparent;border-radius:var(--radius-2);padding:0}
-.songrow{border-bottom:1px solid #ffffff08;padding:var(--space-1) var(--space-1);gap:var(--space-2)}
-.songrow:hover{background:#ffffff13}
-.songrow strong{font-size:var(--type-2)}.songrow small{color:#a9b5aa}
-.songrow .songicon{width:43px;height:43px;font-size:var(--type-4);border-radius:var(--radius-1)}
-.tag{background:transparent;color:#9fa7a0}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.create-tile{position:relative;border:1px solid #3d4c41;border-radius:var(--radius-2);background:#202923;color:#fff;display:flex;flex-direction:column;align-items:flex-start;min-height:190px;padding:var(--space-2);text-align:left;gap:var(--space-1)}
-.create-tile:hover{background:#2b3b2e;border-color:#77b588;transform:translateY(-2px)}
-
-.create-tile strong{font:800 19px Outfit}.create-tile small{color:#abbcaf;font-size:var(--type-1)}
-
-
-
-
-
-
-
-
-
-
-
-.sw-modal{background:#222824;color:#f4f7f4;border:1px solid #415346;border-radius:var(--radius-3);box-shadow:0 32px 110px #000b;width:min(520px,calc(100% - 26px));max-height:min(85dvh,760px);overflow:auto;padding:var(--space-3);overscroll-behavior:contain}
-.sw-modal::backdrop{background:#000b;backdrop-filter:blur(6px)}
-.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-2);margin-bottom:var(--space-3)}.modal-head h2{font:850 28px Outfit;margin:var(--space-1) 0;letter-spacing:-.7px}
-.modal-close{display:grid;place-items:center;width:36px;height:36px;background:#363e38;color:#e6f0e7;border:0;border-radius:50%;flex-shrink:0}.modal-close:hover{background:#4c584f}
-.sw-modal .form{gap:var(--space-2)}.sw-modal .field input,.sw-modal .field select,.sw-modal .field textarea{background:#151a16;border-color:#424e43;border-radius:var(--radius-2)}
-.sw-modal .field label{color:#d1dbd3}.sw-modal .form button[type="submit"],.sw-modal .form>.button{margin-top:var(--space-1);width:100%}
-.notice{background:#202c22;color:#bfe3c6;border-color:#3e5a43}.footnote{font-size:var(--type-1);color:#9da99e}
-
-.auth-wrap{background:#0e140f;min-height:100dvh}
-.auth-show{background:radial-gradient(circle at 83% 66%,#30784b 0,transparent 42%),linear-gradient(145deg,#183826,#07140a);padding:clamp(var(--space-4),5.5vw,var(--space-5))}
-.auth-show h1{font-size:clamp(46px,5vw,85px);letter-spacing:-3.5px}
-.auth-panel{background:#141714}.auth-box{max-width:430px}.auth-box h2{font-size:var(--type-6)}
-.auth-box .field input,.auth-box .field select{background:#202721;border-color:#455248}
-.auth-mode{background:#202721;border-radius:var(--radius-3);padding:var(--space-1);gap:var(--space-1)}.auth-mode .button{box-shadow:none}
-
-
-.toast{background:#254f34;border-color:#5cae70}
-.mobile-dock{display:none}
-
-
-
-
-
-
-/* 2026 Mission 4: playlist-first browsing layout based on user reference.
-   Distinct SoundWave branding; keeps existing player, Auth and RLS integration. */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.sw-owner-avatar{width:25px;height:25px;display:grid;place-items:center;background:#396347;border-radius:50%;font-weight:900;color:#e9f5ec}
-
-
-.sw-big-play{border:0;background:var(--lime);color:#101c12;width:51px;height:51px;border-radius:50%;font-size:var(--type-4);cursor:pointer;padding-left:var(--space-1)}
-.sw-big-play:disabled{opacity:.4;cursor:default}.sw-quiet-action,.sw-more{border:0;background:none;color:#c7cfca;font-size:var(--type-2);font-weight:800;cursor:pointer;padding:var(--space-1)}
-.sw-quiet-action:hover,.sw-more:hover{color:#fff}.sw-more{font-size:var(--type-5);letter-spacing:2px}
-.sw-more-options{position:absolute;left:190px;top:44px;background:#2c332e;border:1px solid #4a554c;border-radius:var(--radius-2);z-index:10;box-shadow:0 8px 30px #0009}
-.sw-more-options[hidden]{display:none}.sw-more-options button{background:transparent;border:0;color:#f0d4d4;font-weight:750;padding:var(--space-2) var(--space-2);cursor:pointer}
-
-
-
-
-
-
-
-
-.sw-playlist-empty{text-align:center;padding:var(--space-4) var(--space-1);color:#d9e2db}.sw-playlist-empty h3{font-size:var(--type-4);margin:var(--space-1) 0 var(--space-1)}.sw-playlist-empty p{font-size:var(--type-1);color:#a4b3a8}
-.sw-add-section{border-top:1px solid #383e39;margin-top:var(--space-3);padding-top:var(--space-3)}.sw-add-section h3{font-size:var(--type-4);letter-spacing:-.5px;margin:0 0 var(--space-2)}
-
-
-.sw-song-results{margin:var(--space-2) 0 0;max-height:350px;overflow-y:auto}.sw-suggest-row{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-1);border-radius:var(--radius-2);min-width:0}
-.sw-suggest-row:hover{background:#ffffff0c}.sw-suggest-art{display:grid;place-items:center;color:#eafff1;width:43px;height:43px;border-radius:var(--radius-1);flex:0 0 43px;font-size:var(--type-5)}
-.sw-suggest-meta{flex:1;min-width:0}.sw-suggest-meta strong,.sw-suggest-meta small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sw-suggest-meta strong{font-size:var(--type-1)}.sw-suggest-meta small{font-size:var(--type-1);color:#a4aea5;margin-top:var(--space-1)}
-.sw-suggest-duration{font-size:var(--type-1);color:#a5afa6}.sw-add-btn{background:transparent;color:#ecf2ee;border:1px solid #838f85;border-radius:var(--radius-3);padding:var(--space-1) var(--space-2);font-weight:800;font-size:var(--type-1);cursor:pointer;white-space:nowrap}.sw-add-btn:hover{border-color:var(--lime);color:var(--lime)}.sw-no-match{padding:var(--space-2) var(--space-1);color:#aeb9ae;font-size:var(--type-1)}
-
-/* The global library sidebar is preserved, but the dedicated playlist page has its own compact collection. */
-
-
-
-/* On desktop, reuse the application's existing left library rather than duplicating it. */
-
-
-/* ============================================================
-   SoundWave / Mission 4 listening-first redesign
-   Spotify-inspired interaction principles, independent brand
-   Adaptive three-pane shell, accessible persistent audio dock.
-   ============================================================ */
-:root{--bg:#060606;--panel:#121212;--panel2:#1f1f1f;--edge:#303030;--muted:#b4b4b4;--lime:#1ed760;--green:#1db954;font-family:Inter,"DM Sans",system-ui,sans-serif}
-html,body{background:#050505;color:#f7f7f7;min-width:320px}body{overflow-x:hidden}
-svg{vertical-align:middle;flex-shrink:0}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #aafcc3;outline-offset:2px}
-#app{min-height:100dvh}.app-top{height:65px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-2);gap:var(--space-2);background:#070707;position:sticky;top:0;z-index:35}
-.app-top-left,.top-actions{display:flex;gap:var(--space-1);align-items:center}.history-btn,.icon-quiet{border:0;background:transparent;color:#c1c1c1;display:grid;place-items:center;min-width:32px;min-height:32px;border-radius:50%;padding:var(--space-1)}.history-btn{width:44px;height:44px;background:#292929;color:white}.history-btn:hover,.icon-quiet:hover{background:#333;color:#fff}
-.global-search{display:flex;align-items:center;gap:var(--space-1);width:min(36vw,490px);height:47px;border-radius:var(--radius-pill);padding:0 var(--space-2);background:#242424;border:1px solid transparent;color:#b6b6b6;transition:background .15s,border-color .15s}.global-search:hover{background:#2f2f2f}.global-search:focus-within{border-color:#ededed}.global-search input{min-width:0;width:100%;background:transparent;border:0;color:white;outline:none;padding:0;height:100%;font-size:var(--type-3)}.global-search input:focus-visible{outline:none}.global-search kbd{font-size:var(--type-4);color:#c7c7c7;border-left:1px solid #666;padding-left:var(--space-1);font-family:inherit}.premium-pill{background:#f5f5f5!important;color:#121212!important;border:0!important;padding:var(--space-1) var(--space-2);font-size:var(--type-1);letter-spacing:0}.top-avatar{border:2px solid #3b3b3b;background:linear-gradient(140deg,#174b49,#16795a);width:38px;height:38px;color:#fff}
-.workspace{display:grid;grid-template-columns:270px minmax(0,1fr) 287px;gap:var(--space-1);min-height:calc(100dvh - 164px);padding:0 var(--space-1) 0;max-width:2400px;margin:auto;align-items:start}.workspace .sidebar,.workspace .main,.context-rail{border-radius:var(--radius-2);background:#121212}.workspace .sidebar{width:100%;height:calc(100dvh - 164px);min-height:460px;top:65px;padding:var(--space-2) var(--space-1) var(--space-1);position:sticky;display:flex;flex-direction:column}.workspace .main{min-height:calc(100dvh - 164px);max-width:none;margin:0;padding:0;background:linear-gradient(180deg,#342850 0px,#23202c 300px,#181818 510px,#181818 100%);overflow:hidden}.workspace .context-rail{position:sticky;top:65px;height:calc(100dvh - 164px);min-height:460px;padding:var(--space-2);overflow-y:auto;scrollbar-width:thin;display:block}.workspace .sidebar.library-collapsed{width:79px}.workspace:has(.library-collapsed){grid-template-columns:79px minmax(0,1fr) 287px}.library-head{display:flex;align-items:center;justify-content:space-between;padding:var(--space-1) var(--space-1) var(--space-2)}.library-toggle{display:flex;align-items:center;gap:var(--space-1);color:#e4e4e4;background:transparent;border:0;padding:var(--space-1);font-size:var(--type-3);font-weight:800;white-space:nowrap}.library-toggle:hover,.icon-quiet:hover{color:white}.library-head .icon-quiet{font-size:var(--type-4)}.library-filters,.home-chips{display:flex;gap:var(--space-1);align-items:center}.library-filters{padding:0 var(--space-1) var(--space-2);flex-wrap:wrap}.filter-pill,.home-chips button{border:0;background:#303030;color:#eee;border-radius:var(--radius-pill);padding:var(--space-1) var(--space-2);font-size:var(--type-1);font-weight:700;white-space:nowrap}.filter-pill:hover,.home-chips button:hover{background:#414141}.home-chips button.active{background:#f6f6f6;color:#171717}.library-scroll{flex:1;overflow-y:auto;scrollbar-width:thin;min-height:0}.library-item{display:flex;align-items:center;gap:var(--space-1);width:100%;padding:var(--space-1);text-align:left;background:transparent;border:0;border-radius:var(--radius-2);color:#f5f5f5}.library-item:hover{background:#242424}.library-item-label{min-width:0}.library-item-label strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-2)}.library-item-label small{display:block;margin-top:var(--space-1);font-size:var(--type-1);color:#aaa}.library-art{display:grid;place-items:center;flex:0 0 49px;height:49px;border-radius:var(--radius-1);background:linear-gradient(130deg,#4f6e66,#343052)}.library-art.liked-art{background:linear-gradient(130deg,#5946d8,#cac4ff);color:white}.library-empty{font-size:var(--type-1);line-height:1.5;color:#aaa;padding:var(--space-1)}.sidebar-bottom{display:grid;gap:var(--space-1);padding-top:var(--space-1);border-top:1px solid #303030;margin-top:var(--space-1)}.sidebar-role{display:flex;align-items:center;gap:var(--space-1);text-align:left;background:transparent;color:#bdbdbd;border:0;border-radius:var(--radius-2);padding:var(--space-1) var(--space-1);font-size:var(--type-1);font-weight:700}.sidebar-role:hover{background:#252525;color:#fff}.library-collapsed .library-toggle span,.library-collapsed .library-filters,.library-collapsed .library-item-label,.library-collapsed .sidebar-role span,.library-collapsed .library-empty{display:none}.library-collapsed .library-head{flex-direction:column;gap:var(--space-1)}.library-collapsed .library-item{justify-content:center}.library-collapsed .sidebar-role{justify-content:center}
-.dashboard-content{max-width:1360px;margin:auto;padding:var(--space-3) clamp(var(--space-3),3vw,var(--space-5)) var(--space-5)}.page-intro{margin:0 0 var(--space-2)}.page-intro .eyebrow{font-size:var(--type-1);color:#c3b4e4;letter-spacing:1px}.page-intro .page-title{font:850 clamp(28px,2.6vw,39px) Outfit,"DM Sans",sans-serif;margin:var(--space-1) 0 var(--space-1);letter-spacing:-1.2px}.page-body{min-width:0}.home-chips{margin:var(--space-1) 0 var(--space-3)}.section-heading{margin:var(--space-4) 0 var(--space-2)}.section-heading h2{font:800 clamp(20px,2vw,26px) Outfit,system-ui;margin:0}.text-link{background:transparent;border:0;color:#c8c8c8;font-size:var(--type-1);font-weight:750;padding:var(--space-1)}.text-link:hover{color:white;text-decoration:underline}.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-1)}.quick-tile{display:flex;align-items:center;overflow:hidden;gap:var(--space-2);border:0;background:#ffffff1c;text-align:left;color:#fff;border-radius:var(--radius-1);padding:0;min-height:64px}.quick-tile:hover{background:#ffffff30}.tile-cover{width:65px;height:65px;display:grid;place-items:center;flex:0 0 65px;color:white;box-shadow:0 4px 15px #0004}.tile-cover.heart{background:linear-gradient(130deg,#4b42cb,#c8d4ff)!important}.tile-copy{display:block;min-width:0;padding:var(--space-1) var(--space-1) var(--space-1) 0}.tile-copy strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--type-2)}.tile-copy small{display:block;color:#ddd;font-size:var(--type-1);margin-top:var(--space-1)}.release-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:var(--space-1)}.release-tile{position:relative;border:0;border-radius:var(--radius-2);padding:var(--space-1) var(--space-1) var(--space-2);color:white;text-align:left;background:#202020;min-width:0}.release-tile:hover{background:#303030}.release-art{display:block;position:relative;aspect-ratio:1/1;border-radius:var(--radius-1);overflow:hidden;margin-bottom:var(--space-2);background:#2f3443}.release-tile strong,.release-tile small{display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.release-tile strong{font-size:var(--type-2)}.release-tile small{font-size:var(--type-1);color:#aaa;margin-top:var(--space-1)}.real-cover.large,.placeholder-art.large{display:grid;place-items:center;width:100%;height:100%;object-fit:cover}.real-cover.tiny,.placeholder-art.tiny{display:grid;place-items:center;width:44px;height:44px;border-radius:var(--radius-1);object-fit:cover;flex-shrink:0}.placeholder-art{color:#e8e2ef}.placeholder-art svg{width:32%;height:32%}.hover-play{position:absolute;bottom:8px;right:9px;display:grid;place-items:center;width:46px;height:46px;background:#1ed760;color:#101010;border-radius:50%;box-shadow:0 7px 15px #0008;opacity:0;transform:translateY(7px);transition:.15s}.hover-play svg{fill:currentColor;width:24px}.release-tile:hover .hover-play,.release-tile:focus-visible .hover-play{opacity:1;transform:none}.artist-card{display:grid;text-align:center;justify-items:center;background:#202020;border:0;border-radius:var(--radius-2);padding:var(--space-2) var(--space-1);color:white;min-width:0}.artist-card:hover{background:#2d2d2d}.artist-round{display:grid;place-items:center;border-radius:50%;aspect-ratio:1/1;width:min(95%,110px);margin-bottom:var(--space-1);font-size:var(--type-7);font-weight:850}.artist-card strong{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-2)}.artist-card small{font-size:var(--type-1);margin-top:var(--space-1);color:#bbb}.empty{color:#bababa}
-.context-rail .rail-title{display:flex;justify-content:space-between;align-items:center}.rail-title h2{font-size:var(--type-2);margin:0}.now-art{display:grid;place-items:center;background:linear-gradient(145deg,#2d2841,#343843);aspect-ratio:1/1;border-radius:var(--radius-1);margin:var(--space-2) 0 var(--space-2);overflow:hidden}.now-art.placeholder svg{width:55px;height:55px;color:#a69db8}.now-art .real-cover,.now-art .placeholder-art{width:100%;height:100%}.now-card h3{font:850 clamp(19px,2vw,25px) Outfit;margin:0 0 var(--space-1);line-height:1.2}.now-card>p{font-size:var(--type-1);margin:0;color:#bababa}
-.workspace-hero{position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;padding:var(--space-4) var(--space-4);border-radius:var(--radius-2);min-height:208px;background:linear-gradient(120deg,#392e52,#261f36);margin:var(--space-1) 0 var(--space-3)}.workspace-hero>div{position:relative;z-index:1}.workspace-hero h2{font:850 clamp(29px,3.7vw,46px) Outfit;letter-spacing:-1.4px;margin:var(--space-1) 0}.workspace-hero p{max-width:450px;color:#ddd;line-height:1.5;margin:0 0 var(--space-2)}.workspace-hero .button{display:inline-flex;align-items:center;gap:var(--space-1)}.workspace-hero .hero-vinyl{width:170px;height:170px;display:grid;place-items:center;color:#c1b0d5;transform:rotate(-13deg);opacity:.65}.hero-vinyl svg{width:145px;height:145px;stroke-width:.7}.artist-hero{background:linear-gradient(110deg,#343147,#254b48)}.admin-hero{background:linear-gradient(110deg,#3e304b,#403338)}.premium-hero{background:linear-gradient(110deg,#263a3f,#314d31)}.stat-ribbon{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-1)}.stat-ribbon>div{background:#242424;border-radius:var(--radius-2);padding:var(--space-2)}.stat-ribbon small{display:block;color:#b5b5b5;font-size:var(--type-1)}.stat-ribbon strong{display:block;font-size:var(--type-6);margin-top:var(--space-1)}.work-actions,.studio-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-1)}.work-actions button,.studio-actions button{display:flex;flex-direction:column;gap:var(--space-1);align-items:flex-start;background:#252525;color:white;border:1px solid #333;border-radius:var(--radius-2);min-height:130px;text-align:left;padding:var(--space-2);position:relative}.work-actions button:hover,.studio-actions button:hover{background:#333;border-color:#606060}.work-actions button>svg{color:#1ed760;width:30px;height:30px}.work-actions button strong,.studio-actions button strong{font-size:var(--type-2)}.work-actions button small,.studio-actions button small{font-size:var(--type-1);color:#bcbcbc;line-height:1.4}.studio-action-art{display:grid;place-items:center;width:57px;height:57px;border-radius:var(--radius-2);color:white;margin-bottom:var(--space-1)}.gradient-one{background:linear-gradient(130deg,#594f93,#854f75)}.gradient-two{background:linear-gradient(130deg,#205c54,#519772)}.gradient-three{background:linear-gradient(130deg,#645647,#b48c66)}.studio-arrow{position:absolute;right:14px;top:21px;color:#dedede}.studio-albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:var(--space-1)}.studio-album{display:flex;flex-direction:column;gap:var(--space-1);background:#252525;border:0;border-radius:var(--radius-2);padding:var(--space-1);color:white;min-width:0;text-align:left}.studio-album:hover{background:#333}.studio-album-art{width:100%;aspect-ratio:1;display:grid;place-items:center;border-radius:var(--radius-1);overflow:hidden}.studio-album-art svg{width:52px;height:52px}.studio-album-art img{width:100%;height:100%;object-fit:cover}.studio-album strong,.studio-album small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.studio-album strong{font-size:var(--type-2)}.studio-album small{font-size:var(--type-1);color:#bbb;margin-top:var(--space-1)}
-.studio-dialog{width:min(94vw,550px);max-height:85dvh;overflow-y:auto}.studio-dialog .modal-head h2{font-size:var(--type-5)}.studio-dialog .eyebrow{color:#1ed760}.single-field{display:flex;flex-direction:column;gap:var(--space-1);margin:var(--space-2) 0;font-size:var(--type-1);font-weight:700;color:#e9e9e9}.single-field input,.single-field select{width:100%;padding:var(--space-2) var(--space-2);background:#262626;border:1px solid #505050;border-radius:var(--radius-1);color:#fff;font-size:var(--type-2)}.single-field input:focus,.single-field select:focus{border-color:#1ed760}.cover-drop,.audio-drop{display:flex;flex-direction:column;align-items:center;gap:var(--space-1);justify-content:center;width:100%;min-height:190px;margin:var(--space-2) 0;border:2px dashed #676767;border-radius:var(--radius-2);background:#242424;cursor:pointer;text-align:center;padding:var(--space-2)}.cover-drop:hover,.audio-drop:hover,.audio-drop.drag-over{border-color:#1ed760;background:#29352d}.cover-drop #cover-preview{display:grid;place-items:center;width:96px;height:96px;border-radius:var(--radius-1);background:linear-gradient(140deg,#5e5d80,#35324a);overflow:hidden}.cover-drop #cover-preview svg{width:36px;height:36px}.cover-drop img{width:100%;height:100%;object-fit:cover}.cover-drop strong,.audio-drop strong{font-size:var(--type-3)}.cover-drop small,.audio-drop small{color:#c0c0c0;font-size:var(--type-1)}.audio-drop{min-height:230px}.audio-drop>svg{width:52px;height:52px;color:#1ed760}.upload-step h3{font-size:var(--type-4);margin:var(--space-1) 0}.upload-step>p{font-size:var(--type-1);line-height:1.5}.upload-step[hidden]{display:none!important}.album-picks{display:grid;gap:var(--space-1);margin:var(--space-3) 0 var(--space-2);max-height:200px;overflow-y:auto}.album-pick{display:flex;align-items:center;gap:var(--space-2);border:1px solid #515151;padding:var(--space-1);border-radius:var(--radius-2);cursor:pointer}.album-pick:has(input:checked){border-color:#1ed760;background:#243026}.album-pick input{accent-color:#1ed760;width:18px;height:18px}.album-pick>span{display:grid;place-items:center;width:46px;height:46px;border-radius:var(--radius-1)}.album-pick strong{font-size:var(--type-2);flex:1}.album-pick>svg{opacity:.2}.album-pick:has(input:checked)>svg{opacity:1;color:#1ed760}.audio-summary{font-size:var(--type-1);color:#bcbcbc;margin:var(--space-1) 0}.dialog-actions{display:flex;gap:var(--space-1);align-items:center;justify-content:flex-end;margin-top:var(--space-2)}.dialog-actions [hidden]{display:none!important}
-.member-avatar{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#275b40}
-.custom-playbar{position:fixed;bottom:0;left:0;width:100%;height:94px;background:#070707;z-index:48;padding:var(--space-1) var(--space-2) var(--space-1);display:grid;grid-template-columns:minmax(150px,1fr) minmax(300px,1.4fr) minmax(150px,1fr);align-items:center;gap:var(--space-2);border-top:1px solid #202020}.player-song{display:flex;align-items:center;gap:var(--space-2);min-width:0}.player-thumb{display:block;width:56px;height:56px;border-radius:var(--radius-1);flex-shrink:0;overflow:hidden}.player-thumb .real-cover,.player-thumb .placeholder-art{width:100%;height:100%}.player-song-text{min-width:0}.player-song-text strong,.player-song-text small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player-song-text strong{font-size:var(--type-2)}.player-song-text small{font-size:var(--type-1);color:#b5b5b5;margin-top:var(--space-1)}.player-center{display:flex;flex-direction:column;align-items:stretch;gap:var(--space-1)}.play-controls{display:flex;justify-content:center;align-items:center;gap:var(--space-2)}.play-controls .icon-quiet{min-height:22px;min-width:22px}.player-main-play{display:grid;place-items:center;width:32px;height:32px;background:#f5f5f5;color:#121212;border-radius:50%;border:0}.player-main-play:hover{transform:scale(1.07)}.player-main-play svg{width:17px}.player-timeline{display:flex;align-items:center;gap:var(--space-1);width:100%;font-size:var(--type-1);color:#b0b0b0}.player-timeline input{width:100%}.custom-playbar input[type=range]{height:4px;accent-color:#1ed760;cursor:pointer}.player-right{display:flex;justify-content:end;align-items:center;gap:var(--space-1);color:#c7c7c7}.player-right>input{width:min(9vw,100px)}.custom-playbar audio{display:none}body.rail-hidden .workspace{grid-template-columns:270px minmax(0,1fr)}body.rail-hidden .context-rail{display:none}
-/* Keep original page functionality while normalizing elements in the new shell. */
-.workspace .main .hero{border:0;border-radius:var(--radius-2);background:linear-gradient(110deg,#39304c,#234537);min-height:190px}.workspace .main .hero:after{display:none}.workspace .main .songrow{border-radius:var(--radius-1)}.workspace .main .songrow:hover{background:#ffffff18}.workspace .main .card{background:#242424;border-color:#353535}.workspace .main .cover-card{background:#242424}.workspace .main .cover-card:hover{background:#363636}
- 
-
-
-
-
-/* The main global library replaces the duplicated nested playlist sidebar on desktop. */
-
-
-.sw-modal{background:#242424;border-color:#4a4a4a;color:#fff}.sw-modal .modal-head{border-bottom:1px solid #414141;padding-bottom:var(--space-1)}.sw-modal .modal-close{background:#333;color:white;border-radius:50%}.sw-modal::backdrop{background:#000c}
-.sw-modal input,.sw-modal select,.sw-modal textarea{background:#292929;color:white}
-
-
-
-
-/* System fonts remain legible when optional web fonts are unavailable. */
-.workspace-hero h2,.now-card h3{font-family:Outfit,"DM Sans",Inter,system-ui,sans-serif}
-.admin-song-row{display:flex;gap:var(--space-2);align-items:center;padding:var(--space-1) var(--space-1);border-radius:var(--radius-1);background:#202020}.admin-song-row:hover{background:#303030}.admin-song-meta{flex:1;min-width:0}.admin-song-meta strong,.admin-song-meta small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-song-meta strong{font-size:var(--type-2)}.admin-song-meta small{font-size:var(--type-1);margin-top:var(--space-1);color:#aaa}.admin-active{padding:var(--space-1) var(--space-1);border-radius:var(--radius-pill);background:#214e34;color:#95f2b6;font-size:var(--type-1);font-weight:800}
-
-
-/* ===== SoundWave UX cleanup v2 ===== */
-.history-btn:disabled{opacity:.3;cursor:not-allowed}
-.profile-wrap{position:relative}
-.profile-menu{position:absolute;right:0;top:48px;z-index:80;width:220px;background:#202020;border:1px solid #3a3a3a;border-radius:var(--radius-2);padding:var(--space-1);box-shadow:0 16px 40px #0008}
-.profile-menu button{width:100%;display:flex;align-items:center;gap:var(--space-1);background:transparent;border:0;color:#eee;text-align:left;padding:var(--space-1) var(--space-1);border-radius:var(--radius-2)}
-.profile-menu button:hover{background:#343434}
-.profile-menu[hidden]{display:none}
-
-
-
-
-
-.idle-playbar{opacity:.98}
-.idle-thumb{display:grid;place-items:center;background:#282828;color:#aaa}
-.track-play,.song-more{border:0;background:transparent;color:#d7d7d7;display:grid;place-items:center;border-radius:50%;padding:var(--space-1)}
-.track-play:hover,.song-more:hover{background:#ffffff16;color:#fff}
-
-
-.release-tile{position:relative}
-.release-tile>.song-more{position:absolute;right:8px;bottom:7px;opacity:0}
-.release-tile:hover>.song-more{opacity:1}
-.hover-play{border:0}
-.artist-card{position:relative}
-
-.social-stats{display:flex;gap:var(--space-1);margin:var(--space-1) 0 var(--space-2)}
-.social-stats>div{background:#242424;border-radius:var(--radius-2);padding:var(--space-2) var(--space-2);min-width:130px}
-.social-stats strong{font-size:var(--type-5);display:block}
-.social-stats span{font-size:var(--type-1);color:#aaa}
-
-.social-row,.collab-row{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-1);border-bottom:1px solid #ffffff10}
-.social-row>div,.collab-row>div{flex:1;min-width:0}
-.social-row strong,.social-row small,.collab-row strong,.collab-row small{display:block}
-.social-row small,.collab-row small{color:#aaa;font-size:var(--type-1);margin-top:var(--space-1)}
-.profile-hero{display:flex;align-items:end;gap:var(--space-3);padding:var(--space-4);border-radius:var(--radius-2);background:linear-gradient(120deg,#48405f,#26272b);margin-bottom:var(--space-3)}
-.profile-avatar-large{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;background:#121212;box-shadow:0 8px 28px #0008;font-size:var(--type-7);font-weight:900}
-.profile-hero h2{font:900 clamp(38px,6vw,68px) Outfit;margin:var(--space-1) 0}
-.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-1)}
-.profile-grid button{display:flex;gap:var(--space-2);align-items:center;text-align:left;background:#242424;border:0;border-radius:var(--radius-2);color:white;padding:var(--space-2)}
-.profile-grid button:hover{background:#333}
-.profile-grid button>svg{color:#1ed760}
-.profile-grid span{display:flex;flex-direction:column;gap:var(--space-1)}
-.profile-grid small{color:#aaa}
-.profile-signout{margin-top:var(--space-2)}
-
-
-
-
-
-
-.sw-add-section{border-top:1px solid #ffffff15;margin-top:var(--space-3);padding-top:var(--space-1)}
-.sw-add-section .section-heading{margin-top:var(--space-1)}
-.compact-form{max-width:520px}
-.collab-list{max-height:300px;overflow:auto;margin-bottom:var(--space-2)}
-.collab-invite{border-top:1px solid #ffffff17;padding-top:var(--space-2)}
-.collab-invite label{display:block;font-weight:700;margin-bottom:var(--space-1)}
-.collab-invite input{flex:1;min-width:190px;background:#2a2a2a;border:1px solid #454545;border-radius:var(--radius-1);color:white;padding:var(--space-1)}
-.playlist-picker-list{display:grid;gap:var(--space-1);max-height:420px;overflow:auto}
-.playlist-picker-list button{display:flex;align-items:center;gap:var(--space-1);background:transparent;border:0;color:white;text-align:left;padding:var(--space-1);border-radius:var(--radius-2)}
-.playlist-picker-list button:hover{background:#333}
-.playlist-picker-list button>span:nth-child(2){flex:1;min-width:0}
-.playlist-picker-list strong,.playlist-picker-list small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.playlist-picker-list small{color:#aaa;font-size:var(--type-1);margin-top:var(--space-1)}
-.songrow{cursor:default}
-.songrow .grow{cursor:default}
-.context-rail .now-card{position:sticky;top:0}
-
-/* Keep bottom playback chrome present for first-time users too. */
-.workspace{padding-bottom:var(--space-5)}
-
-
-/* Mission 4 completion additions */
-.artist-card.clickable{cursor:pointer;position:relative}
-.artist-card.clickable:hover{transform:translateY(-3px)}
-.artist-profile-hero{display:flex;align-items:flex-end;gap:var(--space-3);min-height:270px;padding:var(--space-4);border-radius:var(--radius-3);background:linear-gradient(145deg,#3f5363,#171b1d 62%);margin-bottom:var(--space-3)}
-.artist-profile-avatar{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;font-size:var(--type-7);font-weight:800;box-shadow:0 18px 50px rgba(0,0,0,.38);flex:none}
-.artist-profile-hero h2{font-size:clamp(34px,6vw,76px);line-height:.95;margin:.3rem 0 1rem}
-
-
-.song-action-popover{position:fixed;z-index:9999;width:220px;background:#282828;color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-2);padding:var(--space-1);box-shadow:0 18px 48px rgba(0,0,0,.5)}
-.song-action-popover button{width:100%;display:flex;align-items:center;gap:var(--space-1);background:transparent;color:inherit;border:0;border-radius:var(--radius-2);padding:var(--space-1) var(--space-1);text-align:left;cursor:pointer}
-.song-action-popover button:hover{background:#3a3a3a}
-.song-action-popover svg{width:18px;height:18px}
-
-
-/* =====================================================================
-   SoundWave "Spotify-style" upgrade layer (appended; overrides above)
-   ===================================================================== */
-:root{--sp-green:#1ed760;--sp-text:#fff;--sp-sub:#b3b3b3}
-body{background:#000}
-.main{--tint:#2d2d3d}
-.workspace .main{background:linear-gradient(180deg,var(--tint) 0,#121212 340px,#121212 100%) !important;overflow-y:auto;overflow-x:hidden;height:calc(100dvh - 164px);scroll-behavior:auto;transition:background .3s}
-.workspace .main::-webkit-scrollbar,.library-scroll::-webkit-scrollbar,.context-rail::-webkit-scrollbar{width:10px}
-.workspace .main::-webkit-scrollbar-thumb,.library-scroll::-webkit-scrollbar-thumb,.context-rail::-webkit-scrollbar-thumb{background:#ffffff33;border-radius:var(--radius-1)}
-.dashboard-content{padding:var(--space-2) var(--space-3) var(--space-4)}
-.page-intro:has(.page-title:empty){display:none}
-.page-title{font:800 clamp(26px,3vw,34px) "Outfit",sans-serif;letter-spacing:-.5px;margin:0 0 var(--space-1)}
-body.rail-hidden .context-rail{display:none}
-body.rail-hidden .workspace,body.rail-hidden .workspace:has(.library-collapsed){grid-template-columns:270px minmax(0,1fr)}
-body.rail-hidden .workspace:has(.library-collapsed){grid-template-columns:79px minmax(0,1fr)}
-
-/* top bar */
-.top-logo{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--sp-green);display:grid;place-items:center}
-.top-logo svg{width:28px;height:28px}
-.history-btn.active{background:#2a2a2a;color:#fff}
-.history-btn:disabled{opacity:.4;cursor:default}
-.global-search{transition:background .15s,box-shadow .15s}
-.global-search:hover{background:#2a2a2a}
-.global-search:focus-within{box-shadow:0 0 0 2px #fff}
-.premium-pill{background:#fff;color:#000;border:0;font-weight:800}
-.install-pill{background:#1f1f1f;color:#fff;border:1px solid #3a3a3a;cursor:pointer}
-.install-pill:before,.install-pill[hidden]{display:none}
-.install-pill svg{width:16px;height:16px}
-
-
-/* library */
-.filter-pill{border:0;background:#2a2a2a;color:#fff;border-radius:var(--radius-pill);padding:var(--space-1) var(--space-1);font-weight:600;font-size:var(--type-2)}
-.filter-pill:hover{background:#333}
-.filter-pill.active{background:#fff;color:#000}
-.library-item{width:100%;border:0;background:transparent;color:inherit;text-align:left;display:flex;gap:var(--space-1);align-items:center;padding:var(--space-1);border-radius:var(--radius-1);transition:background .15s}
-.library-item:hover,.library-item.active{background:#ffffff1a}
-.library-item .library-art{width:48px;height:48px;border-radius:var(--radius-1);display:grid;place-items:center;flex-shrink:0;font-weight:800;color:#fff}
-.library-item .library-art.round{border-radius:50%}
-.library-item .library-art.liked-art{background:linear-gradient(135deg,#450af5,#c4efd9)}
-.library-item-label{min-width:0}
-.library-item-label strong{display:block;font-size:var(--type-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.library-item.active .library-item-label strong{color:var(--sp-green)}
-.library-item-label small{color:var(--sp-sub);font-size:var(--type-2)}
-.library-collapsed .library-item-label,.library-collapsed .library-filters,.library-collapsed .library-toggle span,.library-collapsed .sidebar-role span{display:none}
-
-/* shelves + tiles */
-.section-heading{display:flex;align-items:baseline;justify-content:space-between;margin:var(--space-3) 0 var(--space-1)}
-.section-heading h2{font:800 24px "Outfit",sans-serif;margin:0;letter-spacing:-.4px}
-.text-link{background:none;border:0;color:var(--sp-sub);font-weight:700;font-size:var(--type-2);padding:0}
-.text-link:hover{color:#fff;text-decoration:underline}
-.shelf{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,200px);gap:var(--space-2);overflow-x:auto;padding-bottom:var(--space-1);scrollbar-width:none}
-.shelf::-webkit-scrollbar{display:none}
-.shelf.wrap{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(150px,200px));overflow:visible}
-.release-tile,.artist-card,.cover-card{position:relative;display:flex;flex-direction:column;gap:var(--space-1);text-align:left;padding:var(--space-1);border-radius:var(--radius-2);background:#181818;border:0;color:#fff;min-width:0;transition:background .2s}
-.release-tile:hover,.artist-card:hover,.cover-card:hover{background:#282828}
-.release-tile strong,.artist-card strong,.cover-card strong{margin-top:var(--space-1);font-size:var(--type-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.release-tile small,.artist-card small,.cover-card small{color:var(--sp-sub);font-size:var(--type-2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.release-art,.cover-art{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:var(--radius-1);overflow:hidden;box-shadow:0 8px 24px #00000080}
-.release-art>*:not(.hover-play),.cover-art{width:100%;height:100%;object-fit:cover}
-.cover-art{display:grid;place-items:center}
-.cover-art svg,.release-art .placeholder-art svg{width:34%;height:34%;opacity:.85}
-.artist-round{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:50%;font:800 44px "Outfit";box-shadow:0 8px 24px #00000080}
-.artist-card{align-items:flex-start}
-.card-link,.clickable,.quick-tile{cursor:pointer}
-.hover-play{position:absolute;right:8px;bottom:8px;width:48px;height:48px;border-radius:50%;border:0;background:var(--sp-green);color:#000;display:grid;place-items:center;box-shadow:0 8px 8px #0000004d;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s,background .15s}
-.hover-play svg{width:22px;height:22px}
-.hover-play:hover{transform:scale(1.06);background:#3be477}
-.release-tile:hover .hover-play,.release-tile:focus-within .hover-play,.artist-card:hover .hover-play,.artist-card:focus-within .hover-play,.quick-tile:hover .hover-play,.quick-tile:focus-within .hover-play,.top-card:hover .hover-play{opacity:1;transform:none}
-.hover-play.small{width:44px;height:44px;right:12px;bottom:auto;top:50%;margin-top:-22px;transform:translateY(0)}
-.create-tile .placeholder-art{background:#282828 !important;color:#fff}
-
-/* home quick tiles */
-.home-chips{display:flex;gap:var(--space-1);flex-wrap:wrap;margin:var(--space-1) 0 var(--space-2)}
-.home-chips button{border:0;border-radius:var(--radius-pill);background:#ffffff1a;color:#fff;padding:var(--space-1) var(--space-2);font-weight:600;font-size:var(--type-2)}
-.home-chips button:hover{background:#ffffff26}
-.home-chips button.active{background:#fff;color:#000}
-.quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--space-1) var(--space-2)}
-.quick-tile{position:relative;display:flex;align-items:center;gap:var(--space-1);background:#ffffff14;border-radius:var(--radius-1);overflow:hidden;padding:0;min-height:56px;transition:background .2s;border:0;color:#fff;text-align:left}
-.quick-tile:hover{background:#ffffff2e}
-.quick-tile .tile-cover{width:56px;height:56px;display:grid;place-items:center;flex-shrink:0;font:800 22px "Outfit"}
-.quick-tile .tile-cover.liked{background:linear-gradient(135deg,#450af5,#c4efd9)}
-.quick-tile .tile-cover.artist{border-radius:0}
-.quick-tile .tile-copy{display:flex;flex-direction:column;min-width:0;padding-right:var(--space-1)}
-.quick-tile strong{font-size:var(--type-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.quick-tile small{color:var(--sp-sub);font-size:var(--type-1)}
-
-/* hearts */
-.heart-btn{border:0;background:transparent;color:var(--sp-sub);width:32px;height:32px;display:inline-grid;place-items:center;border-radius:50%;padding:0;transition:color .15s,transform .15s}
-.heart-btn svg{width:18px;height:18px}
-.heart-btn:hover{color:#fff;transform:scale(1.08)}
-.heart-btn.on{color:var(--sp-green)}
-.heart-btn.on svg path{fill:currentColor}
-.player-heart{margin-left:var(--space-1);flex-shrink:0}
-
-/* track table */
-.tracks{display:flex;flex-direction:column;margin-top:var(--space-1)}
-.tracks-head,.track{display:grid;grid-template-columns:44px minmax(180px,6fr) minmax(120px,4fr) 40px 56px 72px;gap:var(--space-2);align-items:center;padding:0 var(--space-2);border-radius:var(--radius-1)}
-.tracks.no-album .tracks-head,.tracks.no-album .track{grid-template-columns:44px minmax(180px,1fr) 40px 56px 72px}
-.tracks-head{height:36px;color:var(--sp-sub);font-size:var(--type-1);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid #ffffff1a;margin-bottom:var(--space-1);position:sticky;top:0;background:#121212;z-index:2}
-.tracks-head svg{width:16px;height:16px}
-.t-time{text-align:right;color:var(--sp-sub);font-size:var(--type-2);font-variant-numeric:tabular-nums}
-.tracks-head .t-time{display:flex;justify-content:flex-end}
-.t-num{position:relative;display:grid;place-items:center;color:var(--sp-sub);font-size:var(--type-3);height:24px}
-.t-num b{font-weight:500}
-.t-play{position:absolute;inset:0;border:0;background:transparent;color:#fff;display:none;place-items:center;padding:0}
-.t-play svg{width:16px;height:16px}
-.eq{display:none;gap:var(--space-1);align-items:flex-end;height:14px}
-.eq s{width:3px;background:var(--sp-green);animation:eqb .9s infinite ease-in-out;text-decoration:none}
-.eq s:nth-child(1){height:60%}.eq s:nth-child(2){height:100%;animation-delay:.2s}.eq s:nth-child(3){height:45%;animation-delay:.4s}
-@keyframes eqb{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
-.track{min-height:56px;color:#fff;outline:none}
-.track:hover,.track:focus-visible{background:#ffffff1a}
-.track.selected{background:#ffffff26}
-.track:hover .t-num b,.track:focus-visible .t-num b{display:none}
-.track:hover .t-play,.track:focus-visible .t-play{display:grid}
-.track.playing .t-title strong{color:var(--sp-green)}
-.track.playing .t-num b,.track.playing:hover .t-num b{display:none}
-.track.playing:not(.paused) .eq{display:flex}
-.track.playing:not(.paused):hover .eq{display:none}
-.track.playing.paused .t-num b{display:block}
-.track.playing.paused:hover .t-num b{display:none}
-.t-title{display:flex;gap:var(--space-1);align-items:center;min-width:0}
-.t-title .real-cover,.t-title .placeholder-art{width:40px;height:40px;border-radius:var(--radius-1);flex-shrink:0;object-fit:cover;display:grid;place-items:center}
-.t-title .placeholder-art svg{width:18px;height:18px}
-.t-text{display:flex;flex-direction:column;min-width:0}
-.t-text strong{font-size:var(--type-3);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t-text small,.t-album{color:var(--sp-sub);font-size:var(--type-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t-text a,.t-album a,.coll-sub a,.now-title a{color:inherit;text-decoration:none}
-.t-text a:hover,.t-album a:hover,.coll-sub a:hover,.now-title a:hover{color:#fff;text-decoration:underline}
-.track .heart-btn{opacity:0}
-.track:hover .heart-btn,.track:focus-within .heart-btn,.track .heart-btn.on{opacity:1}
-.t-more{display:flex;justify-content:flex-end;gap:var(--space-1)}
-.t-more .song-more,.t-more .t-remove{position:static;opacity:0;background:transparent;border:0;color:var(--sp-sub);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;padding:0}
-.t-more svg{width:18px;height:18px}
-.track:hover .t-more button,.track:focus-within .t-more button{opacity:1}
-.t-more button:hover{color:#fff}
-.search-top .tracks-head{display:none}
-
-/* collection hero (album / playlist / artist / liked) */
-.coll-hero,.artist-profile-hero{display:flex;align-items:flex-end;gap:var(--space-3);padding:var(--space-1) 0 var(--space-3)}
-.coll-cover{width:clamp(140px,18vw,232px);aspect-ratio:1;flex-shrink:0;border-radius:var(--radius-1);overflow:hidden;box-shadow:0 4px 60px #00000080;display:grid;place-items:center;background:#282828}
-.coll-cover>*{width:100%;height:100%;object-fit:cover}
-.coll-cover .placeholder-art{display:grid;place-items:center}
-.coll-cover .placeholder-art svg{width:40%;height:40%}
-.coll-cover.liked-cover{background:linear-gradient(135deg,#450af5,#c4efd9);color:#fff}
-.coll-cover.liked-cover svg{width:80px;height:80px;fill:#fff;stroke:#fff}
-.placeholder-art.liked-cover{background:linear-gradient(135deg,#450af5,#c4efd9)}
-.cover-collage{display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%}
-.cover-collage>*{width:100%;height:100%;object-fit:cover}
-.coll-meta{min-width:0;display:flex;flex-direction:column;gap:var(--space-1)}
-.coll-kind{font-size:var(--type-2);font-weight:700;text-transform:capitalize}
-.coll-title{font:900 clamp(32px,6.5vw,76px) "Outfit",sans-serif;letter-spacing:-2px;line-height:1.02;margin:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
-.coll-desc{margin:0;color:var(--sp-sub);font-size:var(--type-2)}
-.coll-sub{margin:var(--space-1) 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-1);font-size:var(--type-2);color:#ffffffd9}
-.sw-owner-avatar{width:24px;height:24px;border-radius:50%;background:#1ed760;color:#000;display:inline-grid;place-items:center;font-weight:800;font-size:var(--type-1)}
-.artist-profile-avatar{width:clamp(120px,16vw,200px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:900 64px "Outfit";box-shadow:0 4px 60px #00000080;flex-shrink:0}
-.coll-actions{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-1) 0 var(--space-2);flex-wrap:wrap}
-.sw-big-play{width:56px;height:56px;border-radius:50%;border:0;background:var(--sp-green);color:#000;display:grid;place-items:center;padding:0;transition:transform .1s,background .15s}
-.sw-big-play svg{width:26px;height:26px}
-.sw-big-play:hover:not(:disabled){transform:scale(1.06);background:#3be477}
-.sw-big-play:disabled{opacity:.4}
-.sw-quiet-action,.shuffle-toggle{background:transparent;border:0;color:var(--sp-sub);display:inline-flex;align-items:center;gap:var(--space-1);font-weight:700;padding:var(--space-1);border-radius:var(--radius-pill)}
-.sw-quiet-action svg{width:26px;height:26px}
-.sw-quiet-action span{font-size:var(--type-2)}
-.sw-quiet-action:hover:not(:disabled){color:#fff}
-.sw-quiet-action.active{color:var(--sp-green)}
-
-
-.more-wrap{position:relative}
-.sw-more{background:transparent;border:0;color:var(--sp-sub);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;padding:0}
-.sw-more:hover{color:#fff}
-.sw-more svg{width:26px;height:26px}
-.sw-more-options{position:absolute;top:100%;left:0;min-width:180px;background:#282828;border-radius:var(--radius-1);padding:var(--space-1);box-shadow:0 16px 24px #0000004d;z-index:20}
-.sw-more-options button{width:100%;text-align:left;background:transparent;border:0;color:#fff;padding:var(--space-1) var(--space-1);border-radius:var(--radius-1);font-size:var(--type-2)}
-.sw-more-options button:hover{background:#ffffff1a}
-.about-card{margin-top:var(--space-4);background:#181818;border-radius:var(--radius-2);padding:var(--space-2);max-width:640px}
-.about-card h2{margin:0 0 var(--space-1);font:800 22px "Outfit"}
-.about-card p{color:var(--sp-sub);line-height:1.6;margin:0}
-.sw-playlist-empty{padding:var(--space-3) 0;color:var(--sp-sub)}
-.sw-playlist-empty h3{color:#fff;font:800 22px "Outfit";margin:0 0 var(--space-1)}
-.sw-add-section{margin-top:var(--space-3);border-top:1px solid #ffffff1a;padding-top:var(--space-1)}
-.sw-song-results{display:flex;flex-direction:column}
-.sw-suggest-row{display:flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-2);border-radius:var(--radius-1)}
-.sw-suggest-row:hover{background:#ffffff1a}
-.sw-suggest-art{width:40px;height:40px;border-radius:var(--radius-1);display:grid;place-items:center;flex-shrink:0}
-.sw-suggest-meta{flex:1;min-width:0;display:flex;flex-direction:column}
-.sw-suggest-meta small,.sw-suggest-duration{color:var(--sp-sub)}
-.sw-add-btn{background:transparent;border:1px solid #ffffff80;color:#fff;border-radius:var(--radius-pill);padding:var(--space-1) var(--space-2);font-weight:700;font-size:var(--type-2)}
-.sw-add-btn:hover{border-color:#fff;transform:scale(1.04)}
-
-/* search */
-.page-search{display:none;align-items:center;gap:var(--space-1);background:#242424;border-radius:var(--radius-pill);padding:0 var(--space-2);height:48px;margin-bottom:var(--space-2)}
-.page-search svg{width:20px;height:20px;color:var(--sp-sub)}
-.page-search input{flex:1;background:transparent;border:0;color:#fff;font-size:var(--type-3);outline:none;min-width:0}
-.browse-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-2)}
-.browse-tile{position:relative;overflow:hidden;aspect-ratio:1.75;border:0;border-radius:var(--radius-2);color:#fff;text-align:left;padding:var(--space-2);font:800 22px "Outfit";letter-spacing:-.3px;transition:transform .15s,filter .15s}
-.browse-tile:hover{filter:brightness(1.1);transform:scale(1.02)}
-.browse-tile i{position:absolute;right:-12px;bottom:-6px;transform:rotate(25deg);opacity:.35}
-.browse-tile i svg{width:80px;height:80px}
-.genre-chip{display:inline-flex;align-items:center;gap:var(--space-1);background:var(--sp-green);color:#000;border-radius:var(--radius-pill);padding:var(--space-1) var(--space-1) var(--space-1) var(--space-2);font-weight:700;margin-bottom:var(--space-1)}
-.genre-chip button{border:0;background:#0000001a;border-radius:50%;width:24px;height:24px;display:grid;place-items:center;padding:0;color:#000}
-.genre-chip svg{width:14px;height:14px}
-.search-top{display:grid;grid-template-columns:minmax(260px,5fr) 7fr;gap:var(--space-3);align-items:start}
-.search-top .section-heading{margin-top:var(--space-1)}
-.top-card{position:relative;background:#181818;border-radius:var(--radius-2);padding:var(--space-2);transition:background .2s;cursor:pointer;display:flex;flex-direction:column;gap:var(--space-1)}
-.top-card:hover{background:#282828}
-.top-card h3{font:800 30px "Outfit";margin:var(--space-2) 0 0;letter-spacing:-.5px}
-.top-card p{margin:0;color:var(--sp-sub)}
-.top-art{display:block;width:92px;height:92px;border-radius:var(--radius-1);overflow:hidden;box-shadow:0 8px 24px #00000080}
-.top-art.round{border-radius:50%;display:grid;place-items:center;font:800 36px "Outfit"}
-.top-art>*{width:100%;height:100%;object-fit:cover}
-.type-pill{display:inline-block;background:#121212;color:#fff;border-radius:var(--radius-pill);padding:var(--space-1) var(--space-1);font-size:var(--type-1);font-weight:700;margin-top:var(--space-1)}
-.top-card .hover-play{right:20px;bottom:20px}
-.empty-state{text-align:center;padding:var(--space-5) var(--space-2)}
-.empty-state h3{font:800 24px "Outfit";margin:0 0 var(--space-1)}
-.empty-state p{color:var(--sp-sub);margin:0 0 var(--space-2)}
-.empty{color:var(--sp-sub);padding:var(--space-3) var(--space-1)}
-.search-tabs{margin-top:0}
-
-/* right rail */
-.workspace .context-rail{padding:var(--space-2);overflow-y:auto}
-.rail-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2)}
-.rail-title h2{font:800 16px "Outfit";margin:0}
-.rail-tools{display:flex;gap:var(--space-1)}
-.icon-quiet{background:transparent;border:0;color:var(--sp-sub);width:36px;height:36px;display:grid;place-items:center;border-radius:50%;padding:0}
-.icon-quiet svg{width:18px;height:18px}
-.icon-quiet:hover:not(:disabled){color:#fff}
-.icon-quiet.active{color:var(--sp-green)}
-.icon-quiet:disabled{opacity:.35;cursor:default}
-.now-card .now-art{display:block;width:100%;aspect-ratio:1;border-radius:var(--radius-2);overflow:hidden;box-shadow:0 8px 24px #00000080;background:#282828}
-.now-card .now-art>*{width:100%;height:100%;object-fit:cover}
-.now-card .now-art.placeholder{display:grid;place-items:center;color:#777}
-.now-card .now-art.placeholder svg{width:30%;height:30%}
-.now-title{display:flex;align-items:center;justify-content:space-between;gap:var(--space-1);margin-top:var(--space-2)}
-.now-title h3{font:800 24px "Outfit";margin:0;letter-spacing:-.4px}
-.now-title p{margin:var(--space-1) 0 0}
-.empty-now h3{font:800 18px "Outfit";margin:var(--space-2) 0 var(--space-1)}
-.rail-card{background:#242424;border-radius:var(--radius-2);padding:var(--space-2);margin-top:var(--space-2)}
-.rail-card h4{margin:0 0 var(--space-1);font:800 16px "Outfit"}
-.rail-card-head{display:flex;justify-content:space-between;align-items:baseline}
-.rail-card.about .about-art{display:grid;place-items:center;width:100%;aspect-ratio:2;border-radius:var(--radius-1);font:800 48px "Outfit";margin-bottom:var(--space-1)}
-.rail-card.about p{color:var(--sp-sub);font-size:var(--type-2);line-height:1.5;margin:var(--space-1) 0 var(--space-1)}
-.queue-block{margin-bottom:var(--space-2)}
-.queue-block h4{margin:0 0 var(--space-1);color:var(--sp-sub);font-size:var(--type-2)}
-.queue-row{width:100%;display:flex;align-items:center;gap:var(--space-1);background:transparent;border:0;color:#fff;text-align:left;padding:var(--space-1);border-radius:var(--radius-1)}
-.queue-row:hover{background:#ffffff1a}
-.queue-row.current strong{color:var(--sp-green)}
-.queue-art .real-cover,.queue-art .placeholder-art{width:44px;height:44px;border-radius:var(--radius-1);display:grid;place-items:center;object-fit:cover}
-.queue-text{display:flex;flex-direction:column;min-width:0}
-.queue-text strong{font-size:var(--type-3);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.queue-text small{color:var(--sp-sub);font-size:var(--type-2)}
-
-/* player bar */
-.custom-playbar{display:grid;grid-template-columns:minmax(180px,1fr) minmax(300px,2fr) minmax(180px,1fr);align-items:center;gap:var(--space-2)}
-.player-song{display:flex;align-items:center;gap:var(--space-1);min-width:0}
-.player-thumb{width:56px;height:56px;border-radius:var(--radius-1);overflow:hidden;display:grid;place-items:center;flex-shrink:0;background:#282828}
-.player-thumb>*{width:100%;height:100%;object-fit:cover}
-.player-song-text{min-width:0;display:flex;flex-direction:column}
-.player-song-text strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--type-2)}
-.player-song-text small{color:var(--sp-sub);font-size:var(--type-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player-song-text a{color:inherit;text-decoration:none}
-.player-song-text a:hover{color:#fff;text-decoration:underline}
-.player-center{display:flex;flex-direction:column;align-items:center;gap:var(--space-1);min-width:0}
-.play-controls{display:flex;align-items:center;gap:var(--space-1)}
-.player-main-play{width:34px;height:34px;border-radius:50%;border:0;background:#fff;color:#000;display:grid;place-items:center;padding:0}
-.player-main-play:hover:not(:disabled){transform:scale(1.07)}
-.player-main-play:disabled{opacity:.4}
-.player-main-play svg{width:16px;height:16px}
-.icon-quiet.mode.active::after{content:"";position:absolute;bottom:4px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--sp-green)}
-.icon-quiet.mode{position:relative}
-.skip-15{font-size:var(--type-1);font-weight:800}
-.player-timeline{display:flex;align-items:center;gap:var(--space-1);width:100%;max-width:620px;color:var(--sp-sub);font-size:var(--type-1);font-variant-numeric:tabular-nums}
-.player-timeline span{min-width:36px;text-align:center}
-.player-right{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-1)}
-.player-timeline input[type=range],.player-right input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:var(--radius-1);outline:none;cursor:pointer;background:linear-gradient(to right,#fff var(--pct,0%),#4d4d4d var(--pct,0%))}
-.player-timeline input[type=range]{flex:1}
-.player-right input[type=range]{width:100px}
-.player-timeline input[type=range]:hover,.player-right input[type=range]:hover{background:linear-gradient(to right,var(--sp-green) var(--pct,0%),#4d4d4d var(--pct,0%))}
-.player-timeline input[type=range]::-webkit-slider-thumb,.player-right input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:#fff;opacity:0}
-.player-timeline input[type=range]:hover::-webkit-slider-thumb,.player-right input[type=range]:hover::-webkit-slider-thumb,input[type=range]:focus-visible::-webkit-slider-thumb{opacity:1}
-.player-timeline input[type=range]::-moz-range-thumb,.player-right input[type=range]::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#fff}
-.player-timeline input[type=range]:disabled{opacity:.5;cursor:default}
-
-/* popovers */
-.song-action-popover{position:fixed;z-index:200;min-width:230px;background:#282828;border-radius:var(--radius-1);padding:var(--space-1);box-shadow:0 16px 24px #0000004d}
-.song-action-popover button{display:flex;align-items:center;gap:var(--space-1);width:100%;text-align:left;background:transparent;border:0;color:#ffffffe6;padding:var(--space-1) var(--space-1);border-radius:var(--radius-1);font-size:var(--type-2)}
-.song-action-popover button:hover{background:#ffffff1a;color:#fff}
-.song-action-popover svg{width:16px;height:16px}
-.profile-menu{background:#282828;border-radius:var(--radius-1);padding:var(--space-1);box-shadow:0 16px 24px #0000004d}
-.profile-menu button{display:flex;align-items:center;gap:var(--space-1);width:100%;background:transparent;border:0;color:#fff;padding:var(--space-1) var(--space-1);text-align:left;border-radius:var(--radius-1)}
-.profile-menu button:hover{background:#ffffff1a}
-.profile-menu svg{width:16px;height:16px}
-
-/* responsive */
-
-
-
-
-
-
-/* ---- Your Library (Spotify-style) ---- */
-.workspace .sidebar{padding:var(--space-1) var(--space-1) var(--space-1)}
-.library-head{display:flex;align-items:center;justify-content:space-between;padding:var(--space-1) var(--space-1) var(--space-1)}
-.library-toggle{display:flex;align-items:center;gap:var(--space-1);background:transparent;border:0;color:var(--sp-sub);font:700 16px "DM Sans",sans-serif;padding:var(--space-1);border-radius:var(--radius-1)}
-.library-toggle:hover{color:#fff}
-.library-toggle svg{width:24px;height:24px}
-#library-create{background:#1f1f1f;color:#fff;width:32px;height:32px}
-#library-create:hover{background:#2a2a2a}
-.library-filters{display:flex;gap:var(--space-1);flex-wrap:wrap;padding:0 var(--space-1) var(--space-1)}
-.library-tools{display:flex;align-items:center;gap:var(--space-1);padding:0 var(--space-1) var(--space-1)}
-.library-tools .icon-quiet{width:32px;height:32px;flex-shrink:0}
-.lib-search{flex:1;min-width:0;background:#242424;border:0;border-radius:var(--radius-1);color:#fff;padding:var(--space-1) var(--space-1);font-size:var(--type-2);outline:none}
-.lib-search:focus{box-shadow:0 0 0 2px #fff}
-.lib-sort{margin-left:auto;display:flex;align-items:center;gap:var(--space-1);background:transparent;border:0;color:var(--sp-sub);font-size:var(--type-2);padding:var(--space-1) var(--space-1);border-radius:var(--radius-pill);white-space:nowrap}
-.lib-sort:hover{color:#fff;background:#ffffff14}
-.lib-sort svg{width:16px;height:16px}
-.library-tools:has(.lib-search:not([hidden])) .lib-sort #lib-sort-label{display:none}
-.library-scroll{flex:1;min-height:0;overflow-y:auto;padding:0 var(--space-1);scrollbar-width:thin}
-.library-item .library-art.liked-art svg{width:22px;height:22px;fill:#fff;stroke:#fff}
-.pin-ico{display:inline-block;color:var(--sp-green);margin-right:var(--space-1);vertical-align:-2px}
-.pin-ico svg{width:13px;height:13px}
-.library-item.pinned small{display:flex;align-items:center}
-.library-item.is-artist .library-item-label small,.library-item .library-item-label small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.library-empty{padding:var(--space-2) var(--space-1);color:var(--sp-sub)}
-.library-empty strong{display:block;color:#fff;margin-bottom:var(--space-1)}
-.library-empty p{margin:0;font-size:var(--type-2);line-height:1.5}
-.library-empty-card{background:#242424;border-radius:var(--radius-2);padding:var(--space-2);margin:var(--space-1) var(--space-1)}
-.library-empty-card strong{display:block;font-size:var(--type-3);margin-bottom:var(--space-1)}
-.library-empty-card p{margin:0 0 var(--space-2);color:var(--sp-sub);font-size:var(--type-2)}
-.library-empty-card .button{background:#fff;color:#000}
-/* grid view */
-.library-scroll.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:var(--space-1);align-content:start}
-.library-scroll.grid .library-item{flex-direction:column;align-items:stretch;gap:var(--space-1);padding:var(--space-1);text-align:left}
-.library-scroll.grid .library-item .library-art{width:100%;height:auto;aspect-ratio:1;font-size:var(--type-5)}
-.library-scroll.grid .library-item small{display:none}
-.library-scroll.grid .library-item strong{font-size:var(--type-2)}
-/* collapsed (icons only) */
-.library-collapsed .library-tools,.library-collapsed #library-create{display:none}
-.library-collapsed .library-head{justify-content:center;padding:var(--space-1) 0 var(--space-1)}
-.library-collapsed .library-scroll{padding:0}
-.library-collapsed .library-item{justify-content:center;padding:var(--space-1)}
-.library-collapsed .library-scroll.grid{display:block}
-.library-collapsed .library-scroll.grid .library-item .library-art{width:48px;height:48px}
-.library-collapsed .sidebar-bottom .sidebar-role{justify-content:center}
-.menu-label{padding:var(--space-1) var(--space-1) var(--space-1);color:var(--sp-sub);font-size:var(--type-1);font-weight:700}
-.song-action-popover button .menu-sub{display:block;color:var(--sp-sub);font-size:var(--type-1);margin-top:var(--space-1)}
-.song-action-popover .menu-check{margin-left:auto;color:var(--sp-green);display:inline-flex}
-.song-action-popover button:has(.menu-check){justify-content:space-between}
-.song-action-popover button:has(.menu-check) .menu-check{margin-left:auto}
-
-/* =====================================================================
-   SoundWave consistency pass (final layer).
-   The stylesheet above grew through several redesigns whose rules fight each
-   other. This layer is loaded last and settles the conflicts in one place.
-   ===================================================================== */
-:root{
-  --font-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --font-display:"Outfit","DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  --accent:#1ed760; --card:#181818; --card-hover:#282828; --line:#ffffff1a;
-}
-/* 1. One font system, always with a sans-serif fallback (no more serif flashes) */
-html,body{font-family:var(--font-body)}
-button,input,select,textarea{font-family:inherit}
-h1,h2,h3,h4,.page-title,.coll-title,.rail h3,.hero h2,.auth-show h1,.auth-box h2,.create-tile strong,.workspace-hero h2,.profile-hero h2,.artist-round,.quick-tile .tile-cover,.artist-profile-avatar,.about-card h2,.sw-playlist-empty h3,.browse-tile,.top-card h3,.top-art.round,.empty-state h3,.rail-title h2,.now-title h3,.empty-now h3,.rail-card h4,.rail-card.about .about-art,.avatar,.top-avatar,.profile-avatar-large,.member-avatar,.sw-owner-avatar,.about-art{font-family:var(--font-display)}
-
-/* 2. Artist avatar is always a circle */
-.artist-profile-avatar{width:clamp(120px,16vw,200px);height:auto;aspect-ratio:1/1;flex:none}
-
-
-/* 3. Artist grids: same card size however many artists there are */
-.artist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--space-2)}
-.artist-grid .artist-card{align-items:center;text-align:center}
-.artist-grid .artist-round{width:min(100%,150px)}
-.artist-card .follow-btn{margin-top:var(--space-1)}
-
-/* 4. Podcast / show cards: art keeps its square shape so the title is never squashed */
-.cover-card .cover-art{height:auto;aspect-ratio:1/1;flex:none}
-.cover-card strong,.cover-card small{flex:none}
-.cover-grid{grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--space-2)}
-
-/* 5. Same tile size everywhere */
-.release-grid{grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--space-2)}
-
-
-/* 6. Hero banners: one size, one radius, one headline scale */
-.hero,.workspace-hero{min-height:200px;border-radius:var(--radius-3);padding:clamp(var(--space-3),3vw,var(--space-4));margin:var(--space-1) 0 var(--space-3)}
-.hero h2,.workspace-hero h2{font-size:clamp(28px,3.4vw,44px);letter-spacing:-1px;line-height:1.1}
-.hero-art,.workspace-hero .hero-vinyl{width:130px;height:130px;font-size:var(--type-7);display:grid;place-items:center}
-.hero-art svg,.hero-vinyl svg{width:100%;height:100%}
-
-
-/* 7. Likes: heart is always visible; the ⋯ menu shows on hover/focus and always on touch */
-.track .heart-btn{opacity:1;color:#b3b3b3}
-.track .heart-btn.on{color:var(--accent)}
-.t-more .song-more,.t-more .t-remove{opacity:0}
-.track:hover .t-more button,.track:focus-within .t-more button{opacity:1}
-
-.heart-btn:focus-visible,.follow-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-/* 8. Follow button: one style on every page */
-.follow-btn{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 var(--space-2);border-radius:var(--radius-pill);border:1px solid #ffffff80;background:transparent;color:#fff;font-weight:700;font-size:var(--type-2);cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
-.follow-btn:hover{transform:scale(1.04);border-color:#fff}
-.follow-btn.on{background:#ffffff1a;border-color:transparent}
-.follow-btn.sm{min-height:30px;padding:0 var(--space-2);font-size:var(--type-1)}
-
-/* 9. Followers page + dashboard stat */
-.social-list{margin-top:var(--space-1)}
-.social-row .member-avatar{flex:none;color:#fff;font-weight:800}
-.social-link{display:flex;align-items:center;gap:var(--space-1);flex:1;min-width:0;background:none;border:0;color:#fff;text-align:left;padding:0;cursor:pointer}
-.social-link small{display:block;color:#aaa;font-size:var(--type-1);margin-top:var(--space-1)}
-
-
-.stat-ribbon{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.stat-ribbon>div{background:#242424;border-radius:var(--radius-2);padding:var(--space-2) var(--space-2)}
-
-
-.notice code{background:#0004;padding:var(--space-1) var(--space-1);border-radius:var(--radius-1)}
-
-/* 10. Upload wizards + how-it-works strips */
-.how-steps{list-style:none;margin:0 0 var(--space-1);padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-1)}
-.how-steps li{display:flex;gap:var(--space-1);align-items:flex-start;background:#202020;border-radius:var(--radius-2);padding:var(--space-2) var(--space-2)}
-.how-num{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#000;font-weight:800;font-size:var(--type-2)}
-.how-steps strong{display:block;font-size:var(--type-2)}
-.how-steps small{display:block;color:#b3b3b3;font-size:var(--type-1);line-height:1.5;margin-top:var(--space-1)}
-.wizard-dialog{width:min(94vw,560px)}
-.wizard-steps{list-style:none;display:flex;gap:var(--space-1);margin:var(--space-1) 0 var(--space-2);padding:0}
-.wizard-steps li{flex:1;display:flex;align-items:center;gap:var(--space-1);font-size:var(--type-1);font-weight:700;color:#8d8d8d;padding-bottom:var(--space-1);border-bottom:3px solid #3a3a3a}
-.wizard-steps li span{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#3a3a3a;color:#ddd;font-size:var(--type-1)}
-.wizard-steps li.current{color:#fff;border-color:var(--accent)}
-.wizard-steps li.current span,.wizard-steps li.done span{background:var(--accent);color:#000}
-.wizard-steps li.done{color:#d6d6d6;border-color:#1ed76088}
-.step-desc{color:#c8c8c8;font-size:13.5px;line-height:1.6;margin:0 0 var(--space-2)}
-.step-desc.subtle{color:#a0a0a0;font-size:12.5px;margin:var(--space-2) 0 0}
-.step-tips{margin:0 0 var(--space-1);padding-left:var(--space-2);color:#b9b9b9;font-size:12.5px;line-height:1.7}
-.step-tips b{color:#e6e6e6}
-.upload-summary{display:grid;gap:var(--space-1);margin:var(--space-2) 0 0;padding:var(--space-1) var(--space-2);background:#242424;border-radius:var(--radius-2);font-size:var(--type-2)}
-.upload-summary div{display:flex;gap:var(--space-1);justify-content:space-between}
-.upload-summary dt{color:#a0a0a0}.upload-summary dd{margin:0;font-weight:600;text-align:right;overflow-wrap:anywhere}
-.audio-summary.bad{color:#ff8a8a}
-.audio-drop.drag-over{border-color:var(--accent);background:#1d2b22}
-#create-show-dialog .step-desc{margin-top:-8px}
-
-/* 1b. Same fix for every rule that used a font shorthand with no fallback (generated) */
-.avatar,.rail h3,.page-title,.hero h2,.card h3,.section-heading h2,.auth-show h1,.auth-box h2,.create-tile strong,.modal-head h2,.now-card h3,.workspace-hero h2,.profile-hero h2,.artist-round,.quick-tile .tile-cover,.artist-profile-avatar,.about-card h2,.sw-playlist-empty h3,.browse-tile,.top-card h3,.top-art.round,.empty-state h3,.rail-title h2,.now-title h3,.empty-now h3,.rail-card h4,.rail-card.about .about-art{font-family:var(--font-display)}
-
-/* =====================================================================
-   Layout pass 2: idle player, sidebar, scrollbars, spacing scale
-   ===================================================================== */
-:root{--space-1:8px;--space-2:16px;--space-3:24px;--space-4:32px;--chrome-h:73px}
-
-/* A. The player bar and the "Now playing" panel only exist while something is playing */
-body.is-idle #soundwave-player{display:none}
-body.is-idle .context-rail{display:none!important}
-/* With no active media, reclaim the desktop player reservation so no black strip remains below the workspace. */
-@media (min-width:701px){
-  body.is-idle .workspace{min-height:calc(100dvh - 65px);padding-bottom:0}
-  body.is-idle .workspace .sidebar,
-  body.is-idle .workspace .main,
-  body.is-idle .workspace .context-rail{height:calc(100dvh - 65px)}
-}
-
-
-
-
-/* B. Sidebar: nothing may overflow it, in any state */
-.workspace .sidebar{overflow:hidden}
-.library-scroll{overflow-x:hidden}
-.library-collapsed .library-empty-card{display:none}
-.library-empty-card{overflow-wrap:anywhere}
-.library-empty-card strong{font-size:var(--type-3);line-height:1.3}
-.library-empty-card p{font-size:var(--type-2)}
-.sidebar-bottom{gap:var(--space-1)}
-.sidebar-role{font-size:var(--type-2);padding:var(--space-1) var(--space-1);gap:var(--space-2);min-height:40px}
-.sidebar-role svg{flex:none;width:20px;height:20px}
-.sidebar-role:hover{color:#fff;background:#ffffff0f}
-.library-collapsed .sidebar-role{padding:var(--space-1) 0}
-
-/* C. Slim dark scrollbars everywhere (no white tracks or arrow buttons) */
-*{scrollbar-width:thin;scrollbar-color:#ffffff40 transparent}
-*::-webkit-scrollbar-button{display:none;width:0;height:0}
-*::-webkit-scrollbar-track,*::-webkit-scrollbar-corner{background:transparent}
-
-/* D. One spacing scale for every page: 16px inside blocks, 32px between sections */
-.page-intro{margin:0 0 var(--space-2)}
-.home-chips{margin:0 0 var(--space-3)}
-.page-body>*:first-child{margin-top:0}
-.hero,.workspace-hero{margin:0 0 var(--space-4)}
-.section-heading{margin:var(--space-4) 0 var(--space-2)}
-.page-body>.section-heading:first-child{margin-top:0}
-.stat-ribbon{margin:0 0 var(--space-2)}
-.footnote{margin:var(--space-1) 0 0;line-height:1.5}
-.work-actions,.studio-actions{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-2);margin:0 0 var(--space-4)}
-.work-actions button,.studio-actions button{min-height:0;height:auto;padding:var(--space-2) var(--space-2);gap:var(--space-1)}
-.quick-grid{margin:0 0 var(--space-4);gap:var(--space-1) var(--space-2)}
-.shelf,.cover-grid,.release-grid,.artist-grid{gap:var(--space-2)}
-.shelf-section{margin-top:var(--space-4)}
-
-.how-steps{margin:0}
-
-
-
-
-.page-body>p.muted{margin:0 0 var(--space-2);line-height:1.5}
-.page-body>.empty,.social-list>.empty{margin:0;padding:var(--space-4) var(--space-2)}
-.songrow{margin-bottom:var(--space-1)}
-.notice{margin:0 0 var(--space-2)}
-.social-stats{margin:0 0 var(--space-3)}
-.social-list{margin:0}
-.dashboard-content{padding-bottom:var(--space-4)}
-.work-actions,.studio-actions{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-
-body.is-idle .workspace{padding-bottom:var(--space-1)}
-
-/* =====================================================================
-   Now-playing panel on small laptops / split-screen (761px-1180px)
-   Earlier rules hid the panel here with no way to show it. It now appears
-   while something plays (and can be closed with the X / "Now playing view" button).
-   ===================================================================== */
-
-
-/* =========================================================
-   Mission 4 feature append — preserves the uploaded main UI
-   ========================================================= */
-.profile-avatar-large.profile-photo-btn{position:relative;overflow:hidden;border:0;cursor:pointer;padding:0;color:inherit}
-.profile-avatar-large.profile-photo-btn>img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
-.profile-photo-edit{position:absolute;left:0;right:0;bottom:0;display:flex;gap:var(--space-1);align-items:center;justify-content:center;padding:var(--space-1) var(--space-1);background:linear-gradient(transparent,rgba(0,0,0,.82));font-size:var(--type-1);font-weight:700;opacity:0;transition:.18s}
-.profile-photo-btn:hover .profile-photo-edit{opacity:1}
-.profile-photo-edit svg{width:14px;height:14px}
-.profile-social-line{margin:.35rem 0 .9rem;color:#d8d8d8}.profile-social-line strong{color:#fff}
-.cover-img{width:100%;height:100%;display:block;object-fit:cover}.playlist-main-cover{border-radius:var(--radius-2)}
-
-
-
-
-
-.plan-card.current-plan{outline:2px solid #1ed760;outline-offset:-2px}.premium-hero .hero-vinyl{font-size:2rem}
-.admin-tabs{position:sticky;top:0;z-index:3;padding:var(--space-1) 0;background:linear-gradient(#121212 72%,transparent)}.admin-panel{display:grid;gap:var(--space-1)}.admin-panel[hidden]{display:none}
-
-.top-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}.lyrics-rail{min-height:260px}.lyrics-display{font-size:1.05rem;line-height:1.75;white-space:normal;color:#f2f2f2}
-
-/* Mission 4 lifecycle / dashboard polish */
-.clickable-stats{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
-.stat-card{background:#242424;border:1px solid transparent;border-radius:var(--radius-2);padding:var(--space-2) var(--space-2);color:#fff;text-align:left;min-width:0;transition:.15s}
-.stat-card:hover,.stat-card:focus-visible{background:#303030;border-color:#545454;transform:translateY(-1px)}
-.stat-card small{display:block;color:#b5b5b5;font-size:var(--type-1)}.stat-card strong{display:block;font-size:var(--type-5);margin-top:var(--space-1);overflow:hidden;text-overflow:ellipsis}
-.royalty-card strong{color:#1ed760}.royalty-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--space-1);margin-bottom:var(--space-3)}.royalty-panel>div{background:#242424;border:1px solid #353535;border-radius:var(--radius-2);padding:var(--space-2)}.royalty-panel small{display:block;color:#aaa}.royalty-panel strong{display:block;font-size:var(--type-5);margin-top:var(--space-1)}.release-management{display:grid;gap:var(--space-1)}.profile-danger-zone{display:flex;gap:var(--space-1);flex-wrap:wrap;margin-top:var(--space-2)}.deactivated-wrap{min-height:100vh;display:grid;place-items:center;background:#0b0b0b;padding:var(--space-3)}.deactivated-card{width:min(620px,100%);background:#181818;border:1px solid #333;border-radius:var(--radius-3);padding:var(--space-4)}.deactivated-card h1{font:850 42px Outfit;margin:var(--space-1) 0}.deactivated-card p{color:#bcbcbc;line-height:1.65;margin:0 0 var(--space-3)}.single-field textarea{width:100%;padding:var(--space-2) var(--space-2);background:#262626;border:1px solid #505050;border-radius:var(--radius-1);color:#fff;font-size:var(--type-2);min-height:90px;resize:vertical}.single-field textarea:focus{border-color:#1ed760;outline:none}
-
-
-/* Mission 4: podcast studio, collaborator invite links, album lifecycle */
-.podcast-studio-list{display:grid;gap:var(--space-1);margin:var(--space-1) 0 var(--space-3)}.podcast-studio-row,.studio-album-row{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-1);border-radius:var(--radius-2);background:rgba(255,255,255,.055)}.podcast-studio-art{width:74px;height:74px;border-radius:var(--radius-2);display:grid;place-items:center;overflow:hidden;flex:0 0 auto}.podcast-studio-art .cover-img,.podcast-detail-art .cover-img,.podcast-episode-icon .cover-img{width:100%;height:100%;object-fit:cover}.podcast-studio-row .grow p{margin:.35rem 0 0;color:var(--muted);font-size:.88rem}.studio-album-row>.studio-album{flex:1}.podcast-detail-head{display:flex;gap:var(--space-2);align-items:center;margin:var(--space-1) 0 var(--space-3)}.podcast-detail-art{width:150px;height:150px;overflow:hidden;border-radius:var(--radius-2);flex:0 0 auto}.podcast-episode-icon{overflow:hidden}.collab-invite{margin-top:var(--space-2);padding-top:var(--space-2);border-top:1px solid rgba(255,255,255,.1)}.collab-invite h3{margin:0 0 var(--space-1)}
-
-
-
-/* Album Studio card polish: keep management controls out of the artwork. */
-.studio-albums{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-2)}
-.studio-album-row{display:flex;flex-direction:column;align-items:stretch;gap:var(--space-1);padding:var(--space-1);background:#1f1f1f;border-radius:var(--radius-2);min-width:0}
-.studio-album-row>.studio-album{width:100%;flex:none;padding:0;background:transparent}
-.studio-album-row>.studio-album:hover{background:transparent}
-.studio-album-row .studio-album-art{width:100%;aspect-ratio:1/1;background:#2a2a2a;border-radius:var(--radius-2);box-shadow:0 6px 20px rgba(0,0,0,.24)}
-.studio-album-row .studio-album-art img{display:block;width:100%;height:100%;object-fit:cover}
-.studio-album-row>.button{position:static;width:100%;min-height:36px;justify-content:center;margin:0;border-radius:var(--radius-pill)}
-.studio-album-row .studio-album>span:last-child{padding:0 var(--space-1) var(--space-1)}
-
-
-
-/* =====================================================================
-   2026-10-06 overflow + artwork containment pass
-   Keeps media inside its intended frame and prevents horizontal UI spill.
-   ===================================================================== */
-html,body,#app{max-width:100%;overflow-x:hidden}
-.workspace,.workspace>*,.page-body,.dashboard-content,.main-content{min-width:0;max-width:100%}
-.workspace{width:100%;overflow-x:clip}
-.workspace .main{min-width:0;max-width:100%}
-.dashboard-content,.page-body{overflow-x:clip}
-
-/* Media never expands its parent. */
-img,video,canvas{max-width:100%}
-.cover-img{display:block;width:100%!important;height:100%!important;max-width:100%;max-height:100%;object-fit:cover;object-position:center;min-width:0;min-height:0}
-.library-art,.songicon,.queue-art,.sw-suggest-art,.release-art,.top-art,.tile-cover,.now-art,.podcast-studio-art,.podcast-detail-art,.podcast-episode-icon,.studio-album-art,.playlist-main-cover,.liked-cover,.coll-cover,.artist-round,.artist-profile-avatar,.about-art{overflow:hidden;isolation:isolate}
-.library-art>img,.songicon>img,.queue-art>img,.sw-suggest-art>img,.release-art>img,.top-art>img,.tile-cover>img,.now-art>img,.podcast-studio-art>img,.podcast-detail-art>img,.podcast-episode-icon>img,.studio-album-art>img,.playlist-main-cover>img,.liked-cover>img,.coll-cover>img,.artist-round>img,.artist-profile-avatar>img,.about-art>img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
-
-/* Sidebar library: artwork stays exactly inside the 48px thumbnail. */
-.library-item{min-width:0;max-width:100%;overflow:hidden}
-.library-art{flex:0 0 48px;width:48px;height:48px;max-width:48px;max-height:48px}
-.library-item-label{flex:1 1 auto;width:0;min-width:0;overflow:hidden}
-.library-item-label strong,.library-item-label small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.library-scroll{min-width:0;overflow-x:hidden!important;overscroll-behavior:contain}
-
-/* Rows/cards must shrink instead of forcing the page wider. */
-.songrow,.track,.queue-row,.sw-suggest-row,.podcast-studio-row,.studio-album-row,.admin-song-row,.collab-row,.social-row,.player-song,.podcast-detail-head{min-width:0;max-width:100%}
-.songrow>.grow,.track>.grow,.queue-row>.grow,.sw-suggest-row>.grow,.podcast-studio-row>.grow,.admin-song-meta,.player-song-text,.podcast-detail-head>div:last-child{min-width:0;overflow-wrap:anywhere}
-.cover-card,.release-tile,.artist-card,.quick-tile,.top-card,.plan-card,.stat-card,.rail-card,.card{min-width:0;max-width:100%;overflow:hidden}
-.cover-grid,.release-grid,.artist-grid,.quick-grid,.shelf,.plan-grid,.stat-ribbon,.royalty-panel,.studio-albums{min-width:0;max-width:100%}
-
-/* Long labels/metadata cannot create horizontal overflow. */
-button,.button,.sidebar-role,.text-link{max-width:100%}
-.grow strong,.grow small,.admin-song-meta strong,.admin-song-meta small,.player-song-text strong,.player-song-text small,.tile-copy strong,.tile-copy small{max-width:100%;overflow:hidden;text-overflow:ellipsis}
-.notice,.empty,.rail-card,.field,.field input,.field textarea,.field select{min-width:0;max-width:100%;overflow-wrap:anywhere}
-
-/* Forms/tables/dialogs remain usable on narrow screens. */
-dialog{max-width:min(94vw,720px);max-height:90dvh;overflow:auto}
-
-.form.two{min-width:0}
-.inline{max-width:100%}
-.home-chips,.admin-tabs,.library-filters{max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
-.home-chips::-webkit-scrollbar,.admin-tabs::-webkit-scrollbar,.library-filters::-webkit-scrollbar{display:none}
-
-/* Main hero/detail artwork scales down instead of pushing text out. */
-.podcast-detail-head>div:last-child{flex:1 1 0}
-.podcast-detail-art{max-width:min(150px,32vw)}
-.hero,.workspace-hero,.artist-profile-hero{max-width:100%;overflow:hidden}
-
-/* Player: preserve song information and prevent the fixed bar from spilling. */
-#soundwave-player{max-width:100vw;overflow:hidden}
-.player-song{flex:1 1 260px;max-width:min(32vw,360px)}
-.player-song-text{width:0;flex:1 1 auto}
-
-/* Narrow desktop/tablet: reduce rigid widths before any overflow can occur. */
-
-
-
-
-
-/* =====================================================================
-   CARD GLOW-UP: nicer music boxes + animations (added last so it wins)
-   ===================================================================== */
-:root{--card-ease:cubic-bezier(.22,1,.36,1);--card-spring:cubic-bezier(.34,1.56,.64,1)}
-
-/* Keep lifted cards + shadows from being clipped by the scrolling shelf */
-.shelf{padding:var(--space-2) var(--space-1) var(--space-3);margin:-14px -6px -16px}
-
-/* The card itself */
-.release-tile,.artist-card,.cover-card{
-  --mx:50%;--my:50%;--rx:0deg;--ry:0deg;
-  padding:var(--space-2);border-radius:var(--radius-3);
-  background:linear-gradient(160deg,#1f1f1f 0%,#161616 100%);
-  border:1px solid #ffffff0d;
-  box-shadow:0 2px 6px #0000004d;
-  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(0);
-  transition:transform .45s var(--card-ease),box-shadow .45s var(--card-ease),background .3s,border-color .3s;
-  will-change:transform;
-}
-/* Soft light that follows the cursor */
-.release-tile::before,.artist-card::before,.cover-card::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
-  background:radial-gradient(260px circle at var(--mx) var(--my),#ffffff1c,transparent 62%);
-  opacity:0;transition:opacity .35s;
-}
-/* Accent glow on the border */
-.release-tile::after,.artist-card::after,.cover-card::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
-  box-shadow:inset 0 0 0 1px #1ed76000;transition:box-shadow .35s;
-}
-.release-tile:hover,.artist-card:hover,.cover-card:hover,
-.release-tile:focus-visible,.artist-card:focus-visible,.cover-card:focus-visible{
-  background:linear-gradient(160deg,#2b2b2b 0%,#1c1c1c 100%);
-  border-color:#ffffff1a;
-  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px);
-  box-shadow:0 18px 38px #000000b3,0 0 0 1px #ffffff10,0 10px 40px -12px #1ed76055;
-}
-.release-tile:hover::before,.artist-card:hover::before,.cover-card:hover::before{opacity:1}
-.release-tile:hover::after,.artist-card:hover::after,.cover-card:hover::after{box-shadow:inset 0 0 0 1px #1ed76040}
-.release-tile:active,.artist-card:active,.cover-card:active{
-  transform:perspective(900px) translateY(-3px) scale(.97);transition-duration:.12s;
-}
-
-/* Cover art: rounder, deeper shadow, slow zoom on hover */
-.release-art,.cover-art{border-radius:var(--radius-3);box-shadow:0 10px 26px #00000099;transition:box-shadow .45s var(--card-ease)}
-.release-art>*:not(.hover-play),.cover-art>*{transition:transform .7s var(--card-ease),filter .45s}
-.release-tile:hover .release-art>*:not(.hover-play),
-.cover-card:hover .cover-art>*{transform:scale(1.08);filter:brightness(1.08) saturate(1.1)}
-.release-tile:hover .release-art,.cover-card:hover .cover-art{box-shadow:0 16px 34px #000000cc}
-/* Glossy sheen sweeping across the art */
-.release-art:after,.cover-art:after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(115deg,transparent 35%,#ffffff2e 50%,transparent 65%);
-  transform:translateX(-120%);transition:transform .8s var(--card-ease);
-}
-.release-tile:hover .release-art:after,.cover-card:hover .cover-art:after{transform:translateX(120%)}
-
-/* Play button: springy pop-in with a green glow + pulse ring */
-.hover-play{
-  background:var(--accent);box-shadow:0 8px 20px #000000a0,0 0 0 0 #1ed76000;
-  transform:translateY(14px) scale(.6);
-  transition:opacity .3s,transform .45s var(--card-spring),background .15s,box-shadow .3s;
-}
-.release-tile:hover .hover-play,.release-tile:focus-within .hover-play,
-.artist-card:hover .hover-play,.artist-card:focus-within .hover-play,
-.top-card:hover .hover-play{opacity:1;transform:translateY(0) scale(1);animation:playPulse 1.8s ease-out .45s infinite}
-.hover-play:hover{transform:scale(1.12)!important;background:#3be477;animation:none!important;box-shadow:0 10px 26px #000000b0,0 0 22px #1ed76099}
-.hover-play:active{transform:scale(.94)!important}
-@keyframes playPulse{0%{box-shadow:0 8px 20px #000000a0,0 0 0 0 #1ed76080}70%,100%{box-shadow:0 8px 20px #000000a0,0 0 0 14px #1ed76000}}
-
-/* Text: title brightens, subtitle nudges */
-.release-tile strong,.artist-card strong,.cover-card strong{transition:color .25s,transform .4s var(--card-ease);letter-spacing:-.1px}
-.release-tile:hover strong,.artist-card:hover strong,.cover-card:hover strong{color:#fff;transform:translateX(2px)}
-.release-tile small,.artist-card small,.cover-card small{transition:color .25s,transform .4s var(--card-ease) .03s}
-.release-tile:hover small,.artist-card:hover small,.cover-card:hover small{color:#cfcfcf;transform:translateX(2px)}
-
-/* Artist avatars: ring that grows on hover */
-.artist-round{transition:transform .5s var(--card-spring),box-shadow .45s var(--card-ease)}
-.artist-card:hover .artist-round{transform:scale(1.05);box-shadow:0 14px 30px #000000b3,0 0 0 3px #1ed76066}
-
-/* Entrance: cards float up one after another */
-@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.94)}to{opacity:1;transform:none}}
-.shelf>*,.release-grid>*,.cover-grid>*,.artist-grid>*{animation:cardIn .6s var(--card-ease) backwards}
-.shelf>*:nth-child(1),.release-grid>*:nth-child(1),.cover-grid>*:nth-child(1),.artist-grid>*:nth-child(1){animation-delay:.04s}
-.shelf>*:nth-child(2),.release-grid>*:nth-child(2),.cover-grid>*:nth-child(2),.artist-grid>*:nth-child(2){animation-delay:.10s}
-.shelf>*:nth-child(3),.release-grid>*:nth-child(3),.cover-grid>*:nth-child(3),.artist-grid>*:nth-child(3){animation-delay:.16s}
-.shelf>*:nth-child(4),.release-grid>*:nth-child(4),.cover-grid>*:nth-child(4),.artist-grid>*:nth-child(4){animation-delay:.22s}
-.shelf>*:nth-child(5),.release-grid>*:nth-child(5),.cover-grid>*:nth-child(5),.artist-grid>*:nth-child(5){animation-delay:.28s}
-.shelf>*:nth-child(6),.release-grid>*:nth-child(6),.cover-grid>*:nth-child(6),.artist-grid>*:nth-child(6){animation-delay:.34s}
-.shelf>*:nth-child(n/**/+7),.release-grid>*:nth-child(n/**/+7),.cover-grid>*:nth-child(n/**/+7),.artist-grid>*:nth-child(n/**/+7){animation-delay:.40s}
-
-/* Section headings slide in too */
-@keyframes headIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
-.shelf-section .section-heading{animation:headIn .55s var(--card-ease) backwards}
-
-/* Quick tiles at the top (Liked Songs, playlists...) get a gentler version */
-.quick-tile{transition:background .25s,transform .35s var(--card-ease),box-shadow .35s var(--card-ease)}
-.quick-tile:hover{transform:translateY(-3px);box-shadow:0 10px 24px #00000080}
-.quick-tile:active{transform:scale(.98)}
-
-/* Touch screens: no hover-only tricks */
-
-/* Respect "reduce motion" */
-
-
-/* =====================================================================
-   LOGIN / REGISTER GLOW-UP (added last so it wins)
-   ===================================================================== */
-@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
-
-/* ---------- Left showcase panel ---------- */
-.auth-show{position:relative;overflow:hidden;isolation:isolate;
-  background:radial-gradient(circle at 15% 20%,#1b5e3a 0,transparent 45%),radial-gradient(circle at 85% 75%,#30784b 0,transparent 45%),linear-gradient(145deg,#0f2a1c,#050d08)}
-.auth-show>*{position:relative;z-index:2}
-/* drifting blurred color blobs */
-.auth-show::before{content:"";position:absolute;z-index:0;width:520px;height:520px;left:-120px;top:-140px;border-radius:50%;
-  background:radial-gradient(circle,#1ed76055,transparent 65%);filter:blur(30px);animation:blobDrift 14s ease-in-out infinite alternate}
-/* scrolling waveform along the bottom */
-.auth-show::after{content:"";position:absolute;z-index:1;left:0;right:0;bottom:0;height:34%;pointer-events:none;opacity:.55;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Cg fill='%231ed760'%3E%3Crect x='4' y='60' width='6' height='40' rx='3'/%3E%3Crect x='20' y='35' width='6' height='65' rx='3'/%3E%3Crect x='36' y='50' width='6' height='50' rx='3'/%3E%3Crect x='52' y='15' width='6' height='85' rx='3'/%3E%3Crect x='68' y='45' width='6' height='55' rx='3'/%3E%3Crect x='84' y='25' width='6' height='75' rx='3'/%3E%3Crect x='100' y='55' width='6' height='45' rx='3'/%3E%3Crect x='116' y='10' width='6' height='90' rx='3'/%3E%3Crect x='132' y='40' width='6' height='60' rx='3'/%3E%3Crect x='148' y='62' width='6' height='38' rx='3'/%3E%3Crect x='164' y='30' width='6' height='70' rx='3'/%3E%3Crect x='180' y='52' width='6' height='48' rx='3'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:200px 100%;background-repeat:repeat-x;background-position:0 100%;
-  -webkit-mask-image:linear-gradient(to top,#000 10%,transparent 100%);mask-image:linear-gradient(to top,#000 10%,transparent 100%);
-  animation:waveScroll 12s linear infinite,wavePulse 3s ease-in-out infinite alternate}
-@keyframes blobDrift{to{transform:translate(260px,200px) scale(1.25)}}
-@keyframes waveScroll{to{background-position:-200px 100%}}
-@keyframes wavePulse{from{opacity:.3}to{opacity:.65}}
-
-.auth-show .brand-icon{animation:iconBeat 2.4s ease-in-out infinite;box-shadow:0 0 0 0 #1ed76066}
-@keyframes iconBeat{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #1ed76066}50%{transform:scale(1.08) rotate(-4deg);box-shadow:0 0 0 12px #1ed76000}}
-
-/* headline: gradient text with a slow shimmer */
-.auth-show h1{background:linear-gradient(100deg,#ffffff 20%,#b9f7cf 45%,#1ed760 60%,#ffffff 80%);background-size:250% 100%;
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:textShimmer 7s ease-in-out infinite}
-@keyframes textShimmer{0%,100%{background-position:100% 0}50%{background-position:0 0}}
-.auth-show .eyebrow{color:#1ed760}
-
-/* staggered entrance */
-@keyframes authUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-@keyframes authLeft{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
-.auth-show>.brand{animation:authLeft .7s var(--card-ease,cubic-bezier(.22,1,.36,1)) .05s backwards}
-.auth-show>div:nth-child(2){animation:authUp .8s var(--card-ease,cubic-bezier(.22,1,.36,1)) .2s backwards}
-.auth-show>.small{animation:authUp .8s var(--card-ease,cubic-bezier(.22,1,.36,1)) .4s backwards}
-
-/* ---------- Right form panel ---------- */
-.auth-panel{position:relative;overflow:hidden;
-  background:radial-gradient(circle at 80% 10%,#1ed76014,transparent 40%),radial-gradient(circle at 10% 90%,#1ed76010,transparent 40%),#0f130f}
-.auth-box{position:relative;padding:var(--space-4) var(--space-4) var(--space-4);border-radius:var(--radius-3);
-  background:linear-gradient(160deg,#1a211b 0%,#111511 100%);
-  box-shadow:0 30px 70px #000000a6,0 0 0 1px #ffffff10,0 0 80px -20px #1ed76040;
-  animation:boxIn .9s var(--card-ease,cubic-bezier(.22,1,.36,1)) .1s backwards}
-@keyframes boxIn{from{opacity:0;transform:translateY(36px) scale(.96)}to{opacity:1;transform:none}}
-/* rotating glowing border */
-.auth-box::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
-  background:conic-gradient(from var(--ang),transparent 0 62%,#1ed760 82%,#b6f55a 90%,transparent 100%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
-  animation:borderSpin 6s linear infinite}
-@keyframes borderSpin{to{--ang:360deg}}
-
-.auth-box>*{animation:authUp .7s var(--card-ease,cubic-bezier(.22,1,.36,1)) backwards}
-.auth-box>*:nth-child(1){animation-delay:.25s}.auth-box>*:nth-child(2){animation-delay:.32s}
-.auth-box>*:nth-child(3){animation-delay:.39s}.auth-box>*:nth-child(4){animation-delay:.46s}
-.auth-box>*:nth-child(5){animation-delay:.53s}.auth-box>*:nth-child(6){animation-delay:.6s}
-.auth-box h2{background:linear-gradient(90deg,#fff,#c9f9d9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.auth-box .eyebrow{color:#1ed760}
-
-/* Sign in / Register toggle */
-.auth-mode{background:#0b0e0b;border:1px solid #ffffff12;box-shadow:inset 0 2px 8px #00000080}
-.auth-mode .button{transition:background .3s,color .3s,transform .25s,box-shadow .3s}
-.auth-mode .button:not(.secondary){background:linear-gradient(135deg,#1ed760,#9cf06a);color:#08210f;box-shadow:0 6px 18px #1ed76047}
-.auth-mode .button.secondary{background:transparent;border-color:transparent;color:#9aa89e}
-.auth-mode .button.secondary:hover{color:#fff;background:#ffffff0f;transform:none}
-
-/* Inputs */
-.auth-box .field{position:relative}
-.auth-box .field label{transition:color .25s,transform .3s var(--card-ease,cubic-bezier(.22,1,.36,1))}
-.auth-box .field:focus-within label{color:#1ed760;transform:translateX(3px)}
-.auth-box .field input,.auth-box .field select{background:#0c100c;border:1px solid #2c372e;border-radius:var(--radius-3);padding:var(--space-2) var(--space-2);
-  transition:border-color .25s,box-shadow .3s,background .25s,transform .3s var(--card-ease,cubic-bezier(.22,1,.36,1))}
-.auth-box .field input:hover,.auth-box .field select:hover{border-color:#42554a}
-.auth-box .field input:focus,.auth-box .field select:focus{border-color:#1ed760;background:#101610;
-  box-shadow:0 0 0 4px #1ed76024,0 8px 24px -8px #1ed76059;transform:translateY(-2px);outline:none}
-.auth-box .field input::placeholder{transition:opacity .25s,transform .3s;color:#6c7b70}
-.auth-box .field input:focus::placeholder{opacity:.35;transform:translateX(6px)}
-/* form fields cascade in */
-.auth-box .form>*{animation:authUp .6s var(--card-ease,cubic-bezier(.22,1,.36,1)) backwards}
-.auth-box .form>*:nth-child(1){animation-delay:.55s}.auth-box .form>*:nth-child(2){animation-delay:.63s}
-.auth-box .form>*:nth-child(3){animation-delay:.71s}.auth-box .form>*:nth-child(4){animation-delay:.79s}
-.auth-box .form>*:nth-child(5){animation-delay:.87s}
-
-/* Submit button: gradient + light sweep */
-.auth-box .form>.button{position:relative;overflow:hidden;padding:var(--space-2) var(--space-2);font-size:var(--type-3);border-radius:var(--radius-3);
-  background:linear-gradient(135deg,#1ed760 0%,#9cf06a 100%);color:#06200e;box-shadow:0 10px 26px -6px #1ed76080;
-  transition:transform .3s var(--card-spring,cubic-bezier(.34,1.56,.64,1)),box-shadow .3s,filter .2s}
-.auth-box .form>.button::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(110deg,transparent 30%,#ffffff70 50%,transparent 70%);transform:translateX(-130%);transition:transform .7s var(--card-ease,cubic-bezier(.22,1,.36,1))}
-.auth-box .form>.button:hover{transform:translateY(-3px);box-shadow:0 16px 34px -6px #1ed760a6;filter:none}
-.auth-box .form>.button:hover::after{transform:translateX(130%)}
-.auth-box .form>.button:active{transform:translateY(0) scale(.97)}
-.auth-box .form>.button.secondary{background:#1c231d;color:#e8f2ea;box-shadow:none;border:1px solid #ffffff14}
-
-.auth-box .footnote{color:#7d8c80}
-
-
-
-
-/* ========================================================================== */
-/* COMPETITION POLISH LAYER — judge-facing motion, insights, realtime presence */
-/* ========================================================================== */
-:root{
-  --sw-green:#1ed760;--sw-green-2:#6df59a;--sw-violet:#8b5cf6;--sw-cyan:#39d9ff;
-  --sw-spring:cubic-bezier(.16,1,.3,1);--sw-fast:180ms;--sw-med:420ms;
-  --focus-ring:0 0 0 3px #0b0b0b,0 0 0 5px #7ef5a7;
-}
-:where(button,a,[role="button"],[role="link"],input,select,textarea):focus-visible{outline:0!important;box-shadow:var(--focus-ring);transition:box-shadow .18s var(--sw-spring)}
-.button,.cover-card,.release-tile,.artist-card,.quick-tile,.stat-card,.library-item,.work-actions>button,.studio-actions>button,.rail-card,.top-card{transition:transform .35s var(--sw-spring),box-shadow .35s var(--sw-spring),border-color .25s,background-color .25s,filter .25s;transform-style:preserve-3d}
-
-
-/* Auth: animated gradient + waveform + particles + staggered entrance */
-.auth-wrap{overflow:hidden;background:radial-gradient(circle at 25% 20%,#173b29 0,transparent 30%),#090b0a}
-.auth-show{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(125deg,#0d2419,#163d28,#202148,#0b2d22);background-size:260% 260%;animation:authGradient 14s ease-in-out infinite}
-.auth-show::before{content:"";position:absolute;width:62vmin;height:62vmin;border-radius:50%;right:-15vmin;bottom:-16vmin;background:radial-gradient(circle,#1ed7603d,transparent 65%);filter:blur(8px);animation:authOrb 9s ease-in-out infinite;z-index:-1}
-.auth-show::after{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#0008,transparent 78%);z-index:-2}
-.auth-show .brand,.auth-show .eyebrow,.auth-show h1,.auth-show p,.auth-show>.small{animation:authCopy .75s var(--sw-spring) both}
-.auth-show .eyebrow{animation-delay:.10s}.auth-show h1{animation-delay:.17s}.auth-show p{animation-delay:.24s}.auth-show>.small{animation-delay:.31s}
-.auth-panel{position:relative;background:radial-gradient(circle at 70% 15%,#1ed7600d,transparent 35%)}
-.auth-box{position:relative;padding:var(--space-4);border:1px solid #ffffff13;border-radius:var(--radius-3);background:#111512bf;box-shadow:0 30px 90px #0008;backdrop-filter:blur(22px)}
-.auth-box>*{animation:authField .62s var(--sw-spring) both}
-.auth-box>.eyebrow{animation-delay:.05s}.auth-box>h2{animation-delay:.1s}.auth-box>p{animation-delay:.15s}.auth-mode{animation-delay:.2s}
-.auth-box .form{--stagger:.06s}.auth-box .form>.field:nth-child(1){animation:authField .55s .26s var(--sw-spring) both}.auth-box .form>.field:nth-child(2){animation:authField .55s .32s var(--sw-spring) both}.auth-box .form>.field:nth-child(3){animation:authField .55s .38s var(--sw-spring) both}.auth-box .form>.field:nth-child(4){animation:authField .55s .44s var(--sw-spring) both}.auth-box .form>.field:nth-child(5){animation:authField .55s .50s var(--sw-spring) both}.auth-box .form>.button{animation:authField .55s .56s var(--sw-spring) both}
-.auth-waveform{position:absolute;left:clamp(28px,5vw,76px);right:clamp(28px,5vw,76px);bottom:7vh;height:142px;display:flex;align-items:end;justify-content:center;gap:clamp(var(--space-1),.48vw,var(--space-1));opacity:.52;z-index:-1;pointer-events:none}
-.auth-waveform i{width:clamp(3px,.42vw,7px);height:calc((22px + (var(--i) % 8)*8px)*var(--boost,1));max-height:132px;border-radius:var(--radius-pill);background:linear-gradient(to top,#1ed760,#77f6a2,#d7ffe3);transform-origin:bottom;animation:waveIdle calc(1.05s + (var(--i) % 6)*.12s) ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.05s);box-shadow:0 0 22px #1ed76025}
-.auth-waveform.typing i{animation:waveType .42s var(--sw-spring) both,waveIdle calc(1.05s + (var(--i) % 6)*.12s) .42s ease-in-out infinite alternate}
-.note-particles{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
-.note-particles span{position:absolute;left:calc(4% + (var(--n)*7%));bottom:-12%;font-size:calc(15px + (var(--n)%4)*5px);color:#9cffba;opacity:0;filter:drop-shadow(0 0 9px #1ed76077);animation:floatNote calc(8s + (var(--n)%6)*1.2s) calc(var(--n)*-.9s) linear infinite}
-@keyframes authGradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-@keyframes authOrb{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-8vmin,-5vmin,0) scale(1.16)}}
-@keyframes authCopy{from{opacity:0;transform:translateY(26px);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
-@keyframes authField{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
-@keyframes waveIdle{from{transform:scaleY(.48);opacity:.45}to{transform:scaleY(1);opacity:1}}
-@keyframes waveType{0%{transform:scaleY(.55)}45%{transform:scaleY(1.55)}100%{transform:scaleY(1)}}
-@keyframes floatNote{0%{transform:translate3d(0,0,0) rotate(-12deg) scale(.8);opacity:0}10%{opacity:.45}55%{transform:translate3d(22px,-55vh,0) rotate(12deg) scale(1.1);opacity:.32}100%{transform:translate3d(-12px,-112vh,0) rotate(-8deg) scale(.8);opacity:0}}
-
-/* Route transition */
-#app{transition:opacity .24s ease,transform .34s var(--sw-spring),filter .24s ease}
-#app.route-enter{opacity:.25;transform:translateY(8px);filter:blur(2px)}
-
-/* Home hero hue shift */
-.workspace-hero,.hero{background-size:180% 180%!important;animation:heroHue 14s ease-in-out infinite}
-@keyframes heroHue{0%,100%{background-position:0% 40%;filter:hue-rotate(0deg)}50%{background-position:100% 60%;filter:hue-rotate(14deg)}}
-
-/* Toast spring */
-.toast{display:flex;align-items:center;gap:var(--space-1);opacity:0;transform:translate3d(24px,-18px,0) scale(.9);transition:transform .52s var(--sw-spring),opacity .22s ease;border-radius:var(--radius-3)!important;box-shadow:0 20px 60px #0008!important}.toast.show{opacity:1;transform:none}.toast-mark{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#1ed760;color:#06170b;font-weight:900}.toast.error .toast-mark{background:#ff8f9e;color:#30080e}
-
-/* Playing indicators + player visualizer + hover progress ring */
-.track.playing{background:linear-gradient(90deg,#1ed76013,transparent 60%);box-shadow:inset 3px 0 #1ed760}.track.playing::after{content:"";position:absolute;inset:3px;border-radius:var(--radius-2);pointer-events:none;animation:nowPulse 1.8s ease-in-out infinite}.track{position:relative}
-@keyframes nowPulse{0%,100%{box-shadow:0 0 0 0 #1ed76000}50%{box-shadow:0 0 0 2px #1ed7602b}}
-.mini-visualizer{height:24px;width:20px;display:flex;gap:var(--space-1);align-items:center;justify-content:center}.mini-visualizer i{width:2px;height:28%;border-radius:var(--radius-2);background:#1ed760;animation:viz .58s ease-in-out infinite alternate}.mini-visualizer i:nth-child(2){animation-duration:.42s}.mini-visualizer i:nth-child(3){animation-duration:.71s}.mini-visualizer i:nth-child(4){animation-duration:.49s}#soundwave-player:has(audio:paused) .mini-visualizer i,.idle-playbar .mini-visualizer i{animation-play-state:paused;height:16%}
-@keyframes viz{to{height:95%}}
-.player-main-play{position:relative;isolation:isolate}.player-main-play::before{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(#1ed760 0 0,transparent 0);z-index:-1;opacity:0;transition:opacity .2s;animation:playRingOut .55s ease both}.player-main-play:hover::before{opacity:1;animation:playRing .65s ease forwards}
-@keyframes playRing{from{background:conic-gradient(#1ed760 0deg,transparent 0)}to{background:conic-gradient(#1ed760 360deg,transparent 0)}}@keyframes playRingOut{to{opacity:0}}
-
-/* Heart burst */
-.heart-btn{position:relative}.heart-burst{position:absolute;inset:50% auto auto 50%;pointer-events:none}.heart-burst i{position:absolute;color:#1ed760;font-style:normal;font-size:var(--type-1);animation:heartPop .72s var(--sw-spring) forwards}.heart-burst i:nth-child(1){--x:-28px;--y:-26px}.heart-burst i:nth-child(2){--x:25px;--y:-31px}.heart-burst i:nth-child(3){--x:-34px;--y:3px}.heart-burst i:nth-child(4){--x:31px;--y:5px}.heart-burst i:nth-child(5){--x:0px;--y:-42px}@keyframes heartPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.2)}}
-
-/* Listening stats + weekly mix */
-.insights-panel,.artist-analytics,.weekly-mix{margin:var(--space-3) 0;border:1px solid #ffffff13;border-radius:var(--radius-3);background:linear-gradient(145deg,#1a1d1b,#111311);box-shadow:0 20px 55px #0004;overflow:hidden}.insights-panel{padding:var(--space-3)}.insights-panel .section-heading{margin:0 0 var(--space-2)}.insight-grid{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr)) minmax(260px,1.7fr);gap:var(--space-1)}.insight-number,.insight-chart{min-height:122px;border-radius:var(--radius-3);background:#ffffff08;border:1px solid #ffffff0d;padding:var(--space-2)}.insight-number strong{font:800 clamp(28px,3vw,42px) Outfit;display:block;letter-spacing:-1px}.insight-number span{display:block;color:#9da59f;font-size:var(--type-1);margin-top:var(--space-1)}.mini-bars{width:100%;height:90px}.mini-bars rect{fill:#1ed760}.mini-bars text{fill:#8f9791;font:10px DM Sans}.insight-lists{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-top:var(--space-2)}.insight-lists>div{background:#151715;border:1px solid #ffffff0c;border-radius:var(--radius-3);padding:var(--space-2)}.insight-lists h3{font:700 14px Outfit;margin:0 0 var(--space-1)}.insight-lists button{display:grid;grid-template-columns:26px 1fr auto;gap:var(--space-1);align-items:center;width:100%;border:0;background:transparent;color:#f5f5f5;text-align:left;padding:var(--space-1);border-radius:var(--radius-2)}.insight-lists button:hover{background:#ffffff0a}.insight-lists button b{color:#6f7871}.insight-lists button small{color:#8c948e}.weekly-mix{padding:var(--space-2);display:flex;align-items:center;gap:var(--space-2);background:radial-gradient(circle at 90% 30%,#6d28d933,transparent 38%),linear-gradient(135deg,#24183f,#121716)}.weekly-cover{width:130px;aspect-ratio:1;border-radius:var(--radius-3);flex:0 0 auto;display:grid;place-items:center;background:linear-gradient(145deg,#1ed760,#7856ff);box-shadow:0 18px 44px #0008;transform:rotate(-2deg)}.weekly-cover span{font:900 64px Outfit;line-height:.75;color:#06140b}.weekly-cover small{font:900 11px Outfit;letter-spacing:3px;color:#06140b}.weekly-mix h2{font:800 clamp(24px,3vw,38px) Outfit;margin:var(--space-1) 0}.weekly-mix p{color:#b8c1ba;max-width:650px}.weekly-art{background:linear-gradient(145deg,#1ed760,#7758ff)!important}.library-item.weekly{border:1px solid #1ed76033}
-
-/* Artist analytics */
-.artist-analytics{padding:var(--space-3)}.artist-analytics .section-heading{margin:0 0 var(--space-2)}.artist-analytics-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:var(--space-1)}.analytics-chart,.top-listeners,.royalty-calc{background:#ffffff08;border:1px solid #ffffff0d;border-radius:var(--radius-3);padding:var(--space-2);min-height:160px}.analytics-chart>strong,.royalty-calc>strong{display:block;font:800 32px Outfit}.analytics-chart>span,.royalty-calc>small{color:#909a92;font-size:var(--type-1)}.sparkline{width:100%;height:88px;margin-top:var(--space-1)}.sparkline polyline{stroke:#1ed760;stroke-width:3;filter:drop-shadow(0 0 5px #1ed76055)}.top-listeners h3,.royalty-calc h3{margin:0 0 var(--space-1);font:700 14px Outfit}.top-listeners>div{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:var(--space-1);padding:var(--space-1) 0}.top-listeners small{color:#929a94}.member-avatar{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#2f3a33;color:#bdf7ce;font-size:var(--type-1);font-weight:800}
-
-/* Realtime friend feed + collaborative presence */
-.friend-now button{width:100%;display:grid;grid-template-columns:11px 1fr;gap:var(--space-1);border:0;background:transparent;color:#fff;text-align:left;padding:var(--space-1);border-radius:var(--radius-2)}.friend-now button:hover{background:#ffffff09}.friend-now button span:last-child{min-width:0}.friend-now button strong,.friend-now button small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.friend-now button small{color:#8f9891;margin-top:var(--space-1)}.presence-dot{width:8px;height:8px;border-radius:50%;background:#1ed760;box-shadow:0 0 0 4px #1ed7601f;animation:presencePulse 1.8s infinite}.friend-feed>div{display:grid;grid-template-columns:30px 1fr;gap:var(--space-1);padding:var(--space-1) 0}.friend-feed p{margin:0;font-size:var(--type-1);line-height:1.35}.friend-feed p small{display:block;color:#79827b;margin-top:var(--space-1)}.playlist-presence{display:flex;align-items:center;margin-top:var(--space-1);min-height:30px}.presence-label{font-size:var(--type-1);color:#b7c0ba;margin-right:var(--space-1)}.presence-avatar{display:grid;place-items:center;width:29px;height:29px;margin-left:-5px;border:2px solid #191919;border-radius:50%;background:linear-gradient(145deg,#315f43,#795ab8);font-size:var(--type-1);font-weight:900;box-shadow:0 0 0 1px #ffffff12}@keyframes presencePulse{50%{box-shadow:0 0 0 7px #1ed76000}}
-
-/* Podcast resume progress */
-.episode-progress{height:3px;background:#3a3d3a;border-radius:var(--radius-2);overflow:hidden;margin-top:var(--space-1);max-width:520px}.episode-progress span{display:block;height:100%;border-radius:inherit;background:#1ed760}
-
-/* Recent searches */
-.recent-searches{display:flex;align-items:center;gap:var(--space-1);flex-wrap:wrap;margin:-5px 0 var(--space-2)}.recent-searches>span{color:#929a94;font-size:var(--type-1)}.recent-searches button{border:1px solid #ffffff17;border-radius:var(--radius-pill);background:#242624;color:#dce2dd;padding:var(--space-1) var(--space-1);font-size:var(--type-1)}.recent-searches button:hover{border-color:#1ed760;background:#1ed76012}.kbd-active{box-shadow:inset 0 0 0 2px #1ed760!important}
-
-/* Skeleton async overlay */
-.async-skeleton{position:absolute;inset:0;z-index:20;padding:var(--space-3);background:linear-gradient(180deg,#171917ee,#111311f5);backdrop-filter:blur(3px);pointer-events:none}.skeleton-line,.skeleton-card{border-radius:var(--radius-2);background:linear-gradient(90deg,#242824 20%,#343934 40%,#242824 60%);background-size:220% 100%;animation:shimmer 1.25s linear infinite}.skeleton-line{height:18px;margin:0 0 var(--space-1)}.skeleton-line.big{height:42px;width:55%;margin-bottom:var(--space-3)}.skeleton-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-2)}.skeleton-card{aspect-ratio:1}.main{position:relative}@keyframes shimmer{to{background-position:-220% 0}}
-
-/* Onboarding */
-.onboarding{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:var(--space-2);background:#000b;backdrop-filter:blur(14px);animation:tourIn .3s ease both}.onboarding-card{width:min(520px,100%);padding:var(--space-4);border:1px solid #ffffff1f;border-radius:var(--radius-3);background:radial-gradient(circle at 70% 0,#1ed76018,transparent 36%),#171917;box-shadow:0 35px 120px #000c;animation:tourCard .6s var(--sw-spring) both}.onboarding-card h2{font:850 34px Outfit;margin:var(--space-1) 0}.onboarding-card p{color:#aab3ac;line-height:1.6}.onboarding-illustration{position:relative;display:grid;place-items:center;width:120px;height:120px;margin-bottom:var(--space-2);border-radius:var(--radius-3);background:linear-gradient(145deg,#1ed760,#7257ff);font-size:var(--type-7);color:#07130a;overflow:hidden}.onboarding-illustration i{position:absolute;border:2px solid #07130a55;border-radius:50%;animation:tourRings 3s infinite}.onboarding-illustration i:nth-child(1){width:45px;height:45px}.onboarding-illustration i:nth-child(2){width:75px;height:75px;animation-delay:.3s}.onboarding-illustration i:nth-child(3){width:105px;height:105px;animation-delay:.6s}.onboarding-dots{display:flex;gap:var(--space-1);margin:var(--space-2) 0}.onboarding-dots span{width:7px;height:7px;border-radius:var(--radius-3);background:#4b514d;transition:.3s}.onboarding-dots span.active{width:24px;background:#1ed760}@keyframes tourIn{from{opacity:0}to{opacity:1}}@keyframes tourCard{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}@keyframes tourRings{0%{transform:scale(.65);opacity:0}40%{opacity:.6}100%{transform:scale(1.28);opacity:0}}
-
-/* Friendly generic empty/error surfaces */
-.empty,.empty-state,.library-empty-card{position:relative;overflow:hidden}.empty::before,.empty-state::before,.library-empty-card::before{content:"♫";display:grid;place-items:center;width:42px;height:42px;margin:0 auto var(--space-1);border-radius:50%;background:#1ed76012;color:#1ed760;font:800 20px Outfit}
-
-/* Responsive intent: mobile, tablet, desktop */
-
-
-
-
-.not-found{min-height:58vh;display:grid;grid-template-columns:minmax(220px,.8fr) 1fr;align-items:center;gap:var(--space-4);padding:var(--space-4);border:1px solid #ffffff12;border-radius:var(--radius-3);background:radial-gradient(circle at 18% 45%,#7c3aed2c,transparent 34%),#151715}.not-found-code{font:900 clamp(110px,18vw,240px) Outfit;letter-spacing:-12px;line-height:.8;color:#1ed760;text-shadow:18px 18px 0 #7257ff33;animation:glitchFloat 3.2s ease-in-out infinite}.not-found h2{font:850 clamp(34px,5vw,64px) Outfit;margin:var(--space-1) 0}.not-found p{color:#aeb7b0;max-width:520px;line-height:1.7;margin-bottom:var(--space-3)}@keyframes glitchFloat{50%{transform:translateY(-8px) rotate(-1deg)}}
-
-
-
-/* ===== Responsive system: consolidated to three width breakpoints ===== */
-
-/* ===== STRUCTURE: overflow safety + role/navigation clarity ===== */
-html,body{max-width:100%;overflow-x:hidden}
-:where(.workspace,.app-top,.app-top-left,.top-actions,.main,.dashboard-content,.page-body,.hero,.workspace-hero,.artist-profile-hero,.profile-hero,.track,.tracks-head,.grid,.release-grid,.cover-grid,.artist-grid,.quick-grid,.profile-grid,.work-actions,.studio-actions,.stat-ribbon,.search-top,.podcast-detail-head,.podcast-studio-row,.studio-album-row,.custom-playbar,.player-song,.player-center,.player-right)>*{min-width:0}
-:where(.app-top,.custom-playbar,.mobile-dock,.toast,.song-action-popover,.onboarding,dialog){max-width:100vw}
-.role-badge{display:inline-flex;align-items:center;min-height:var(--space-4);padding:0 var(--space-2);border:1px solid var(--edge);border-radius:var(--radius-pill);background:var(--panel2);color:var(--text);font-size:var(--type-1);font-weight:800;white-space:nowrap}
-.admin-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-2);margin-block:var(--space-3)}
-.admin-summary button{display:grid;gap:var(--space-1);padding:var(--space-3);border:1px solid var(--edge);border-radius:var(--radius-3);background:var(--panel2);color:var(--text);text-align:left}
-.admin-summary small{font-size:var(--type-1);color:var(--muted)}
-.admin-summary strong{font-size:var(--type-6)}
-.page-search.mobile-search{display:none}
-.library-filters{display:none!important}
-@media (max-width:700px){
-  html,body{width:100%;max-width:100%;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  #app{width:100%;max-width:100%;min-height:100dvh;overflow:visible!important}
-  body{position:static!important;height:auto!important;min-height:100dvh;overscroll-behavior-y:auto;touch-action:pan-y}
-  .app-top{height:var(--space-5);padding:0 var(--space-1);gap:var(--space-1)}
-  .app-top-left{flex:1;min-width:0;gap:var(--space-1)}
-  .top-logo{width:var(--space-4);height:var(--space-4);flex:0 0 var(--space-4)}
-  .history-btn{width:var(--space-4);height:var(--space-4);min-width:var(--space-4);min-height:var(--space-4)}
-  .app-top-left .history-btn{display:none}
-  .app-top .global-search{display:none}
-  .top-actions{margin-left:auto;gap:var(--space-1)}
-  .role-badge{max-width:112px;overflow:hidden;text-overflow:ellipsis}
-
-  .workspace,.workspace:has(.library-collapsed),body.rail-hidden .workspace{display:block;width:100%;max-width:100%;height:auto!important;min-height:0!important;padding:0;overflow:visible!important}
-  .workspace .sidebar,.workspace .context-rail{display:none!important}
-  /* Mobile owns its own vertical scroll container. This avoids desktop fixed-height rules trapping the page. */
-  .workspace .main{
-    display:block;
-    width:100%;
-    max-width:100%;
-    height:calc(100dvh - var(--space-5) - 69px)!important;
-    min-height:0!important;
-    max-height:none!important;
-    border-radius:0;
-    overflow-x:hidden!important;
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-y:contain;
-    touch-action:pan-y;
-    scrollbar-width:none;
+/* ====== SUPABASE CONNECTION ====== */
+const SUPABASE_URL = 'https://azqbzyxknfdwfuqevbrd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_OcR9EJnNuPqBWtZrmNVUdA_tt_CMCmR';
+const configured = Boolean(SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes('YOUR_PROJECT') && !SUPABASE_KEY.includes('YOUR_PUBLISHABLE_KEY'));
+const db = configured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
+}) : null;
+/* ====== APP ====== */
+
+
+const $ = (selector) => document.querySelector(selector);
+const escapeHtml = (v = '') => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const state = { user:null, profile:null, artist:null, admin:false, page:'home', songs:[], artists:[], favorites:[], playlists:[], playlistSongs:[], playlistCollaborators:[], albums:[], genres:[], plans:[], subscriptions:[], podcasts:[], episodes:[], myShows:[], history:[], members:[], selectedShow:null, selectedPlaylist:null, selectedArtist:null, podcastHistory:[], followers:[], following:[], player:null, playerToken:0, loading:false, error:'',coverUrls:{},subscriptionMembers:[],sharedMemberships:[],paymentRows:[],uiFilter:'all',libraryExpanded:true,navStack:[],navForward:[],songMenu:null, offlineDownloads:[], entitlement:null, socialSource:'user_follow', liked:[], likedIds:new Set(), likesAvailable:true, selectedAlbum:null, searchQuery:'', searchGenre:null, searchTab:'all', libFilter:'all', railTab:'now', hist:{i:0,max:0}, routeReady:false, installEvent:null, tint:null, focusSearch:null, libQuery:'', libSearchOpen:false };
+Object.assign(state, { historyError: '', historyWriteError: '', episodeTitles: {}, likesMode: 'remote', artistFollowers: [], followerCounts: {}, socialProfiles: {}, socialRpc: { counts: false, mine: false, profiles: false }, profileStats:null, studioStats:null, royaltySummary:null, adminData:null, subscriptionRequests:[], lyricsCache:{}, profilePhotoUrl:null, ownedSongs:[], adminTab:'accounts', playlistInviteHandled:false });
+Object.assign(state,{insightHistory:[],listeningStats:null,topWeekSongs:[],friendActivity:[],friendNow:[],artistThirtyDay:[],artistTopListeners:[],recentSearches:[],playlistPresence:[],competitionLoaded:false});
+const nice = (n) => Number.isFinite(Number(n)) ? `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}` : '—';
+const val = (id) => document.getElementById(id)?.value?.trim();
+const opts = (rows,key,label) => rows.map(x=>`<option value="${escapeHtml(x[key])}">${escapeHtml(x[label])}</option>`).join('');
+// ===================================================================
+// SoundWave "Spotify-style" upgrade layer
+// ===================================================================
+const esc = escapeHtml;
+const PREF_KEY = 'soundwave-prefs-v1';
+const prefs = (() => {
+  const d = { volume: .85, shuffle: false, repeat: 'off', muted: false, railHidden: false };
+  try { return { ...d, ...JSON.parse(localStorage.getItem(PREF_KEY) || '{}') }; } catch { return d; }
+})();
+const savePrefs = () => { try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch {} };
+const shuffled = (a) => { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+const yearOf = (d) => (d ? String(d).slice(0, 4) : '');
+const totalTime = (songs) => { const s = songs.reduce((t, x) => t + (Number(x.duration_seconds) || 0), 0); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h ? `${h} hr ${m} min` : `${Math.max(1, m)} min`; };
+const TINTS = ['#4a3b8f', '#1f4e79', '#7a4d8f', '#2f6f6a', '#8f2f6b', '#7a2a3a', '#2c6e3a', '#3a4f8f', '#8a3a55', '#5a4a7a', '#6b6b2a', '#3a6f8a'];
+const tintFor = (n = 0) => TINTS[Math.abs(Number(n) || 0) % TINTS.length];
+const BROWSE_COLORS = ['#dc148c', '#006450', '#8400e7', '#1e3264', '#e8115b', '#477d95', '#e13300', '#7358ff', '#148a08', '#bc5900', '#503750', '#0d73ec'];
+
+// Resolve artwork saved in several formats used by older SoundWave builds.
+// New uploads store a Storage object path, while some seed/legacy rows contain
+// a full URL or a path prefixed with "covers/".
+function normalizedCoverPath(value){
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  if(/^https?:\/\//i.test(raw)){
+    try{
+      const u=new URL(raw);
+      const markers=['/storage/v1/object/public/covers/','/storage/v1/object/sign/covers/','/storage/v1/object/authenticated/covers/'];
+      for(const marker of markers){
+        const at=u.pathname.indexOf(marker);
+        if(at>=0)return decodeURIComponent(u.pathname.slice(at+marker.length));
+      }
+      return raw;
+    }catch{return raw;}
   }
-  .workspace .main::-webkit-scrollbar{display:none}
-  .dashboard-content{width:100%;max-width:100%;min-height:max-content;padding:var(--space-2) var(--space-2) calc(69px + var(--space-3) + env(safe-area-inset-bottom,0))}
-  body:has(#soundwave-player) .dashboard-content{padding-bottom:calc(69px + 72px + var(--space-3) + env(safe-area-inset-bottom,0))}
-  .page-intro{margin:0 0 var(--space-2)}
-  .page-title{font-size:var(--type-5);line-height:1.15}
-
-  .page-search.mobile-search{display:flex;width:100%;max-width:100%;margin-bottom:var(--space-2)}
-  .recent-searches{max-width:100%;overflow-x:auto;flex-wrap:nowrap}
-
-  .grid,.form.two,.insight-lists,.artist-analytics-grid,.search-top,.profile-grid,.work-actions,.studio-actions,.royalty-panel,.admin-summary{grid-template-columns:1fr!important}
-  .release-grid,.cover-grid,.artist-grid,.quick-grid,.studio-albums,.skeleton-grid,.insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:var(--space-1)}
-  .shelf{gap:var(--space-1);max-width:100%;overflow-x:auto}
-
-  .hero,.workspace-hero,.artist-profile-hero,.profile-hero,.coll-hero{width:100%;max-width:100%;min-height:0;padding:var(--space-3);border-radius:var(--radius-3);flex-direction:column;align-items:flex-start;gap:var(--space-2);overflow:hidden}
-  .hero h2,.workspace-hero h2,.artist-profile-hero h1,.profile-hero h2{font-size:var(--type-6);line-height:1.05;letter-spacing:-1px}
-  .hero p,.workspace-hero p{font-size:var(--type-2)}
-  .hero-art,.workspace-hero .hero-vinyl{display:none!important}
-  .artist-profile-hero{text-align:left}
-  .artist-profile-avatar{width:96px;height:96px;font-size:var(--type-7)}
-
-  .tracks{width:100%;max-width:100%;overflow:hidden}
-  .tracks-head{display:none!important}
-  .track,.tracks.no-album .track{width:100%;max-width:100%;grid-template-columns:var(--space-4) minmax(0,1fr) var(--space-4) var(--space-4);gap:var(--space-1);padding:var(--space-1);min-height:64px}
-  .track .t-album,.track .t-time{display:none!important}
-  .track .t-title{min-width:0}
-  .track .t-text{min-width:0}
-  .track .t-text strong,.track .t-text small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .track .t-like,.track .t-more{width:var(--space-4);min-width:var(--space-4)}
-  .track .heart-btn,.track .song-more,.track .t-remove{opacity:1}
-  .t-play{display:none!important}
-
-  dialog,.sw-modal,.wizard-dialog{width:calc(100vw - var(--space-4));max-width:calc(100vw - var(--space-4));max-height:calc(100dvh - var(--space-4));margin:auto;border-radius:var(--radius-3);overflow:auto}
-  dialog form,.modal-body,.upload-step{min-width:0;max-width:100%}
-  .dialog-actions{display:flex;flex-wrap:wrap;gap:var(--space-1)}
-  .dialog-actions .button{flex:1 1 120px;white-space:normal}
-
-  .custom-playbar{left:0;right:0;bottom:69px;width:100vw;max-width:100vw;height:auto;min-height:72px;padding:var(--space-1) var(--space-2);grid-template-columns:minmax(0,1fr) auto;gap:var(--space-1);overflow:hidden}
-  .player-song{max-width:100%;gap:var(--space-1)}
-  .player-thumb{width:var(--space-5);height:var(--space-5);flex:0 0 var(--space-5)}
-  .player-song-text{min-width:0}
-  .player-center{display:contents}
-  .player-center .play-controls{gap:var(--space-1)}
-  .player-center .play-controls #sw-prev,.player-center .play-controls .mode,.player-right,.player-timeline{display:none!important}
-  .player-main-play{width:var(--space-4);height:var(--space-4)}
-
-  .mobile-dock{display:flex!important;position:fixed;left:0;right:0;bottom:0;width:100vw;max-width:100vw;height:69px;z-index:65;align-items:center;justify-content:space-around;padding:var(--space-1);background:#101611f5;border-top:1px solid var(--edge)}
-  .mobile-dock button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--radius-1);padding:var(--radius-1);border:0;background:transparent;color:var(--muted);font-size:var(--type-1)}
-  .mobile-dock button.active{color:#baffcc}
-  .mobile-dock small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-1)}
-
-  .auth-wrap{display:block;width:100%;max-width:100%;overflow:hidden}
-  .auth-show{min-height:220px;padding:var(--space-3);overflow:hidden}
-  .auth-show h1{font-size:var(--type-7);letter-spacing:-2px}
-  .auth-panel{padding:var(--space-2)}
-  .auth-box{width:100%;max-width:100%;padding:var(--space-3);border-radius:var(--radius-3)}
-  .toast{left:var(--space-2);right:var(--space-2);top:var(--space-2);width:auto;max-width:calc(100vw - var(--space-4))}
-  .song-action-popover{max-width:calc(100vw - var(--space-4))}
+  return raw.replace(/^\/+/, '').replace(/^covers\//i,'');
+}
+async function resolveCoverUrl(value){
+  const raw=String(value||'').trim();
+  if(!raw)return null;
+  // External/legacy URLs that are not Supabase Storage URLs can be used directly.
+  if(/^https?:\/\//i.test(raw) && !/\/storage\/v1\/object\//i.test(raw))return raw;
+  const path=normalizedCoverPath(raw);
+  if(/^https?:\/\//i.test(path))return path;
+  const signed=await db.storage.from('covers').createSignedUrl(path,3600);
+  if(!signed.error && signed.data?.signedUrl)return signed.data.signedUrl;
+  // Public buckets do not need a signed URL. This fallback also makes migrations
+  // between private/public cover buckets less fragile.
+  const pub=db.storage.from('covers').getPublicUrl(path);
+  return pub.data?.publicUrl||null;
 }
 
-@media (min-width:701px) and (max-width:1180px){
-  .workspace{grid-template-columns:220px minmax(0,1fr);max-width:100%;padding:0 var(--space-1)}
-  .workspace:has(.library-collapsed){grid-template-columns:72px minmax(0,1fr)}
-  .workspace .context-rail{display:none!important}
-  .workspace .sidebar{height:calc(100dvh - 158px)}
-  .dashboard-content{padding:var(--space-3)}
-  .global-search{width:min(48vw,440px)}
-  .release-grid,.cover-grid,.artist-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .grid,.form.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero,.workspace-hero{padding:var(--space-4)}
-  .hero-art,.workspace-hero .hero-vinyl{max-width:28vw}
-  .custom-playbar{grid-template-columns:minmax(0,1fr) minmax(280px,1.4fr);max-width:100vw}
-  .player-right{display:none}
-  .tracks-head,.track,.tracks.no-album .tracks-head,.tracks.no-album .track{grid-template-columns:36px minmax(0,1fr) 40px 52px 56px;gap:var(--space-1);padding-inline:var(--space-1)}
-  .t-album,.tracks-head .t-album{display:none}
+// ---------- Routing (URL <-> state) so refresh, deep links and the browser Back button all work ----------
+const ROUTES = ['not-found','home', 'listener-dashboard', 'artist-dashboard', 'admin-dashboard', 'music', 'artists', 'artist-detail', 'album-detail', 'liked-artists', 'liked-songs', 'followers', 'profile', 'playlists', 'history', 'downloads', 'podcasts', 'podcast-studio', 'plans', 'studio', 'admin'];
+function pageToHash() {
+  const p = state.page;
+  const id = p === 'playlists' ? state.selectedPlaylist : p === 'artist-detail' ? state.selectedArtist : p === 'album-detail' ? state.selectedAlbum : p === 'podcasts' ? state.selectedShow : null;
+  return `#/${p}${id ? '/' + id : ''}`;
+}
+function applyHash(hash) {
+  const m = /^#\/([a-z-]+)(?:\/(\d+))?$/.exec(hash || '');
+  if (!m || !ROUTES.includes(m[1])) { if(hash){ state.page='not-found'; return true; } return false; }
+  const [, page, id] = m;
+  if (!pageAllowed(page)) return false;
+  state.page = page;
+  state.selectedPlaylist = page === 'playlists' && id ? Number(id) : null;
+  state.selectedArtist = page === 'artist-detail' && id ? Number(id) : null;
+  state.selectedAlbum = page === 'album-detail' && id ? Number(id) : null;
+  state.selectedShow = page === 'podcasts' && id ? Number(id) : null;
+  return true;
+}
+async function routeLoad() {
+  if (state.page === 'playlists' && state.selectedPlaylist) {
+    if (!state.playlists.some((p) => p.playlist_id === state.selectedPlaylist)) { state.selectedPlaylist = null; render(); return; }
+    await playlistDetail();
+  } else if (state.page === 'podcasts' && state.selectedShow) {
+    await showDetail();
+  } else render();
+}
+function afterRender() {
+  document.body.dataset.page = state.page;
+  document.body.classList.toggle('rail-hidden', !!prefs.railHidden);
+  if (!state.user) return;
+  syncHearts(); markPlaying();
+  const h = pageToHash();
+  if (!state.routeReady) { state.routeReady = true; window.history.replaceState({ i: state.hist.i }, '', h); }
+  else if (location.hash !== h) { state.hist.i++; state.hist.max = state.hist.i; window.history.pushState({ i: state.hist.i }, '', h); }
+}
+window.addEventListener('popstate', (e) => {
+  if (!state.user || !configured) return;
+  state.hist.i = e.state?.i ?? 0;
+  if (applyHash(location.hash)) action(routeLoad);
+});
+function openPlaylist(id) { state.page = 'playlists'; state.selectedPlaylist = Number(id); action(playlistDetail); }
+function openShow(id) { state.page = 'podcasts'; state.selectedShow = Number(id); action(showDetail); }
+
+// ---------- Catalog helpers ----------
+let _albumCache = { src: null, val: [] };
+function catalogAlbums() {
+  if (_albumCache.src === state.songs) return _albumCache.val;
+  const m = new Map();
+  for (const s of state.songs) {
+    const a = s.album; if (!a) continue;
+    if (!m.has(a.album_id)) m.set(a.album_id, { album_id: a.album_id, title: a.album_title, description: a.description, release_type: a.release_type || 'Album', cover_path: a.cover_path, release_date: a.release_date, artist: a.artist, songs: [] });
+    m.get(a.album_id).songs.push(s);
+  }
+  for (const al of m.values()) al.songs.sort((x, y) => (x.track_number ?? 1e9) - (y.track_number ?? 1e9) || x.song_id - y.song_id);
+  _albumCache = { src: state.songs, val: [...m.values()] };
+  return _albumCache.val;
+}
+const albumById = (id) => catalogAlbums().find((a) => Number(a.album_id) === Number(id));
+const songsByArtist = (artistId) => state.songs.filter((s) => Number(s.album?.artist?.artist_id) === Number(artistId));
+const songById = (id) => state.songs.find((s) => Number(s.song_id) === Number(id));
+const ids = (songs) => songs.map((s) => s.song_id);
+
+// ---------- Liked songs ----------
+const isLiked = (id) => state.likedIds.has(Number(id));
+function heartBtn(id, cls = '') {
+  const on = isLiked(id);
+  return `<button type="button" class="heart-btn ${cls} ${on ? 'on' : ''}" data-like="${id}" aria-pressed="${on}" aria-label="${on ? 'Remove from Liked Songs' : 'Save to Liked Songs'}" title="${on ? 'Remove from Liked Songs' : 'Save to Liked Songs'}">${icon('heart')}</button>`;
+}
+// Likes are saved to your account (Supabase table saved_song). If that table has not been installed yet we
+// fall back to saving on this device, so the heart ALWAYS works — and the likes move to your account later.
+const likeKey = () => `soundwave-likes-${state.user?.id || 'anon'}`;
+const readLocalLikes = () => { try { return JSON.parse(localStorage.getItem(likeKey()) || '[]').map(Number).filter(Boolean); } catch { return []; } };
+const writeLocalLikes = (list) => { try { localStorage.setItem(likeKey(), JSON.stringify(list)); } catch {} };
+const isMissingTable = (e) => /does not exist|schema cache|PGRST20\d|42P01|undefined_table/i.test(`${e?.code || ''} ${e?.message || ''}`);
+const likesInFlight = new Set();
+function applyLike(id, on) {
+  state.likedIds[on ? 'add' : 'delete'](id);
+  state.liked = state.liked.filter((x) => Number(x.song_id) !== id);
+  if (on) state.liked.unshift({ song_id: id, liked_at: new Date().toISOString() });
+  syncHearts(); renderLibraryList();
+  if (state.page === 'liked-songs') render();
+}
+async function toggleLike(id) {
+  id = Number(id);
+  if (!id || likesInFlight.has(id)) return;
+  likesInFlight.add(id);
+  const wasLiked = isLiked(id);
+  applyLike(id, !wasLiked); // instant feedback; rolled back below if saving fails
+  try {
+    if (state.likesMode === 'remote') {
+      try {
+        if (wasLiked) check(await db.from('saved_song').delete().eq('user_id', state.user.id).eq('song_id', id));
+        else { const r = await db.from('saved_song').insert({ user_id: state.user.id, song_id: id }); if (r.error && r.error.code !== '23505') throw r.error; }
+      } catch (e) {
+        if (!isMissingTable(e)) throw e;
+        state.likesMode = 'local';
+        toast('Saved on this device. Run sql/RUN_ME_likes_and_followers.sql in Supabase to sync likes to your account.');
+      }
+    }
+    if (state.likesMode === 'local') writeLocalLikes(state.liked.map((x) => Number(x.song_id)));
+    if(!wasLiked)burstHearts(id);toast(wasLiked ? 'Removed from Liked Songs' : 'Added to Liked Songs');
+  } catch (e) {
+    applyLike(id, wasLiked);
+    throw e;
+  } finally { likesInFlight.delete(id); }
+}
+async function migrateLocalLikes(uid) {
+  const local = readLocalLikes();
+  if (!local.length) return;
+  const have = new Set(state.liked.map((x) => Number(x.song_id)));
+  let moved = 0;
+  for (const sid of local) {
+    if (have.has(sid)) continue;
+    const r = await db.from('saved_song').insert({ user_id: uid, song_id: sid });
+    if (!r.error || r.error.code === '23505') { moved++; state.liked.push({ song_id: sid, liked_at: new Date().toISOString() }); state.likedIds.add(sid); }
+  }
+  try { localStorage.removeItem(likeKey()); } catch {}
+  if (moved) console.info(`Moved ${moved} on-device likes to your account.`);
+}
+const likesNotice = () => (state.likesMode === 'local' ? `<div class="notice">These likes are saved on this device only. To keep them on your account (and every device), run <code>sql/RUN_ME_likes_and_followers.sql</code> once in the Supabase SQL Editor, then refresh — your likes will move over automatically.</div>` : '');
+
+// ---------- Following artists ----------
+// "Follow" is stored in favorite_artist (the same table the app already used for saved artists).
+const isFollowing = (artistId) => state.favorites.some((f) => Number(f.artist_id) === Number(artistId));
+const isOwnArtist = (a) => Boolean(a && state.user && a.user_id && String(a.user_id) === String(state.user.id));
+function followerText(artistId) {
+  const n = state.followerCounts?.[Number(artistId)];
+  return n == null ? '' : `${n} ${n === 1 ? 'follower' : 'followers'}`;
+}
+function followBtn(a, cls = '') {
+  if (!a || isOwnArtist(a)) return '';
+  const on = isFollowing(a.artist_id);
+  return `<button type="button" class="follow-btn ${cls} ${on ? 'on' : ''}" data-fav="${a.artist_id}" aria-pressed="${on}">${on ? 'Following' : 'Follow'}</button>`;
+}
+const followInFlight = new Set();
+function applyFollow(artistId, on) {
+  state.favorites = state.favorites.filter((f) => Number(f.artist_id) !== artistId);
+  if (on) state.favorites.push({ user_id: state.user.id, artist_id: artistId });
+  if (state.followerCounts && artistId in state.followerCounts) state.followerCounts[artistId] = Math.max(0, state.followerCounts[artistId] + (on ? 1 : -1));
+  document.querySelectorAll(`[data-fav="${artistId}"]`).forEach((b) => { b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? 'Following' : 'Follow'; });
+  document.querySelectorAll(`[data-follower-count="${artistId}"]`).forEach((el) => { el.textContent = followerText(artistId); });
+  renderLibraryList(); refreshRail();
+  if (state.page === 'liked-artists' || state.page === 'followers') render();
+}
+async function toggleFollow(artistId) {
+  artistId = Number(artistId);
+  const artist = state.artists.find((a) => Number(a.artist_id) === artistId);
+  if (isOwnArtist(artist)) throw Error('This is your own artist profile.');
+  if (!artistId || followInFlight.has(artistId)) return;
+  followInFlight.add(artistId);
+  const was = isFollowing(artistId);
+  applyFollow(artistId, !was);
+  try {
+    if (was) check(await db.from('favorite_artist').delete().eq('user_id', state.user.id).eq('artist_id', artistId));
+    else { const r = await db.from('favorite_artist').insert({ user_id: state.user.id, artist_id: artistId }); if (r.error && r.error.code !== '23505') throw r.error; }
+    toast(was ? `Unfollowed ${artist?.artist_name || 'artist'}` : `Following ${artist?.artist_name || 'artist'}`);
+  } catch (e) {
+    applyFollow(artistId, was);
+    throw e;
+  } finally { followInFlight.delete(artistId); }
 }
 
-@media (min-width:1181px){
-  .workspace{grid-template-columns:255px minmax(0,1fr) 240px}
-  body.rail-hidden .workspace{grid-template-columns:255px minmax(0,1fr)}
-  .dashboard-content{max-width:1500px;margin-inline:auto;padding:var(--space-3) var(--space-4) var(--space-5)}
-  .release-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-  .page-search.mobile-search{display:none!important}
+function syncHearts() {
+  document.querySelectorAll('[data-like]').forEach((b) => {
+    const on = isLiked(b.dataset.like);
+    b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on));
+    const label = on ? 'Remove from Liked Songs' : 'Save to Liked Songs';
+    b.setAttribute('aria-label', label); b.title = label;
+  });
+  document.querySelectorAll('[data-liked-count]').forEach((el) => { el.textContent = `${state.liked.length} ${state.liked.length === 1 ? 'song' : 'songs'}`; });
 }
 
-/* Feature/media-capability queries */
-@media (hover:none){.t-more .song-more,.t-more .t-remove{opacity:1}}
-@media (hover:hover) and (pointer:fine){
-  .button:hover{transform:translateY(-2px) scale(1.025)}
-  .cover-card:hover,.release-tile:hover,.artist-card:hover,.quick-tile:hover,.top-card:hover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-5px);box-shadow:0 22px 55px #0008}
-  .cover-card,.release-tile,.artist-card,.quick-tile,.top-card{position:relative;overflow:hidden}
-  .cover-card::after,.release-tile::after,.artist-card::after,.quick-tile::after,.top-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),#ffffff20,transparent 45%);opacity:0;transition:opacity .25s}
-  .cover-card:hover::after,.release-tile:hover::after,.artist-card:hover::after,.quick-tile:hover::after,.top-card:hover::after{opacity:1}
+// ---------- Track list (Spotify-style table) ----------
+function trackTable(songs, o = {}) {
+  const { queue = ids(songs), remove = false, showAlbum = true, header = true } = o;
+  if (!songs.length) return '<div class="empty">Nothing here yet.</div>';
+  const q = queue.join(',');
+  return `<div class="tracks${showAlbum ? '' : ' no-album'}" role="table">${header ? `<div class="tracks-head" role="row"><span class="t-num">#</span><span>Title</span>${showAlbum ? '<span class="t-album">Album</span>' : ''}<span class="t-like"></span><span class="t-time" title="Duration">${icon('clock')}</span><span class="t-more"></span></div>` : ''}${songs.map((s, i) => trackRow(s, i, q, { showAlbum, remove })).join('')}</div>`;
 }
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
-  .release-tile:hover,.artist-card:hover,.cover-card:hover{transform:none!important;box-shadow:none}
+function trackRow(s, i, q, { showAlbum, remove, albumHtml, histId }) {
+  const artist = s.album?.artist;
+  return `<div class="track" role="row" tabindex="0" data-song="${s.song_id}" data-queue="${q}"><span class="t-num"><b>${i + 1}</b><button type="button" class="t-play" data-play="${s.song_id}" aria-label="Play ${esc(s.song_title)}">${icon('play')}</button><i class="eq" aria-hidden="true"><s></s><s></s><s></s></i></span><span class="t-title">${albumArt(s, 'tiny')}<span class="t-text"><strong>${esc(s.song_title)}</strong><small>${artist ? `<a href="#/artist-detail/${artist.artist_id}" data-open-artist="${artist.artist_id}">${esc(artist.artist_name)}</a>` : 'SoundWave'}</small></span></span>${showAlbum ? `<span class="t-album">${albumHtml ?? (s.album ? `<a href="#/album-detail/${s.album.album_id}" data-open-album="${s.album.album_id}">${esc(s.album.album_title)}</a>` : '')}</span>` : ''}<span class="t-like">${heartBtn(s.song_id)}</span><span class="t-time">${nice(s.duration_seconds)}</span><span class="t-more"><button type="button" class="song-more" data-song-menu="${s.song_id}" aria-label="More options for ${esc(s.song_title)}">${icon('dots')}</button>${remove ? `<button type="button" class="t-remove" data-remove="${s.song_id}" aria-label="Remove from playlist">${icon('close')}</button>` : ''}${histId ? `<button type="button" class="t-remove" data-histdelete="${histId}" aria-label="Remove from history" title="Remove from history">${icon('close')}</button>` : ''}</span></div>`;
 }
+function playRow(r) { const q = (r.dataset.queue || '').split(',').filter(Boolean).map(Number); action(() => playSong(Number(r.dataset.song), q)); }
+
+// ---------- Shared tiles ----------
+function albumTile(a) {
+  const q = ids(a.songs).join(',');
+  return `<article class="release-tile card-link" tabindex="0" role="link" data-open-album="${a.album_id}" data-queue="${q}"><span class="release-art">${albumArt({ song_id: a.album_id, album: a }, 'large')}<button type="button" class="hover-play" data-play="${a.songs[0].song_id}" aria-label="Play ${esc(a.title)}">${icon('play')}</button></span><strong>${esc(a.title)}</strong><small>${yearOf(a.release_date) ? yearOf(a.release_date) + ' · ' : ''}${esc(a.artist?.artist_name || 'SoundWave')}</small></article>`;
+}
+function artistCard(a, i = 0, o = {}) {
+  const songs = songsByArtist(a.artist_id), fc = followerText(a.artist_id);
+  return `<article class="artist-card clickable" tabindex="0" role="link" data-open-artist="${a.artist_id}" ${songs.length ? `data-queue="${ids(songs).join(',')}"` : ''}><span class="artist-round" style="background:${grad(i)}">${esc(a.artist_name?.[0] || 'A')}${songs.length ? `<button type="button" class="hover-play" data-play="${songs[0].song_id}" aria-label="Play ${esc(a.artist_name)}">${icon('play')}</button>` : ''}</span><strong>${esc(a.artist_name)}</strong><small>Artist${fc ? ` · <span data-follower-count="${a.artist_id}">${fc}</span>` : ''}</small>${o && o.follow === true ? followBtn(a, 'sm') : ''}</article>`;
+}
+function showCard(p, i = 0) {
+  const art=p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="${esc(p.show_title)}">`:icon('mic');
+  return `<button type="button" class="cover-card" data-open-show="${p.show_id}"><span class="cover-art" style="background:${grad(i)}">${art}</span><strong>${esc(p.show_title)}</strong><small>${esc(p.category || 'Podcast')}</small></button>`;
+}
+function toast(msg,error=false){ const el=document.createElement('div'); el.className=`toast ${error?'error':''}`; el.setAttribute('role',error?'alert':'status'); el.innerHTML=`<span class=\"toast-mark\">${error?'!':'✓'}</span><span>${esc(msg)}</span>`;document.body.append(el);requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),450)},5000); }
+function humanErr(e){const msg=e?.message || String(e||'');if(msg.includes('row-level security'))return 'That action is not available for this account.';if(/failed to fetch|network|offline/i.test(msg))return 'SoundWave cannot reach the server right now. Check your connection and try again.';if(/jwt|session|auth/i.test(msg))return 'Your session needs to be refreshed. Please sign in again.';return 'Something went wrong. Please try again.';}
+function check(result){if(result.error) throw result.error;return result.data;}
+async function action(fn){if(state.loading)return;state.loading=true;showAsyncSkeleton();try{await fn();}catch(e){console.error(e);toast(humanErr(e),true);}finally{state.loading=false;hideAsyncSkeleton();document.querySelectorAll('[data-busy]').forEach(b=>b.disabled=false);}}
+function requireConfig(){if(configured)return false; $('#app').innerHTML=`<main class="main" style="max-width:820px;padding-top:90px"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div class="card"><span class="eyebrow">Setup required</span><h1 class="page-title">Connect your Supabase project</h1><p class="muted">Make a copy of <code>.env.example</code> named <code>.env</code> and add your real project URL and publishable key. Restart the development server.</p><pre style="overflow:auto;background:#0d1526;padding:20px;border-radius:13px">VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co\nVITE_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY</pre><p class="footnote">Never place your database password, secret key or service_role key in this application.</p></div></main>`;return true;}
+const nav = [['music','♫','Search'],['artists','♥','Artists'],['playlists','▤','Your library'],['history','◷','Recently played'],['podcasts','◉','Podcasts'],['plans','♢','Premium']];
+// Dashboard and capability are separate: Admin is an additional grant, while
+// Listener tools are shared by Listener, Artist and Admin sessions.
+function hasArtistAccess(){return state.profile?.account_type === 'Artist' && Boolean(state.artist?.is_active);}
+function hasAdminAccess(){return state.admin === true;}
+function primaryDashboard(){return hasAdminAccess()?'admin-dashboard':hasArtistAccess()?'artist-dashboard':'listener-dashboard';}
+function navigate(page, extras = {}) {
+  if (!pageAllowed(page)) return toast('This page is not available for your account.', true);
+  if (page === 'playlists' && !('selectedPlaylist' in extras)) state.selectedPlaylist = null;
+  state.page = page; Object.assign(state, extras);
+  render();
+  const main = document.getElementById('main-content'); if (main) main.scrollTop = 0;
+}
+function goBack() { window.history.back(); }
+function goForward() { window.history.forward(); }
+function albumArt(song, size='tile'){
+ const path=song?.cover_path||song?.album?.cover_path, url=path&&state.coverUrls?.[path];
+ return url?`<img class="real-cover ${size}" src="${escapeHtml(url)}" alt="" loading="lazy">`:`<span class="placeholder-art ${size}" style="background:${grad(song?.song_id||0)}" aria-hidden="true">${icon('music')}</span>`;
+}
+function icon(name){const paths={pin:'<path d="M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3z" fill="currentColor"/>',list:'<path d="M4 6h16M4 12h16M4 18h16"/>',grid:'<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',shuffle:'<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>',repeat:'<path d="m17 2 4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',repeat1:'<path d="m17 2 4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/><path d="M11 10.5l1.5-1V15" stroke-width="1.5"/>',queue:'<path d="M3 6h13M3 11h13M3 16h7"/><path d="m15 14 6 3.5-6 3.5z" fill="currentColor"/>',mute:'<path d="M3 9v6h4l5 4V5L7 9zM16 9l5 6m0-6-5 6"/>',download:'<path d="M12 3v13m-5-5 5 5 5-5M4 21h16"/>',home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/>',search:'<circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/>',library:'<path d="M5 4v16M10 4v16M15 7l6 12"/>',music:'<path d="M9 18V5l12-2v13M9 9l12-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="18" cy="16" rx="3" ry="2"/>',plus:'<path d="M12 5v14M5 12h14"/>',play:'<path d="m8 5 12 7-12 7z" fill="currentColor" stroke="none"/>',pause:'<path d="M8 5v14M16 5v14" stroke-width="4"/>',next:'<path d="m5 5 11 7-11 7zM19 5v14"/>',prev:'<path d="m19 5-11 7 11 7zM5 5v14"/>',heart:'<path d="M20.8 5.6c-2.5-2.5-5.8-1.8-8.8 1.1-3-2.9-6.3-3.6-8.8-1.1-2.5 2.6-1.4 5.6.6 7.8L12 21l8.2-7.6c2-2.2 3.1-5.2.6-7.8z"/>',mic:'<rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3M8 21h8"/>',album:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9 7 7m10 10 2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',upload:'<path d="M12 16V3m-5 5 5-5 5 5M3 16v5h18v-5"/>',back:'<path d="m14 5-7 7 7 7"/>',forward:'<path d="m10 5 7 7-7 7"/>',check:'<path d="m4 12 5 5L20 6"/>',dots:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',close:'<path d="M5 5 19 19M19 5 5 19"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M2 20c0-4 3-6 7-6s7 2 7 6M16 6a3 3 0 0 1 0 6m2 2c3 1 4 3 4 6"/>',shield:'<path d="m12 2 9 4v6c0 6-5 9-9 10-4-1-9-4-9-10V6z"/><path d="m8 12 3 3 5-6"/>',chevron:'<path d="m8 10 4 4 4-4"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 3"/>',volume:'<path d="M3 9v6h4l5 4V5L7 9zM16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/>'};return `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" aria-hidden="true">${paths[name]||paths.music}</svg>`;}
+function quickTile(label, meta, body, target, kind = 'album', number = 0, attrs = '') {
+  const route = target.startsWith('playlist:') ? `data-openplaylist="${target.split(':')[1]}"` : target.startsWith('artist:') ? `data-open-artist="${target.split(':')[1]}"` : target.startsWith('show:') ? `data-open-show="${target.split(':')[1]}"` : `data-nav="${target}"`;
+  const inner = kind === 'artist' ? esc(label[0] || 'A') : icon(kind === 'podcast' ? 'mic' : kind === 'liked' ? 'heart' : kind === 'album' ? 'album' : 'music');
+  return `<div class="quick-tile" role="link" tabindex="0" ${route} ${attrs} data-tint="${kind === 'liked' ? '#4a3b8f' : tintFor(number)}"><span class="tile-cover ${kind}" ${kind === 'liked' ? '' : `style="background:${grad(number)}"`}>${inner}</span><span class="tile-copy"><strong>${esc(label)}</strong><small>${esc(meta)}</small></span>${body || ''}</div>`;
+}
+function listeningShelf() {
+  const f = state.uiFilter || 'all', tiles = [];
+  if (f !== 'podcasts') {
+    if (state.likesAvailable) {
+      const liked = state.liked.map((x) => songById(x.song_id)).filter(Boolean);
+      tiles.push(quickTile('Liked Songs', `${state.liked.length} ${state.liked.length === 1 ? 'song' : 'songs'}`, liked.length ? `<button type="button" class="hover-play small" data-play="${liked[0].song_id}" aria-label="Play Liked Songs">${icon('play')}</button>` : '', 'liked-songs', 'liked', 0, liked.length ? `data-queue="${ids(liked).join(',')}"` : ''));
+    }
+    state.playlists.slice(0, 3).forEach((p, i) => tiles.push(quickTile(p.playlist_name, 'Playlist', '', 'playlist:' + p.playlist_id, 'album', i + 1)));
+    state.artists.filter((a) => state.favorites.some((x) => x.artist_id === a.artist_id)).slice(0, 3).forEach((a, i) => {
+      const songs = songsByArtist(a.artist_id);
+      tiles.push(quickTile(a.artist_name, 'Artist', songs.length ? `<button type="button" class="hover-play small" data-play="${songs[0].song_id}" aria-label="Play ${esc(a.artist_name)}">${icon('play')}</button>` : '', 'artist:' + a.artist_id, 'artist', i + 4, songs.length ? `data-queue="${ids(songs).join(',')}"` : ''));
+    });
+  }
+  if (f !== 'music') state.podcasts.slice(0, f === 'podcasts' ? 8 : 2).forEach((p, i) => tiles.push(quickTile(p.show_title, 'Podcast', '', 'show:' + p.show_id, 'podcast', i + 6)));
+  const picks = tiles.slice(0, 8);
+  return `<div class="quick-grid">${picks.length ? picks.join('') : `${quickTile('Your library', 'Start your first playlist', '', 'playlists', 'album', 0)}${quickTile('Search', 'Explore the catalog', '', 'music', 'album', 1)}${quickTile('Podcasts', 'Find a show', '', 'podcasts', 'podcast', 2)}`}</div>`;
+}
+function artTile(song) {
+  const album = song.album ? albumById(song.album.album_id) : null;
+  const q = (album ? ids(album.songs) : [song.song_id]).join(',');
+  return `<article class="release-tile card-link" tabindex="0" role="link" ${song.album ? `data-open-album="${song.album.album_id}"` : ''} data-queue="${q}"><span class="release-art">${albumArt(song, 'large')}<button type="button" class="hover-play" data-play="${song.song_id}" aria-label="Play ${esc(song.song_title)}">${icon('play')}</button></span><strong>${esc(song.song_title)}</strong><small>${esc(song.album?.artist?.artist_name || 'SoundWave artist')}</small></article>`;
+}
+function menu(){
+ const items=[['home','home','Home'],['music','search','Search'],['playlists','library','Your library'],['artists','heart','Artists'],['podcasts','mic','Podcasts'],['podcast-studio','upload','Podcast Studio'],['history','clock','Recently played'],['plans','users','Premium']];
+ if(hasArtistAccess())items.push(['studio','upload','Artist Studio']);
+ if(hasAdminAccess())items.push(['admin','shield','Admin tools']);
+ return items;
+}
+function pageAllowed(page){
+ if(['artist-dashboard','studio'].includes(page))return hasArtistAccess();
+ if(['admin-dashboard','admin'].includes(page))return hasAdminAccess();
+ return true;
+}
+
+function shell(content, title, desc) {
+  const display = state.profile?.display_name || state.user?.email?.split('@')[0] || 'Listener';
+  const role = hasAdminAccess() ? (hasArtistAccess() ? 'Artist + Admin' : 'Admin') : hasArtistAccess() ? 'Artist' : 'Listener';
+  const prevMain = document.getElementById('main-content'), key = pageToHash();
+  const keep = prevMain && shell.lastKey === key ? prevMain.scrollTop : 0; shell.lastKey = key;
+  const tint = state.tint || '#202522'; state.tint = null;
+  const dashboardButtons = hasAdminAccess() && hasArtistAccess()
+    ? `<button type="button" class="sidebar-role" data-nav="studio">${icon('upload')}<span>Artist Studio</span></button><button type="button" class="sidebar-role" data-nav="admin">${icon('shield')}<span>Moderation</span></button>`
+    : hasAdminAccess()
+      ? `<button type="button" class="sidebar-role" data-nav="admin">${icon('shield')}<span>Moderation</span></button>`
+      : hasArtistAccess()
+        ? `<button type="button" class="sidebar-role" data-nav="studio">${icon('upload')}<span>Artist Studio</span></button>`
+        : `<button type="button" class="sidebar-role" data-nav="home">${icon('home')}<span>Home</span></button>`;
+  const mobileDashboard = ['home','home','Home'];
+  const profileMenu = `<div class="profile-menu" id="profile-menu" hidden><button data-nav="profile">${icon('users')} Profile</button><button data-nav="${followNav()}">${icon('users')} ${followLabel()}</button>${isPremiumUser() ? `<button data-nav="downloads">${icon('download')} Downloads</button>` : ''}<button data-nav="history">${icon('clock')} Recently played</button><button id="profile-signout">${icon('forward')} Log out</button></div>`;
+  $('#app').innerHTML = `<div class="app-top"><div class="app-top-left"><span class="top-logo" aria-label="SoundWave">${icon('music')}</span><button type="button" class="history-btn" id="nav-back" aria-label="Go back" ${state.hist.i > 0 ? '' : 'disabled'}>${icon('back')}</button><button type="button" class="history-btn" id="nav-forward" aria-label="Go forward" ${state.hist.i < state.hist.max ? '' : 'disabled'}>${icon('forward')}</button><label class="global-search">${icon('search')}<input id="global-search" type="search" autocomplete="off" spellcheck="false" placeholder="What do you want to play?" aria-label="Search SoundWave" value="${esc(state.searchQuery || '')}"></label></div><div class="top-actions"><span class="role-badge">${esc(role)}</span><div class="profile-wrap"><button type="button" class="avatar top-avatar" id="profile-toggle" aria-label="Open profile menu" title="${esc(display)}">${state.profilePhotoUrl?`<img src="${esc(state.profilePhotoUrl)}" alt="${esc(display)}">`:esc(display[0]?.toUpperCase() || 'S')}</button>${profileMenu}</div></div></div>
+<div class="workspace"><aside class="sidebar ${state.libraryExpanded ? '' : 'library-collapsed'}" aria-label="Your library"><div class="library-head"><button type="button" class="library-toggle" id="library-toggle" aria-expanded="${state.libraryExpanded}" title="${state.libraryExpanded ? 'Collapse' : 'Expand'} your library">${icon('library')}<span>Your Library</span></button></div><div class="library-tools" id="library-tools">${libraryToolsHtml()}</div><div class="library-scroll ${prefs.libView === 'grid' ? 'grid' : ''}" id="library-list">${libraryListHtml()}</div><div class="sidebar-bottom">${dashboardButtons}<button type="button" class="sidebar-role" data-nav="${followNav()}">${icon('users')}<span>${followLabel()}</span></button>${isPremiumUser() ? `<button type="button" class="sidebar-role" data-nav="downloads">${icon('download')}<span>Downloads</span></button>` : ''}<button type="button" class="sidebar-role" data-nav="podcast-studio">${icon('mic')}<span>Podcast Studio</span></button></div></aside>
+<main class="main" id="main-content" style="--tint:${tint}"><div class="dashboard-content"><div class="page-intro"><h1 class="page-title">${esc(title)}</h1></div><div class="page-body">${content}</div></div></main>
+<aside class="context-rail" id="context-rail" aria-label="Now playing">${railHtml()}</aside></div>
+<nav class="mobile-dock" aria-label="Mobile navigation">${[mobileDashboard, ['music', 'search', 'Search'], ['playlists', 'library', 'Library'], ['podcasts', 'mic', 'Podcasts'], ['profile', 'users', 'You']].map(([id, ico, label]) => `<button type="button" data-nav="${id}" class="${state.page === id ? 'active' : ''}">${icon(ico)}<small>${label}</small></button>`).join('')}</nav>
+${addToPlaylistDialog()}`;
+  const main = document.getElementById('main-content'); if (keep) main.scrollTop = keep;
+  bindShared(); bindMusic(); bindRail(); bindLibrary(); renderIdlePlayer();
+  const g = $('#global-search');
+  g.addEventListener('input', () => setSearch(g.value, g));
+  g.addEventListener('keydown', (e) => { if (e.key === 'Enter') { rememberSearch(g.value); if (state.page !== 'music') navigate('music'); } });
+  if (state.focusSearch) { const el = document.getElementById(state.focusSearch); if (el) { el.focus(); const n = el.value.length; try { el.setSelectionRange(n, n); } catch {} } state.focusSearch = null; }
+  $('#library-toggle')?.addEventListener('click', () => { state.libraryExpanded = !state.libraryExpanded; render(); });
+  $('#nav-back')?.addEventListener('click', goBack); $('#nav-forward')?.addEventListener('click', goForward);
+  $('#profile-toggle')?.addEventListener('click', (e) => { e.stopPropagation(); const m = $('#profile-menu'); m.hidden = !m.hidden; });
+  $('#profile-signout')?.addEventListener('click', () => action(async () => { stopAudio(); document.getElementById('soundwave-player')?.remove(); check(await db.auth.signOut()); }));
+  bindSongMenus();
+}
+function grad(i=0){return ['linear-gradient(135deg,#6564aa,#3a8069)','linear-gradient(135deg,#97734b,#527e5b)','linear-gradient(135deg,#72598c,#9a6c6d)','linear-gradient(135deg,#2f7b77,#a4a45f)'][Number(i)%4]}
+function bindShared() {
+  bindContent(document);
+  document.querySelectorAll('[data-create-playlist]').forEach((b) => b.onclick = () => action(quickCreatePlaylist));
+  document.querySelectorAll('[data-open-modal]').forEach((b) => b.onclick = () => document.getElementById(b.dataset.openModal)?.showModal());
+  document.querySelectorAll('[data-close-modal]').forEach((b) => b.onclick = () => b.closest('dialog')?.close());
+  document.querySelectorAll('[data-switch-modal]').forEach((b) => b.onclick = () => { b.closest('dialog')?.close(); document.getElementById(b.dataset.switchModal)?.showModal(); });
+  document.querySelectorAll('dialog.sw-modal').forEach((d) => d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
+  $('#signout')?.addEventListener('click', () => action(async () => { stopAudio(); document.getElementById('soundwave-player')?.remove(); check(await db.auth.signOut()); }));
+  $('#refresh')?.addEventListener('click', () => action(async () => { await loadData(); render(); toast('Library refreshed'); }));
+  document.querySelectorAll('[data-open-add]').forEach((b) => b.onclick = () => openAddToPlaylist(Number(b.dataset.openAdd)));
+}
+// Binds navigation-style controls inside a container (used for the page, the search results and the right rail).
+function bindContent(root = document) {
+  root.querySelectorAll('[data-nav]').forEach((b) => b.onclick = () => navigate(b.dataset.nav));
+  root.querySelectorAll('[data-admin-target]').forEach((b)=>b.onclick=()=>{state.adminTab=b.dataset.adminTarget||'accounts';navigate('admin');});
+  root.querySelectorAll('[data-openplaylist]').forEach((b) => b.onclick = () => openPlaylist(b.dataset.openplaylist));
+  root.querySelectorAll('[data-open-show]').forEach((b) => b.onclick = () => openShow(b.dataset.openShow));
+  root.querySelectorAll('[data-open-artist]').forEach((b) => b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); navigate('artist-detail', { selectedArtist: Number(b.dataset.openArtist) }); });
+  root.querySelectorAll('[data-open-album]').forEach((b) => b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); navigate('album-detail', { selectedAlbum: Number(b.dataset.openAlbum) }); });
+  root.querySelectorAll('[data-filter]').forEach((b) => b.onclick = () => { state.uiFilter = b.dataset.filter; render(); });
+  root.querySelectorAll('.quick-tile[data-tint]').forEach((t) => {
+    const main = document.getElementById('main-content');
+    t.addEventListener('mouseenter', () => main?.style.setProperty('--tint', t.dataset.tint));
+    t.addEventListener('mouseleave', () => main?.style.setProperty('--tint', '#2d2d3d'));
+  });
+}
+function playerRoot(){let el=document.getElementById('soundwave-player');if(!el){el=document.createElement('div');el.id='soundwave-player';document.body.appendChild(el)}return el}
+function syncIdleLayout() { document.body.classList.toggle('is-idle', !state.player); }
+function renderIdlePlayer() {
+  syncIdleLayout();
+  const existing = document.getElementById('soundwave-player');
+  // Do not mount an empty player. The app shell expands to the viewport while idle.
+  if (!state.user || !state.player) { existing?.remove(); return; }
+}
+function playerBarHtml(d) {
+  const idle = !d, podcast = d?.kind === 'podcast', dis = idle ? 'disabled' : '';
+  const song = d?.kind === 'song' ? songById(d.id) : null;
+  const artistId = song?.album?.artist?.artist_id;
+  const vol = prefs.muted ? 0 : Math.round(prefs.volume * 100);
+  const thumb = idle ? icon('music') : podcast ? icon('mic') : albumArt(song, 'tiny');
+  return `<div class="custom-playbar ${idle ? 'idle-playbar' : ''}">
+ <div class="player-song"><span class="player-thumb ${idle ? 'idle-thumb' : ''}">${thumb}</span><div class="player-song-text"><strong>${esc(d?.title || 'SoundWave')}</strong><small>${idle ? 'Choose something to play' : artistId ? `<a href="#/artist-detail/${artistId}" data-open-artist="${artistId}">${esc(d.artist)}</a>` : esc(d.artist)}</small></div>${song ? heartBtn(song.song_id, 'player-heart') : ''}</div>
+ <div class="player-center"><div class="play-controls">
+  ${podcast ? '' : `<button type="button" id="sw-shuffle" class="icon-quiet mode ${prefs.shuffle ? 'active' : ''}" aria-pressed="${prefs.shuffle}" aria-label="Shuffle" title="Shuffle" ${dis}>${icon('shuffle')}</button>`}
+  <button type="button" id="sw-prev" class="icon-quiet" aria-label="${podcast ? 'Back 15 seconds' : 'Previous song'}" title="${podcast ? 'Back 15 seconds' : 'Previous'}" ${dis}>${podcast ? '<span class="skip-15">−15</span>' : icon('prev')}</button>
+  <span class="mini-visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button type="button" id="sw-toggle" class="player-main-play" aria-label="${idle ? 'Play' : 'Pause'}" ${dis}>${icon(idle ? 'play' : 'pause')}</button>
+  <button type="button" id="sw-next" class="icon-quiet" aria-label="${podcast ? 'Forward 15 seconds' : 'Next song'}" title="${podcast ? 'Forward 15 seconds' : 'Next'}" ${dis}>${podcast ? '<span class="skip-15">+15</span>' : icon('next')}</button>
+  ${podcast ? '' : `<button type="button" id="sw-repeat" class="icon-quiet mode ${prefs.repeat !== 'off' ? 'active' : ''}" data-mode="${prefs.repeat}" aria-label="Repeat: ${prefs.repeat}" title="Repeat" ${dis}>${icon(prefs.repeat === 'one' ? 'repeat1' : 'repeat')}</button>`}
+ </div><div class="player-timeline"><span id="sw-elapsed">0:00</span><input id="sw-seek" type="range" min="0" max="1000" value="0" style="--pct:0%" aria-label="Seek position" ${dis}><span id="sw-total">${nice(d?.duration || 0)}</span></div></div>
+ <div class="player-right"><button type="button" id="sw-queue" class="icon-quiet ${state.railTab === 'queue' && !prefs.railHidden ? 'active' : ''}" aria-label="Queue" title="Queue">${icon('queue')}</button><button type="button" id="sw-mute" class="icon-quiet" aria-label="Mute" title="Mute">${icon(vol === 0 ? 'mute' : 'volume')}</button><input id="sw-volume" type="range" min="0" max="100" value="${vol}" style="--pct:${vol}%" aria-label="Volume"><button type="button" id="sw-view" class="icon-quiet ${prefs.railHidden ? '' : 'active'}" aria-label="Now playing view" title="Now playing view">${icon('library')}</button></div>
+ ${idle ? '' : `<audio id="sw-audio" preload="metadata" src="${esc(d.url)}"></audio>`}</div>`;
+}
+function stopAudio() {
+  const audio = document.getElementById('sw-audio');
+  if (audio) { void saveListening(audio.ended); audio.pause(); }
+  state.player = null; state.playerToken++;
+  document.title = 'SoundWave | Music for every moment';
+  try { if ('mediaSession' in navigator) navigator.mediaSession.metadata = null; } catch {}
+  const root = document.getElementById('soundwave-player');
+  if (!state.user) { root?.remove(); return; }
+  renderIdlePlayer(); refreshRail(); markPlaying();
+}
+function buildPlayback(songId, queueIds, opts = {}) {
+  const id = Number(songId);
+  const queue = (queueIds && queueIds.length ? queueIds : ids(state.songs)).map(Number);
+  if (!queue.includes(id)) queue.unshift(id);
+  let order = opts.order, pos = opts.pos;
+  if (!order) {
+    if (prefs.shuffle) { order = [id, ...shuffled(queue.filter((x) => x !== id))]; pos = 0; }
+    else { order = [...queue]; pos = order.indexOf(id); }
+  }
+  return { queue, order, pos };
+}
+async function playSong(songId, queueIds = null, opts = {}) {
+  const id = Number(songId);
+  const cur = state.player, audio = document.getElementById('sw-audio');
+  if (!opts.order && cur?.kind === 'song' && Number(cur.id) === id && audio) { if (audio.paused) await audio.play(); else audio.pause(); return; }
+  const pb = buildPlayback(id, queueIds, opts);
+  if (!navigator.onLine && state.offlineDownloads.some((x) => Number(x.songId) === id)) return playDownloaded(id, pb);
+  const song = songById(id);
+  if (!song?.audio_path) throw Error('This song has no playable audio uploaded yet.');
+  const result = check(await db.storage.from('song-audio').createSignedUrl(song.audio_path, 3600));
+  startPlayer({ kind: 'song', id: song.song_id, title: song.song_title, artist: song.album?.artist?.artist_name || 'SoundWave', url: result.signedUrl, duration: song.duration_seconds, fromSkip: !!opts.fromSkip, ...pb });
+}
+function reorderQueue() {
+  const p = state.player; if (!p || p.kind !== 'song') return;
+  const cur = Number(p.id);
+  if (prefs.shuffle) { p.order = [cur, ...shuffled(p.queue.filter((x) => x !== cur))]; p.pos = 0; }
+  else { p.order = [...p.queue]; p.pos = Math.max(0, p.order.indexOf(cur)); }
+}
+function updateModeButtons() {
+  const sh = $('#sw-shuffle'), rp = $('#sw-repeat');
+  if (sh) { sh.classList.toggle('active', prefs.shuffle); sh.setAttribute('aria-pressed', String(prefs.shuffle)); }
+  if (rp) { rp.classList.toggle('active', prefs.repeat !== 'off'); rp.dataset.mode = prefs.repeat; rp.setAttribute('aria-label', `Repeat: ${prefs.repeat}`); rp.innerHTML = icon(prefs.repeat === 'one' ? 'repeat1' : 'repeat'); }
+  document.querySelectorAll('[data-toggle-shuffle]').forEach((b) => b.classList.toggle('active', prefs.shuffle));
+}
+function toggleShuffle() { prefs.shuffle = !prefs.shuffle; savePrefs(); reorderQueue(); updateModeButtons(); refreshRail(); }
+function addToQueue(id) {
+  id = Number(id);
+  const p = state.player;
+  if (!p || p.kind !== 'song') { action(() => playSong(id, [id])); return; }
+  if (!p.queue.includes(id)) p.queue.push(id);
+  p.order.splice(p.pos + 1, 0, id);
+  refreshRail(); toast('Added to queue');
+}
+async function skip(dir, auto = false) {
+  const p = state.player, audio = document.getElementById('sw-audio');
+  if (!p || !audio) return;
+  if (p.kind !== 'song') { audio.currentTime = Math.max(0, audio.currentTime + (dir > 0 ? 15 : -15)); return; }
+  if (dir < 0 && audio.currentTime > 3) { audio.currentTime = 0; return; }
+  if (auto && prefs.repeat === 'one') { audio.currentTime = 0; await audio.play().catch(() => {}); return; }
+  let pos = p.pos + dir;
+  if (pos >= p.order.length) {
+    if (auto && prefs.repeat !== 'all') { audio.currentTime = 0; audio.pause(); return; }
+    if (prefs.shuffle) p.order = shuffled(p.queue);
+    pos = 0;
+  }
+  if (pos < 0) pos = p.order.length - 1;
+  await playSong(p.order[pos], p.queue, { order: p.order, pos, fromSkip: true });
+}
+function startPlayer(details) {
+  const old = document.getElementById('sw-audio');
+  if (old) { void saveListening(old.ended); old.pause(); if (old.src?.startsWith('blob:')) URL.revokeObjectURL(old.src); }
+  const wasIdle = !state.player;
+  state.player = details; const token = ++state.playerToken; syncIdleLayout();
+  // The right-hand "Now playing" panel appears whenever the user starts a song or episode, even if it was
+  // closed earlier. Next / Previous / auto-advance leave it as the user set it, so closing it still works.
+  if (wasIdle) state.railTab = 'now';
+  if (wasIdle || !details.fromSkip) toggleRail(false);
+  playerRoot().innerHTML = playerBarHtml(details);
+  const audio = $('#sw-audio'); audio.volume = prefs.muted ? 0 : prefs.volume;
+  if (details.resumeAt > 5) audio.addEventListener('loadedmetadata', () => { try { audio.currentTime = details.resumeAt; } catch {} }, { once: true });
+  bindPlayerBar(audio, details, token);
+  refreshRail(); markPlaying(); updateMediaSession(details);
+  document.title = `${details.title} · ${details.artist}`;
+  audio.play().catch(() => { toast('Press Play to start audio.'); });
+}
+function bindPlayerBar(audio, details, token) {
+  let seeking = false;
+  const podcast = details.kind === 'podcast';
+  const live = () => token === state.playerToken;
+  const dur = () => (audio.duration > 0 && isFinite(audio.duration) ? audio.duration : Number(details.duration) || 0);
+  const sync = () => {
+    if (!live() || !$('#sw-toggle')) return;
+    $('#sw-toggle').innerHTML = icon(audio.paused ? 'play' : 'pause');
+    $('#sw-toggle').setAttribute('aria-label', audio.paused ? 'Play' : 'Pause');
+    $('#sw-total').textContent = nice(dur());
+    if (!seeking) {
+      const pct = dur() > 0 ? Math.min(1000, Math.floor((audio.currentTime / dur()) * 1000)) : 0;
+      $('#sw-elapsed').textContent = nice(audio.currentTime);
+      const sk = $('#sw-seek'); sk.value = String(pct); sk.style.setProperty('--pct', `${pct / 10}%`);
+    }
+    try { if ('mediaSession' in navigator && dur() > 0) navigator.mediaSession.setPositionState({ duration: dur(), position: Math.min(audio.currentTime, dur()), playbackRate: audio.playbackRate }); } catch {}
+  };
+  $('#sw-toggle').onclick = () => { if (audio.paused) audio.play().catch((e) => toast(humanErr(e), true)); else audio.pause(); };
+  $('#sw-prev').onclick = () => action(() => skip(-1));
+  $('#sw-next').onclick = () => action(() => skip(1));
+  $('#sw-shuffle')?.addEventListener('click', toggleShuffle);
+  $('#sw-repeat')?.addEventListener('click', () => { prefs.repeat = { off: 'all', all: 'one', one: 'off' }[prefs.repeat]; savePrefs(); updateModeButtons(); toast(prefs.repeat === 'off' ? 'Repeat off' : prefs.repeat === 'all' ? 'Repeating the queue' : 'Repeating this song'); });
+  const seek = $('#sw-seek');
+  seek.oninput = (e) => { seeking = true; const v = Number(e.target.value); e.target.style.setProperty('--pct', `${v / 10}%`); $('#sw-elapsed').textContent = nice((dur() * v) / 1000); };
+  seek.onchange = (e) => { if (dur() > 0) audio.currentTime = (dur() * Number(e.target.value)) / 1000; seeking = false; sync(); };
+  const vol = $('#sw-volume');
+  const paintVol = () => { const v = prefs.muted ? 0 : Math.round(prefs.volume * 100); vol.value = String(v); vol.style.setProperty('--pct', `${v}%`); $('#sw-mute').innerHTML = icon(v === 0 ? 'mute' : 'volume'); audio.volume = v / 100; };
+  vol.oninput = (e) => { prefs.volume = Number(e.target.value) / 100; prefs.muted = prefs.volume === 0; savePrefs(); paintVol(); };
+  $('#sw-mute').onclick = () => { prefs.muted = !prefs.muted; if (!prefs.muted && prefs.volume === 0) prefs.volume = .5; savePrefs(); paintVol(); };
+  $('#sw-queue').onclick = () => { state.railTab = state.railTab === 'queue' && !prefs.railHidden ? 'now' : 'queue'; if (prefs.railHidden) toggleRail(false); refreshRail(); };
+  $('#sw-view').onclick = () => { toggleRail(); $('#sw-view').classList.toggle('active', !prefs.railHidden); refreshRail(); };
+  audio.addEventListener('timeupdate', sync); audio.addEventListener('loadedmetadata', sync); audio.addEventListener('durationchange', sync);
+  audio.onplay = () => { sync(); markPlaying(); if (live()) details.createPromise = createListening(); };
+  audio.onpause = () => { sync(); markPlaying(); if (live()) void saveListening(false); };
+  audio.onended = () => { sync(); markPlaying(); if (live()) { void saveListening(true); if (details.kind === 'song') action(() => skip(1, true)); } };
+  audio.onerror = async () => {
+    if (!live() || details.retried || details.offline || details.kind !== 'song') { if (live()) toast('This track could not be played.', true); return; }
+    details.retried = true;
+    try { const song = songById(details.id); const r = check(await db.storage.from('song-audio').createSignedUrl(song.audio_path, 3600)); const t = audio.currentTime; audio.src = r.signedUrl; audio.currentTime = t; await audio.play(); } catch (e) { toast(humanErr(e), true); }
+  };
+}
+function markPlaying() {
+  const p = state.player, audio = document.getElementById('sw-audio'), playing = !!(audio && !audio.paused);
+  document.querySelectorAll('.track[data-song]').forEach((r) => {
+    const on = p?.kind === 'song' && Number(r.dataset.song) === Number(p.id);
+    r.classList.toggle('playing', on); r.classList.toggle('paused', on && !playing);
+    const b = r.querySelector('.t-play'); if (b) b.innerHTML = icon(on && playing ? 'pause' : 'play');
+  });
+}
+function updateMediaSession(d) {
+  if (!('mediaSession' in navigator)) return;
+  try {
+    const song = d.kind === 'song' ? songById(d.id) : null;
+    const art = song?.album?.cover_path && state.coverUrls[song.album.cover_path];
+    navigator.mediaSession.metadata = new MediaMetadata({ title: d.title, artist: d.artist, album: song?.album?.album_title || 'SoundWave', artwork: art ? [{ src: art, sizes: '512x512' }] : [] });
+  } catch {}
+}
+function initMediaKeys() {
+  if (!('mediaSession' in navigator)) return;
+  const a = () => document.getElementById('sw-audio');
+  const set = (n, f) => { try { navigator.mediaSession.setActionHandler(n, f); } catch {} };
+  set('play', () => a()?.play()); set('pause', () => a()?.pause());
+  set('previoustrack', () => action(() => skip(-1))); set('nexttrack', () => action(() => skip(1)));
+  set('seekto', (e) => { if (a() && e.seekTime != null) a().currentTime = e.seekTime; });
+}
+async function createListening(){const p=state.player;if(!p||p.recorded||p.creating||!state.user)return;p.creating=true;
+ const isPodcast=p.kind==='podcast';const table=isPodcast?'podcast_listening_history':'listening_history';
+ const payload=isPodcast?{user_id:state.user.id,episode_id:p.id,duration_played_seconds:0,resume_position_seconds:0,completion_status:'Partial',device_type:'Web'}:{user_id:state.user.id,song_id:p.id,duration_played_seconds:0,completion_status:'Partial',device_type:'Web',stream_quality:'Standard'};
+ try{const q=check(await db.from(table).insert(payload).select(isPodcast?'podcast_stream_id':'stream_id').single());p.historyId=q[isPodcast?'podcast_stream_id':'stream_id'];p.recorded=true;state.historyWriteError='';const row=isPodcast?{podcast_stream_id:p.historyId,episode_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,resume_position_seconds:0,completion_status:'Partial'}:{stream_id:p.historyId,song_id:p.id,stream_date:new Date().toISOString(),duration_played_seconds:0,completion_status:'Partial'};(isPodcast?state.podcastHistory:state.history).unshift(row);if(isPodcast)state.episodeTitles[p.id]=p.title;if(state.page==='history')render();}catch(e){console.warn('Listening-history write failed:',e);state.historyWriteError=humanErr(e);toast('Playback works, but history could not be recorded: '+humanErr(e),true);p.recorded=true;if(state.page==='history')render();}finally{p.creating=false;}
+}
+async function saveListening(ended=false){const p=state.player, audio=document.getElementById('sw-audio');if(!p||!audio)return;const elapsed=Math.floor(Number(audio.currentTime)||0);if(p.createPromise)await p.createPromise;if(!p.historyId)return;const maximum=Number(p.duration)||Math.ceil(audio.duration)||elapsed;const seconds=Math.min(elapsed,maximum);if(seconds===p.lastSaved&&!ended)return;p.lastSaved=seconds;const isPodcast=p.kind==='podcast';const payload={duration_played_seconds:seconds,completion_status:ended?'Completed':seconds<5?'Skipped':'Partial'};if(isPodcast)payload.resume_position_seconds=ended?0:seconds;
+ const r=await db.from(isPodcast?'podcast_listening_history':'listening_history').update(payload).eq(isPodcast?'podcast_stream_id':'stream_id',p.historyId);if(r.error){console.warn('Could not update playback history:',r.error);return;}
+ const list=isPodcast?state.podcastHistory:state.history,key=isPodcast?'podcast_stream_id':'stream_id',row=list.find(x=>x[key]===p.historyId);if(row)Object.assign(row,payload);
+}
+// Shown after sign-up (and when someone tries to sign in before confirming): tells them to check their inbox, with a resend button.
+function confirmView(email) {
+  authView(false);
+  const box = document.querySelector('.auth-box'); if (!box) return;
+  box.innerHTML = `<div class="eyebrow">One more step</div><h2>Check your email</h2><p class="muted">We sent a confirmation link to <strong>${esc(email)}</strong>. Open it to activate your account, then sign in. It can take a minute, and may land in spam.</p><div class="form"><button type="button" class="button" id="resend-confirm">Resend confirmation email</button><button type="button" class="button secondary" id="back-to-login">Back to sign in</button></div><p class="footnote" id="resend-note"></p>`;
+  $('#back-to-login').onclick = () => authView(false);
+  let wait = 0, timer = null;
+  $('#resend-confirm').onclick = () => action(async () => {
+    if (wait > 0) return;
+    check(await db.auth.resend({ type: 'signup', email, options: { emailRedirectTo: window.location.origin } }));
+    toast('Confirmation email sent again');
+    const btn = $('#resend-confirm'); wait = 60; btn.disabled = true;
+    timer = setInterval(() => { wait--; if (!document.body.contains(btn)) return clearInterval(timer); if (wait <= 0) { clearInterval(timer); btn.disabled = false; btn.textContent = 'Resend confirmation email'; } else btn.textContent = `Resend in ${wait}s`; }, 1000);
+  });
+}
+function authView(register=false){document.getElementById('soundwave-player')?.remove();$('#app').innerHTML=`<div class="auth-wrap"><div class="auth-show"><div class="brand"><span class="brand-icon">♫</span> SoundWave</div><div><div class="eyebrow">Your sound. Your space.</div><h1>Everything sounds better together.</h1><p class="muted">Discover music, build playlists, release tracks and explore podcasts.</p></div><div class="small" style="color:#c5cce6">Music &amp; podcasts, all in one place.</div></div><div class="auth-panel"><div class="auth-box"><div class="eyebrow">Welcome to SoundWave</div><h2>${register?'Create an account':'Listen without limits.'}</h2><p class="muted">${register?'Choose your account type and create your profile.':'Sign in to explore your music and podcasts.'}</p><div class="auth-mode"><button class="button ${register?'secondary':''}" id="mode-login">Sign in</button><button class="button ${register?'':'secondary'}" id="mode-register">Register</button></div><form class="form" id="authform">${register?`<div class="field"><label>Display name</label><input id="display-name" required maxlength="90" placeholder="Alex Rivera"/></div><div class="field"><label>Account type</label><select id="account-type"><option value="Listener">Listener</option><option value="Artist">Artist</option></select></div><div class="field" id="artist-name-field" style="display:none"><label>Artist name</label><input id="artist-name" maxlength="100" placeholder="Your stage name"/></div>`:''}<div class="field"><label>Email</label><input id="auth-email" type="email" autocomplete="email" required placeholder="your@email.com"/></div><div class="field"><label>Password</label><input id="auth-password" type="password" minlength="6" autocomplete="${register?'new-password':'current-password'}" required placeholder="At least 6 characters"/></div><button class="button" data-busy>${register?'Create account':'Sign in'} →</button></form><p class="footnote">Registration uses Supabase Auth. Email confirmation may be required depending on your project settings.</p></div></div></div>`;enhanceAuth();$('#mode-login').onclick=()=>authView(false);$('#mode-register').onclick=()=>authView(true);$('#account-type')?.addEventListener('change',e=>{const a=e.target.value==='Artist';$('#artist-name-field').style.display=a?'flex':'none';$('#artist-name').required=a;});$('#authform').onsubmit=e=>{e.preventDefault();action(async()=>{const email=val('auth-email'),password=$('#auth-password').value;if(!register){const r=await db.auth.signInWithPassword({email,password});if(r.error){if(/email_not_confirmed|not confirmed/i.test(`${r.error.code||''} ${r.error.message||''}`)){confirmView(email);return;}throw r.error;}toast('Signed in');return;}const account_type=val('account-type'),display_name=val('display-name'),artist_name=account_type==='Artist'?val('artist-name'):null;const data=check(await db.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin,data:{name:display_name,full_name:display_name,account_type,artist_name}}}));if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){toast('That email is already registered. Please sign in instead.',true);authView(false);return;}if(data.session){console.warn('Supabase returned a session straight after sign-up, so "Confirm email" is OFF for this project. Turn it on in Authentication > Sign In / Providers > Email.');toast('Registration complete');}else{confirmView(email);}});};}
+async function loadData(){if(!state.user)return;const id=state.user.id;const requests=[
+ db.from('users').select('user_id,display_name,account_type,is_active,profile_photo_path').eq('user_id',id).maybeSingle(),
+ db.from('artist').select('artist_id,user_id,artist_name,is_active').eq('user_id',id).maybeSingle(),
+ db.rpc('is_active_admin'),
+ db.from('song').select('song_id,song_title,description,cover_path,genre_id,track_number,duration_seconds,audio_path,is_active,album:album_id(album_id,album_title,description,release_type,cover_path,release_date,is_active,artist:artist_id(artist_id,user_id,artist_name,is_active))').eq('is_active',true).order('song_id',{ascending:false}).limit(400),
+ db.from('artist').select('artist_id,user_id,artist_name,country,bio,is_active').eq('is_active',true).order('artist_name').limit(100),
+ db.from('favorite_artist').select('user_id,artist_id').eq('user_id',id),
+ db.from('playlist').select('playlist_id,playlist_name,description,visibility,cover_path,is_active').eq('user_id',id).eq('is_active',true).order('playlist_id',{ascending:false}),
+ db.from('genre').select('genre_id,genre_name').order('genre_name'),
+ db.from('subscription_plan').select('plan_id,plan_name,monthly_price,max_members,is_active').eq('is_active',true),
+ db.from('subscription').select('subscription_id,status,start_date,end_date,plan:plan_id(plan_name,max_members,monthly_price)').eq('user_id',id).order('subscription_id',{ascending:false}),
+ db.from('podcast_show').select('show_id,user_id,show_title,category,description,cover_path,is_active').eq('is_active',true).limit(50),
+ db.from('podcast_show').select('show_id,user_id,show_title,category,description,cover_path,is_active').eq('user_id',id).limit(40),
+ db.from('listening_history').select('stream_id,song_id,stream_date,duration_played_seconds,completion_status').eq('user_id',id).order('stream_date',{ascending:false}).limit(35),
+ db.from('podcast_listening_history').select('podcast_stream_id,episode_id,stream_date,duration_played_seconds,resume_position_seconds,completion_status').eq('user_id',id).order('stream_date',{ascending:false}).limit(30)
+];const result=await Promise.all(requests);const names=['profile','artist','admin','songs','artists','favorites','playlists','genres','plans','subscriptions','podcasts','myShows','history','podcastHistory'];result.forEach((r,i)=>{if(r.error){console.warn(`Could not load ${names[i]}`,r.error);if(i===2){state.admin=false;}else if(i===0||i===1){state[names[i]]=null;}else{state[names[i]]=[];}return;}state[names[i]]=r.data??((i===2)?false:[]);});
+ // Only an explicitly classified Artist with an active matching profile receives Artist Studio access.
+ // An orphan/stale artist row does not turn a Listener account into an Artist.
+ if(state.profile?.account_type !== 'Artist' || !state.artist?.is_active){
+   if(state.profile?.account_type === 'Listener' && state.artist){
+     console.warn('Account mismatch: this Listener also has an artist row. Check public.users/account_type and public.artist.');
+   }
+   state.artist=null;
+ }
+ if(state.artist){const r=await db.from('album').select('album_id,album_title,description,release_type,release_date,cover_path,is_active').eq('artist_id',state.artist.artist_id).order('album_id',{ascending:false});state.albums=r.error?[]:r.data;const albumIds=state.albums.map(a=>a.album_id);if(albumIds.length){const sr=await db.from('song').select('song_id,album_id,genre_id,song_title,description,cover_path,duration_seconds,track_number,audio_path,is_active').in('album_id',albumIds).order('song_id',{ascending:false});state.ownedSongs=sr.error?[]:(sr.data||[]).map(song=>{const a=state.albums.find(x=>Number(x.album_id)===Number(song.album_id));return {...song,album:a?{...a,artist:state.artist}:null};});}else state.ownedSongs=[];}else{state.albums=[];state.ownedSongs=[];}if(state.selectedPlaylist && !state.playlists.some(p=>p.playlist_id===state.selectedPlaylist)){state.selectedPlaylist=null;state.playlistSongs=[];}
+ // Load owned subscription members; no auth.users enumeration in the browser.
+ state.subscriptionMembers=[];state.sharedMemberships=[];state.paymentRows=[];
+ const shared=await db.from('subscription_member').select('subscription_id,user_id').eq('user_id',id);if(!shared.error)state.sharedMemberships=shared.data||[];else console.warn('Shared memberships unavailable',shared.error);
+ const ids=state.subscriptions.map(x=>x.subscription_id);
+ if(ids.length){
+  const [m,p]=await Promise.all([db.from('subscription_member').select('subscription_id,user_id').in('subscription_id',ids),db.from('payment').select('subscription_id,payment_amount,payment_status,payment_date,payment_method').in('subscription_id',ids).order('payment_date',{ascending:false}).limit(15)]);
+  if(!m.error)state.subscriptionMembers=m.data||[];else console.warn('Subscription members unavailable',m.error);
+  if(!p.error)state.paymentRows=p.data||[];else console.warn('Payment history unavailable',p.error);
+ }
+ state.followers=[];state.following=[];
+ // RLS already limits social rows to relationships involving the signed-in user.
+ // Select * so the frontend tolerates the two column-name variants that existed
+ // across the SoundWave documentation and deployed schema.
+ let social=await db.from('user_follow').select('*');
+ if(social.error){
+   const fallback=await db.from('user_follower').select('*');
+   if(!fallback.error){social=fallback;state.socialSource='user_follower';}
+ }
+ if(!social.error){
+   const normalized=(social.data||[]).map(r=>({
+     follower_user_id:r.follower_user_id||r.follower_id||r.user_id||null,
+     followed_user_id:r.followed_user_id||r.followed_id||null,
+     date_followed:r.date_followed||r.datefollowed||r.dateFollowed||null
+   })).filter(r=>r.follower_user_id&&r.followed_user_id);
+   state.followers=normalized.filter(r=>String(r.followed_user_id)===String(id));
+   state.following=normalized.filter(r=>String(r.follower_user_id)===String(id));
+ }else console.warn('Followers unavailable',social.error);
+ // Artist followers (people who tapped Follow on an artist). Needs the RPCs in sql/RUN_ME_likes_and_followers.sql.
+ state.artistFollowers=[];state.socialProfiles={};state.followerCounts={};state.socialRpc={counts:false,mine:false,profiles:false};
+ const [fcnt,fmine,fprof]=await Promise.all([db.rpc('get_artist_follower_counts'),state.artist?db.rpc('get_my_artist_followers'):Promise.resolve({data:[],error:null}),db.rpc('get_social_profiles')]);
+ if(!fcnt.error){state.socialRpc.counts=true;(fcnt.data||[]).forEach(r=>{state.followerCounts[Number(r.artist_id)]=Number(r.follower_count)||0;});}else console.info('Follower counts unavailable (run sql/RUN_ME_likes_and_followers.sql):',fcnt.error.message);
+ if(!fmine.error){state.socialRpc.mine=true;state.artistFollowers=fmine.data||[];}else console.info('Artist followers unavailable:',fmine.error.message);
+ if(!fprof.error){state.socialRpc.profiles=true;(fprof.data||[]).forEach(p=>{state.socialProfiles[String(p.user_id)]=p;});}
+ state.artistFollowers.forEach(r=>{if(r.display_name&&!state.socialProfiles[String(r.follower_user_id)])state.socialProfiles[String(r.follower_user_id)]={user_id:r.follower_user_id,display_name:r.display_name};});
+ // Premium entitlement is primarily derived from the user's active subscription.
+ // If the optional helper RPC is installed it also resolves Duo/Family members.
+ state.entitlement=null;
+ const ent=await db.rpc('get_my_entitlement');
+ if(!ent.error){state.entitlement=Array.isArray(ent.data)?ent.data[0]:ent.data;}
+ else {
+   const own=state.subscriptions.find(x=>String(x.status).toLowerCase()==='active');
+   if(own)state.entitlement={is_premium:true,plan_name:own.plan?.plan_name||'Premium',subscription_id:own.subscription_id};
+ }
+ // Liked Songs: saved to your account; if the liked_song table is not installed yet, fall back to this device.
+ const likedRes=await db.from('saved_song').select('song_id,date_saved').eq('user_id',id).order('date_saved',{ascending:false});
+ state.likesAvailable=true;
+ if(likedRes.error){state.likesMode='local';const local=readLocalLikes();state.liked=local.map(x=>({song_id:x,liked_at:null}));state.likedIds=new Set(local);console.info('saved_song table unavailable, saving likes on this device:',likedRes.error.message);}
+ else{state.likesMode='remote';state.liked=(likedRes.data||[]).map(x=>({...x,liked_at:x.liked_at||x.date_saved||null}));state.likedIds=new Set(state.liked.map(x=>Number(x.song_id)));await migrateLocalLikes(id);}
+ state.offlineDownloads=await listOfflineDownloads(id);
+ if(!isPremiumUser() && state.offlineDownloads.length){await clearOfflineDownloads(id);state.offlineDownloads=[];}
+  const newPaths=[...new Set([...state.songs.flatMap(x=>[x.cover_path,x.album?.cover_path]),...state.ownedSongs.map(x=>x.cover_path),...state.albums.map(x=>x.cover_path)].filter(x=>x&&!state.coverUrls[x]))].slice(0,35);
+ if(newPaths.length){const urls=await Promise.all(newPaths.map(async path=>[path,await resolveCoverUrl(path)]));urls.forEach(([path,url])=>{if(url)state.coverUrls[path]=url;});}
+ // Mission 4 feature append: use the newer helper RPCs when installed, but keep the original UI/data fallbacks.
+ const [ps,ss,roy,ent2,adm,reqs,lib,social2,af2] = await Promise.all([
+   db.rpc('profile_stats'),
+   state.artist?db.rpc('artist_studio_stats'):Promise.resolve({data:null,error:null}),
+   state.artist?db.rpc('artist_royalty_summary'):Promise.resolve({data:null,error:null}),
+   db.rpc('my_subscription_entitlement'),
+   state.admin?db.rpc('admin_moderation_data'):Promise.resolve({data:null,error:null}),
+   db.from('subscription_request').select('*').eq('user_id',id).order('created_at',{ascending:false}),
+   db.rpc('my_library_playlists'),
+   db.rpc('social_connections'),
+   state.artist?db.rpc('artist_follower_list'):Promise.resolve({data:[],error:null})
+ ]);
+ state.profileStats=!ps.error?(Array.isArray(ps.data)?ps.data[0]:ps.data):null;
+ state.studioStats=!ss.error?(Array.isArray(ss.data)?ss.data[0]:ss.data):null;
+ state.royaltySummary=!roy.error?(Array.isArray(roy.data)?roy.data[0]:roy.data):null;
+ if(!ent2.error){const e=Array.isArray(ent2.data)?ent2.data[0]:ent2.data;if(e)state.entitlement={...e,is_premium:String(e.status||'').toLowerCase()==='active' && String(e.plan_name||'').toLowerCase()!=='free'};}
+ state.adminData=!adm.error?adm.data:null;
+ state.subscriptionRequests=reqs.error?[]:(reqs.data||[]);
+ if(!lib.error&&Array.isArray(lib.data)) state.playlists=lib.data;
+ if(!social2.error&&social2.data){const so=Array.isArray(social2.data)?social2.data[0]:social2.data;state.followers=so?.followers||state.followers;state.following=so?.following||state.following;}
+ if(!af2.error&&Array.isArray(af2.data)){state.artistFollowers=af2.data.map(x=>({follower_user_id:x.user_id,display_name:x.display_name,profile_photo_path:x.profile_photo_path||x.profile_photo_url||null}));state.socialRpc.mine=true;}
+ if(state.profile?.profile_photo_path){const pr=db.storage.from('profile-images').getPublicUrl(state.profile.profile_photo_path);state.profilePhotoUrl=pr.data?.publicUrl||null;}else state.profilePhotoUrl=null;
+ const extraCoverPaths=[...new Set([...state.playlists.map(x=>x.cover_path),...state.podcasts.map(x=>x.cover_path),...state.myShows.map(x=>x.cover_path)].filter(x=>x&&!state.coverUrls[x]))].slice(0,35);
+ if(extraCoverPaths.length){const urls=await Promise.all(extraCoverPaths.map(async path=>[path,await resolveCoverUrl(path)]));urls.forEach(([path,url])=>{if(url)state.coverUrls[path]=url;});}
+}
+
+function isPremiumUser(){
+ const e=state.entitlement;if(e && (e.is_premium===true||String(e.is_premium)==='true'))return true;
+ return state.subscriptions.some(s=>String(s.status).toLowerCase()==='active' && !/^free$/i.test(s.plan?.plan_name||''));
+}
+
+const OFFLINE_DB='soundwave-offline-v1', OFFLINE_DB_VERSION=3, OFFLINE_STORE='tracks', KEY_STORE='keys';
+function requireOfflineCrypto(){
+  if(!window.isSecureContext || !window.crypto || !window.crypto.subtle){
+    throw new Error('Encrypted offline downloads require HTTPS or localhost. On this computer open http://localhost:5173. For phones or other devices, deploy SoundWave over HTTPS before using Download.');
+  }
+  return window.crypto;
+}
+function openOfflineDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open(OFFLINE_DB,OFFLINE_DB_VERSION);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(OFFLINE_STORE))d.createObjectStore(OFFLINE_STORE,{keyPath:'key'});if(!d.objectStoreNames.contains(KEY_STORE))d.createObjectStore(KEY_STORE,{keyPath:'userId'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('SoundWave offline storage upgrade is blocked. Close other SoundWave tabs and try again.'));});}
+async function getOfflineKey(userId){const c=requireOfflineCrypto();const d=await openOfflineDb();const existing=await new Promise((resolve,reject)=>{const r=d.transaction(KEY_STORE).objectStore(KEY_STORE).get(userId);r.onsuccess=()=>resolve(r.result?.cryptoKey||null);r.onerror=()=>reject(r.error);});if(existing)return existing;const cryptoKey=await c.subtle.generateKey({name:'AES-GCM',length:256},false,['encrypt','decrypt']);await new Promise((resolve,reject)=>{const tx=d.transaction(KEY_STORE,'readwrite');tx.objectStore(KEY_STORE).put({userId,cryptoKey});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});return cryptoKey;}
+async function listOfflineDownloads(userId){if(!('indexedDB'in window)||!userId)return[];try{const d=await openOfflineDb();return await new Promise((resolve,reject)=>{const r=d.transaction(OFFLINE_STORE).objectStore(OFFLINE_STORE).getAll();r.onsuccess=()=>resolve((r.result||[]).filter(x=>x.userId===userId));r.onerror=()=>reject(r.error);});}catch(e){console.warn('Offline library unavailable',e);return[];}}
+async function saveOfflineSong(song){if(!state.user||!isPremiumUser())throw Error('Offline downloads are available only with an active Premium plan.');if(!song?.audio_path)throw Error('This song has no downloadable audio.');const signed=check(await db.storage.from('song-audio').createSignedUrl(song.audio_path,900));const response=await fetch(signed.signedUrl);if(!response.ok)throw Error('Could not download the audio file.');const plain=await response.arrayBuffer();const c=requireOfflineCrypto();const iv=c.getRandomValues(new Uint8Array(12));const key=await getOfflineKey(state.user.id);const cipher=await c.subtle.encrypt({name:'AES-GCM',iv},key,plain);const d=await openOfflineDb();const row={key:`${state.user.id}:song:${song.song_id}`,userId:state.user.id,songId:song.song_id,title:song.song_title,artist:song.album?.artist?.artist_name||'SoundWave',album:song.album?.album_title||'Single',duration:song.duration_seconds,mime:response.headers.get('content-type')||'audio/mpeg',iv:Array.from(iv),cipher,validatedAt:Date.now()};await new Promise((resolve,reject)=>{const tx=d.transaction(OFFLINE_STORE,'readwrite');tx.objectStore(OFFLINE_STORE).put(row);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});state.offlineDownloads=await listOfflineDownloads(state.user.id);toast('Downloaded for offline listening');}
+async function removeOfflineSong(songId){const d=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=d.transaction(OFFLINE_STORE,'readwrite');tx.objectStore(OFFLINE_STORE).delete(`${state.user.id}:song:${songId}`);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});state.offlineDownloads=await listOfflineDownloads(state.user.id);}
+async function clearOfflineDownloads(userId){if(!('indexedDB'in window))return;const rows=await listOfflineDownloads(userId);const d=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=d.transaction(OFFLINE_STORE,'readwrite');for(const r of rows)tx.objectStore(OFFLINE_STORE).delete(r.key);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
+async function offlineBlobUrl(row){const c=requireOfflineCrypto();const key=await getOfflineKey(row.userId);const plain=await c.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(row.iv)},key,row.cipher);return URL.createObjectURL(new Blob([plain],{type:row.mime||'audio/mpeg'}));}
+async function playDownloaded(songId, pb = null) {
+  const row = state.offlineDownloads.find((x) => Number(x.songId) === Number(songId));
+  if (!row) throw Error('This song is not downloaded.');
+  const url = await offlineBlobUrl(row);
+  const dl = state.offlineDownloads.map((x) => Number(x.songId));
+  const keep = pb?.order && pb.order.every((x) => dl.includes(x));
+  const b = buildPlayback(songId, dl, keep ? { order: pb.order, pos: pb.pos } : {});
+  startPlayer({ kind: 'song', id: Number(row.songId), title: row.title, artist: row.artist, url, duration: row.duration, offline: true, ...b });
+}
+
+// ---------- Right-hand "Now playing / Queue" panel ----------
+function downloadsPage(){if(!isPremiumUser())return plans();const rows=state.offlineDownloads;shell(`<section class="workspace-hero premium-hero"><div><span class="eyebrow">OFFLINE LIBRARY</span><h2>Your downloads.</h2><p>Premium downloads are stored encrypted in this browser for the signed-in account.</p></div><span class="hero-vinyl">↓</span></section><div class="section-heading"><h2>Downloaded music <span class="muted small">(${rows.length})</span></h2></div>${rows.length?`<div class="songlist">${rows.map((r,i)=>`<div class="songrow"><span class="tag">${i+1}</span><span class="placeholder-art tiny" style="background:${grad(i)}">♫</span><div class="grow"><strong>${escapeHtml(r.title)}</strong><small>${escapeHtml(r.artist)} · ${escapeHtml(r.album)}</small></div><span class="muted small">${nice(r.duration)}</span><button class="track-play" data-offline-play="${r.songId}">${icon('play')}</button><button class="button secondary sm" data-offline-remove="${r.songId}">Remove</button></div>`).join('')}</div>`:'<div class="empty">No downloads yet. Use a song’s ••• menu and choose Download.</div>'}<p class="footnote">The app rechecks Premium entitlement whenever you sign in. If entitlement expires, this local offline library is removed.</p>`,'Downloads',state.entitlement?.plan_name?`${state.entitlement.plan_name} offline listening`:'Premium offline listening');document.querySelectorAll('[data-offline-play]').forEach(b=>b.onclick=()=>action(()=>playDownloaded(Number(b.dataset.offlinePlay))));document.querySelectorAll('[data-offline-remove]').forEach(b=>b.onclick=()=>action(async()=>{await removeOfflineSong(Number(b.dataset.offlineRemove));render();toast('Download removed');}));}
+
+function artistDetail() {
+  const artist = state.artists.find((a) => Number(a.artist_id) === Number(state.selectedArtist));
+  if (!artist) return artists();
+  const releases = songsByArtist(artist.artist_id);
+  const albums = catalogAlbums().filter((a) => Number(a.artist?.artist_id) === Number(artist.artist_id));
+  const own = isOwnArtist(artist), fc = followerText(artist.artist_id);
+  state.tint = tintFor(artist.artist_id);
+  shell(`<section class="artist-profile-hero"><span class="artist-profile-avatar" style="background:${grad(artist.artist_id)}">${esc(artist.artist_name?.[0] || 'A')}</span><div><span class="coll-kind">Artist</span><h1 class="coll-title">${esc(artist.artist_name)}</h1><p class="coll-sub">${fc ? `<strong data-follower-count="${artist.artist_id}">${fc}</strong> · ` : ''}${albums.length} ${albums.length === 1 ? 'release' : 'releases'} · ${releases.length} ${releases.length === 1 ? 'song' : 'songs'}${artist.country ? ' · ' + esc(artist.country) : ''}</p></div></section>
+<div class="coll-actions">${releases.length ? `<button type="button" class="sw-big-play" data-play-ids="${ids(releases).join(',')}" aria-label="Play ${esc(artist.artist_name)}">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle">${icon('shuffle')}</button>` : ''}${own ? `<button type="button" class="follow-btn" data-nav="followers">View your followers</button>` : followBtn(artist)}</div>
+${releases.length ? `<section><div class="section-heading"><h2>Popular</h2></div>${trackTable(releases.slice(0, 10), { queue: ids(releases), showAlbum: false })}</section>` : ''}
+${albums.length ? `<section class="shelf-section"><div class="section-heading"><h2>Discography</h2></div><div class="shelf">${albums.map(albumTile).join('')}</div></section>` : '<div class="empty">No published releases yet.</div>'}
+${artist.bio ? `<section class="about-card"><h2>About</h2><p>${esc(artist.bio)}</p></section>` : ''}`, '', '');
+}
+function songRows(rows, showAdd = false, queueIds = null) { return trackTable(rows, { queue: queueIds?.length ? queueIds : ids(rows) }); }
+function recommendationShelf(){const likedArtistIds=new Set(state.favorites.map(f=>Number(f.artist_id)));const recentSongIds=new Set(state.history.slice(0,10).map(h=>Number(h.song_id)));const preferred=state.songs.filter(s=>likedArtistIds.has(Number(s.album?.artist?.artist_id))&&!recentSongIds.has(Number(s.song_id)));const rest=state.songs.filter(s=>!recentSongIds.has(Number(s.song_id))&&!preferred.includes(s));const picks=[...preferred,...rest].slice(0,5);return `<div class="section-heading"><h2>Made for you</h2><span class="muted small">Based on liked artists and recent listening</span></div><div class="release-grid">${picks.map(artTile).join('')||'<div class="empty">Listen to a few tracks and follow artists to personalize this area.</div>'}</div>`;}
+function listenerDashboard() {
+  const h = new Date().getHours(), greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  const f = state.uiFilter || 'all';
+  const chips = `<div class="home-chips">${[['all', 'All'], ['music', 'Music'], ['podcasts', 'Podcasts']].map(([k, l]) => `<button type="button" class="${f === k ? 'active' : ''}" data-filter="${k}">${l}</button>`).join('')}</div>`;
+  const seen = new Set(), recent = [];
+  for (const r of state.history) { const s = songById(r.song_id); if (s && !seen.has(s.song_id)) { seen.add(s.song_id); recent.push(s); } }
+  const albums = [...catalogAlbums()].sort((a, b) => String(b.release_date || '').localeCompare(String(a.release_date || '')) || b.album_id - a.album_id);
+  const popular = state.artists.filter((a) => state.favorites.some((x) => x.artist_id === a.artist_id)).concat(state.artists.filter((a) => !state.favorites.some((x) => x.artist_id === a.artist_id))).slice(0, 7);
+  const shelf = (title, link, html) => html ? `<section class="shelf-section"><div class="section-heading"><h2>${title}</h2>${link ? `<button type="button" class="text-link" data-nav="${link}">Show all</button>` : ''}</div>${html}</section>` : '';
+  const music = f !== 'podcasts' ? `${shelf('Recently played', 'history', recent.length ? `<div class="shelf">${recent.slice(0, 7).map(artTile).join('')}</div>` : '')}${shelf('Made for you', 'music', state.songs.length ? `<div class="shelf">${recommendationPicks().map(artTile).join('')}</div>` : '')}${shelf('New releases', 'music', albums.length ? `<div class="shelf">${albums.slice(0, 7).map(albumTile).join('')}</div>` : '')}${shelf('Popular artists', 'artists', popular.length ? `<div class="shelf">${popular.map(artistCard).join('')}</div>` : '')}${!state.songs.length ? '<div class="empty">When artists release music, you will find it here.</div>' : ''}` : '';
+  const pods = f !== 'music' ? shelf('Podcasts for you', 'podcasts', state.podcasts.length ? `<div class="shelf">${state.podcasts.slice(0, 7).map(showCard).join('')}</div>` : (f === 'podcasts' ? '<div class="empty">No shows published yet.</div>' : '')) : '';
+  shell(`${chips}${listeningStatsHtml()}${weeklyTopHtml()}${music}${pods}`, greeting, '');
+}
+function recommendationPicks() {
+  const liked = new Set(state.favorites.map((x) => Number(x.artist_id))), recent = new Set(state.history.slice(0, 10).map((x) => Number(x.song_id)));
+  const pref = state.songs.filter((s) => liked.has(Number(s.album?.artist?.artist_id)) && !recent.has(Number(s.song_id)));
+  const rest = state.songs.filter((s) => !recent.has(Number(s.song_id)) && !pref.includes(s));
+  return [...pref, ...rest].slice(0, 7);
+}
+function artistDashboard(){if(!hasArtistAccess())return listenerDashboard();
+ const owned=state.ownedSongs||[];
+ shell(`<section class="workspace-hero artist-hero"><div><span class="eyebrow">ARTIST STUDIO</span><h2>Your sound. Your space.</h2><p>See how your releases are performing, then jump into publishing when you are ready.</p><button class="button" data-nav="studio">${icon('upload')} Manage releases</button></div><span class="hero-vinyl">${icon('album')}</span></section>${artistAnalyticsHtml()}<div class="section-heading"><h2>Recent releases</h2><button class="text-link" data-nav="studio">Manage →</button></div><div class="release-grid">${owned.filter(x=>x.is_active).slice(0,5).map(artTile).join('')||quickTile('Create your first album','Start in Artist Studio','', 'studio','album',2)}</div>`,'Artist Studio',`Welcome back, ${state.artist?.artist_name||'Artist'}.`);
+}
+function adminDashboard(){if(!hasAdminAccess())return listenerDashboard();
+ const d=state.adminData||{};const activeUsers=(d.users||[]).filter(x=>x.is_active!==false).length;const pending=(d.subscription_requests||[]).filter(x=>String(x.status).toLowerCase()==='pending').length;
+ shell(`<section class="workspace-hero admin-hero"><div><span class="eyebrow">MODERATION</span><h2>Keep SoundWave healthy.</h2><p>Review accounts, catalog activity and payment requests from one focused workspace.</p><button class="button" data-admin-target="accounts">${icon('shield')} Open moderation</button></div><span class="hero-vinyl">${icon('shield')}</span></section><div class="admin-summary"><button data-admin-target="accounts"><small>Active accounts</small><strong>${activeUsers}</strong></button><button data-admin-target="payments"><small>Pending payments</small><strong>${pending}</strong></button></div><p class="footnote">Use Moderation in the sidebar for protected admin actions. Listener and Artist tools stay separate so the workspace remains clear.</p>`,'Moderation','Administrator workspace.');
+}
+function home(){return listenerDashboard();}
+function music() {
+  state.tint = '#1d3a2f';
+  shell(`<label class="page-search mobile-search">${icon('search')}<input id="page-search" type="search" autocomplete="off" spellcheck="false" placeholder="What do you want to play?" aria-label="Search" value="${esc(state.searchQuery || '')}"></label>${recentSearchesHtml()}<div id="search-results">${searchResultsHtml()}</div>`, 'Search', '');
+  const pg = $('#page-search'); if(pg){pg.addEventListener('input', () => setSearch(pg.value, pg));pg.addEventListener('keydown',searchKeyboardNav);}document.querySelectorAll('[data-recent-search]').forEach(b=>b.onclick=()=>{state.searchQuery=b.dataset.recentSearch;render();});
+  bindSearchBits(document.getElementById('search-results'));
+  if (!state.searchQuery && !state.searchGenre && matchMedia('(hover: hover)').matches && !state.focusSearch) $('#global-search')?.focus();
+}
+function bindMusic(root = document) {
+  root.querySelectorAll('[data-jump]').forEach((b) => b.onclick = () => navigate(b.dataset.jump));
+  root.querySelectorAll('[data-play]').forEach((b) => b.onclick = (e) => {
+    e.stopPropagation(); e.preventDefault();
+    action(async () => { const row = b.closest('[data-queue]'); const q = row?.dataset.queue ? row.dataset.queue.split(',').filter(Boolean).map(Number) : null; await playSong(Number(b.dataset.play), q); });
+  });
+  root.querySelectorAll('[data-play-ids]').forEach((b) => b.onclick = (e) => {
+    e.stopPropagation();
+    const list = b.dataset.playIds.split(',').filter(Boolean).map(Number); if (!list.length) return;
+    const start = prefs.shuffle ? list[Math.floor(Math.random() * list.length)] : list[0];
+    action(() => playSong(start, list));
+  });
+  root.querySelectorAll('[data-toggle-shuffle]').forEach((b) => { b.classList.toggle('active', prefs.shuffle); b.onclick = toggleShuffle; });
+  bindSongMenus();
+}
+
+// ---------- Library sidebar (Spotify-style "Your Library") ----------
+function libraryChips() {
+  return [['playlists', 'Playlists'], ['artists', 'Artists'], ['podcasts', 'Podcasts']].map(([k, label]) => `<button type="button" class="filter-pill ${state.libFilter === k ? 'active' : ''}" data-lib-filter="${k}" aria-pressed="${state.libFilter === k}">${label}</button>`).join('');
+}
+function libraryToolsHtml() {
+  const open = state.libSearchOpen || state.libQuery;
+  return `<button type="button" class="icon-quiet" id="lib-search-toggle" aria-label="Search in Your Library" title="Search in Your Library">${icon('search')}</button><input id="lib-search" class="lib-search" type="search" autocomplete="off" placeholder="Search in Your Library" aria-label="Search in Your Library" value="${esc(state.libQuery || '')}" ${open ? '' : 'hidden'}><button type="button" class="lib-sort" id="lib-sort" aria-haspopup="menu"><span id="lib-sort-label">${prefs.libSort === 'alpha' ? 'Alphabetical' : 'Recents'}</span>${icon(prefs.libView === 'grid' ? 'grid' : 'list')}</button>`;
+}
+function libraryEntries() {
+  const f = state.libFilter, q = (state.libQuery || '').trim().toLowerCase(), out = [];
+  const add = (name, meta, art, attrs, active, cls = '') => out.push({ name, meta, art, attrs, active, cls });
+  if (f === 'all' || f === 'playlists') state.playlists.slice(0, 80).forEach((p, i) => add(p.playlist_name, `Playlist · ${p.visibility}`, `<span class="library-art" style="background:${grad(i)}">${icon('music')}</span>`, `data-openplaylist="${p.playlist_id}"`, state.page === 'playlists' && state.selectedPlaylist === p.playlist_id));
+  if (f === 'all' || f === 'podcasts') state.myShows.filter((s) => s.is_active).slice(0, 40).forEach((s, i) => {
+    const podcastArt = s.cover_path && state.coverUrls[s.cover_path]
+      ? `<img class="cover-img" src="${esc(state.coverUrls[s.cover_path])}" alt="${esc(s.show_title)}">`
+      : icon('mic');
+    add(s.show_title, 'Podcast · Your show', `<span class="library-art" style="background:${grad(i + 2)}">${podcastArt}</span>`, `data-open-show="${s.show_id}"`, state.page === 'podcasts' && state.selectedShow === s.show_id);
+  });
+  if (f === 'all' || f === 'artists') state.artists.filter((a) => state.favorites.some((x) => x.artist_id === a.artist_id)).slice(0, 80).forEach((a, i) => add(a.artist_name, 'Artist', `<span class="library-art round" style="background:${grad(i + 1)}">${esc(a.artist_name?.[0] || 'A')}</span>`, `data-open-artist="${a.artist_id}"`, state.page === 'artist-detail' && state.selectedArtist === a.artist_id, 'is-artist'));
+  let rows = q ? out.filter((e) => e.name.toLowerCase().includes(q)) : out;
+  if (prefs.libSort === 'alpha') rows = [...rows].sort((x, y) => x.name.localeCompare(y.name));
+  return rows;
+}
+function libraryListHtml() {
+  const f = state.libFilter, q = (state.libQuery || '').trim().toLowerCase(), grid = prefs.libView === 'grid';
+  const item = (cls, art, name, metaHtml, attrs, active) => `<button type="button" class="library-item ${cls} ${active ? 'active' : ''}" ${attrs} title="${esc(name)}">${art}<span class="library-item-label"><strong>${esc(name)}</strong><small>${metaHtml}</small></span></button>`;
+  const parts = [];
+  // Liked Songs is always pinned first, exactly like Spotify.
+  if ((f === 'all' || f === 'playlists') && (!q || 'liked songs'.includes(q))) {
+    const meta = state.likesAvailable ? `${state.liked.length} ${state.liked.length === 1 ? 'song' : 'songs'}` : 'Set up needed';
+    parts.push(item('liked pinned', `<span class="library-art liked-art">${icon('heart')}</span>`, 'Liked Songs', `<span class="pin-ico">${icon('pin')}</span>Playlist · ${meta}`, 'data-nav="liked-songs"', state.page === 'liked-songs'));
+  }
+  if ((f === 'all' || f === 'playlists') && state.topWeekSongs.length && (!q || 'your top songs of the week'.includes(q))) {
+    parts.push(item('weekly pinned', `<span class="library-art weekly-art">${icon('music')}</span>`, 'Your Top Songs of the Week', `<span class="pin-ico">${icon('pin')}</span>Auto playlist · ${state.topWeekSongs.length} songs`, `data-play-ids="${state.topWeekSongs.map(x=>x.song_id).join(',')}"`, false));
+  }
+  libraryEntries().forEach((e) => parts.push(item(e.cls, e.art, e.name, esc(e.meta), e.attrs, e.active)));
+  if (parts.length === ((f === 'all' || f === 'playlists') && (!q || 'liked songs'.includes(q)) ? 1 : 0) && !libraryEntries().length) {
+    if (q) return parts.join('') + `<div class="library-empty"><strong>Couldn’t find “${esc(state.libQuery)}”</strong><p>Try searching again using a different spelling or keyword.</p></div>`;
+    if (f === 'artists') return `<div class="library-empty-card"><strong>Follow your first artist</strong><p>Follow artists you like and they’ll show up here.</p><button type="button" class="button sm" data-nav="artists">Browse artists</button></div>`;
+    if (f === 'podcasts') return `<div class="library-empty-card"><strong>Create your first podcast show</strong><p>Share a story with the world.</p><button type="button" class="button sm" data-create-show>Create show</button></div>`;
+    return parts.join('') + `<div class="library-empty-card"><strong>Create your first playlist</strong><p>It’s easy, we’ll help you.</p><button type="button" class="button sm" data-create-playlist>Create playlist</button></div>`;
+  }
+  return parts.join('');
+}
+function renderLibraryList() {
+  const list = document.getElementById('library-list'); if (!list) return;
+  list.className = `library-scroll ${prefs.libView === 'grid' ? 'grid' : ''}`;
+  list.innerHTML = libraryListHtml();
+  const chips = document.getElementById('library-filters'); if (chips) chips.innerHTML = libraryChips();
+  const lab = document.getElementById('lib-sort-label'); if (lab) lab.textContent = prefs.libSort === 'alpha' ? 'Alphabetical' : 'Recents';
+  const sortBtn = document.getElementById('lib-sort'); if (sortBtn) { sortBtn.querySelector('svg')?.remove(); sortBtn.insertAdjacentHTML('beforeend', icon(prefs.libView === 'grid' ? 'grid' : 'list')); }
+  bindLibrary();
+}
+function popMenu(anchor, html, wire) {
+  document.querySelector('.song-action-popover')?.remove();
+  const pop = document.createElement('div'); pop.className = 'song-action-popover'; pop.setAttribute('role', 'menu'); pop.innerHTML = html; document.body.appendChild(pop);
+  const r = anchor.getBoundingClientRect();
+  pop.style.left = `${Math.max(8, Math.min(window.innerWidth - 250, r.left))}px`;
+  pop.style.top = `${Math.min(window.innerHeight - (pop.offsetHeight || 200) - 100, r.bottom + 6)}px`;
+  wire(pop, (sel, fn) => pop.querySelector(sel)?.addEventListener('click', () => { pop.remove(); fn(); }));
+}
+function openCreateShow() { navigate('podcasts'); setTimeout(() => document.getElementById('create-show-dialog')?.showModal(), 60); }
+function bindLibrary() {
+  const sb = document.querySelector('.sidebar'); if (!sb) return;
+  bindContent(sb); bindMusic(sb);
+  sb.querySelectorAll('[data-create-playlist]').forEach((b) => b.onclick = () => action(quickCreatePlaylist));
+  sb.querySelectorAll('[data-create-show]').forEach((b) => b.onclick = openCreateShow);
+  sb.querySelectorAll('[data-lib-filter]').forEach((b) => b.onclick = () => { state.libFilter = state.libFilter === b.dataset.libFilter ? 'all' : b.dataset.libFilter; renderLibraryList(); });
+  const create = document.getElementById('library-create');
+  if (create) create.onclick = (e) => { e.stopPropagation(); popMenu(create, `<button data-c-pl>${icon('music')} <span>Playlist<small class="menu-sub">Build a playlist with songs</small></span></button><button data-c-show>${icon('mic')} <span>Podcast show<small class="menu-sub">Start your own show</small></span></button>`, (pop, on) => { on('[data-c-pl]', () => action(quickCreatePlaylist)); on('[data-c-show]', openCreateShow); }); };
+  const tog = document.getElementById('lib-search-toggle'), box = document.getElementById('lib-search');
+  if (tog && box) {
+    tog.onclick = () => { state.libSearchOpen = !state.libSearchOpen; if (!state.libSearchOpen) { state.libQuery = ''; box.value = ''; renderLibraryList(); } box.hidden = !(state.libSearchOpen || state.libQuery); if (!box.hidden) box.focus(); };
+    box.oninput = () => { state.libQuery = box.value; renderLibraryList(); };
+  }
+  const sort = document.getElementById('lib-sort');
+  if (sort) sort.onclick = (e) => { e.stopPropagation(); const chk = (c) => (c ? `<span class="menu-check">${icon('check')}</span>` : ''); popMenu(sort, `<div class="menu-label">Sort by</div><button data-s="recents">Recents ${chk(prefs.libSort !== 'alpha')}</button><button data-s="alpha">Alphabetical ${chk(prefs.libSort === 'alpha')}</button><div class="menu-label">View as</div><button data-v="list">${icon('list')} List ${chk(prefs.libView !== 'grid')}</button><button data-v="grid">${icon('grid')} Grid ${chk(prefs.libView === 'grid')}</button>`, (pop, on) => { on('[data-s="recents"]', () => { prefs.libSort = 'recents'; savePrefs(); renderLibraryList(); }); on('[data-s="alpha"]', () => { prefs.libSort = 'alpha'; savePrefs(); renderLibraryList(); }); on('[data-v="list"]', () => { prefs.libView = 'list'; savePrefs(); renderLibraryList(); }); on('[data-v="grid"]', () => { prefs.libView = 'grid'; savePrefs(); renderLibraryList(); }); }); };
+}
+
+// ---------- Search ----------
+function setSearch(q, from) {
+  state.searchQuery = q;
+  document.querySelectorAll('#global-search,#page-search').forEach((el) => { if (el !== from && el.value !== q) el.value = q; });
+  if (state.page !== 'music') { state.focusSearch = from?.id || 'global-search'; state.page = 'music'; render(); return; }
+  renderSearchResults();
+}
+function fuzzyScore(text, query){
+  text=String(text||'').toLowerCase();query=String(query||'').trim().toLowerCase();if(!query)return 1;
+  if(text===query)return 120;if(text.startsWith(query))return 100-query.length;if(text.includes(query))return 80-query.length;
+  let qi=0,score=0,last=-2;for(let i=0;i<text.length&&qi<query.length;i++){if(text[i]===query[qi]){score+=i===last+1?6:2;last=i;qi++;}}
+  return qi===query.length?score:0;
+}
+function searchData() {
+  const q=(state.searchQuery||'').trim().toLowerCase(),g=state.searchGenre;
+  let songs=state.songs,albums=catalogAlbums(),artists=state.artists,playlists=state.playlists,shows=state.podcasts;
+  if(g){songs=songs.filter(s=>Number(s.genre_id)===Number(g));albums=albums.filter(a=>a.songs.some(s=>Number(s.genre_id)===Number(g)));const aids=new Set(songs.map(s=>s.album?.artist?.artist_id));artists=artists.filter(a=>aids.has(a.artist_id));playlists=[];shows=[];}
+  const rank=(rows,fields)=>q?rows.map(row=>({row,score:Math.max(...fields.map(f=>fuzzyScore(f(row),q)))})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).map(x=>x.row):rows;
+  songs=rank(songs,[s=>s.song_title,s=>s.album?.album_title,s=>s.album?.artist?.artist_name]);
+  albums=rank(albums,[a=>a.title,a=>a.artist?.artist_name]);artists=rank(artists,[a=>a.artist_name,a=>a.country]);playlists=rank(playlists,[p=>p.playlist_name,p=>p.description]);shows=rank(shows,[p=>p.show_title,p=>p.category]);
+  return {q,songs,albums,artists,playlists,shows};
+}
+function topResultHtml(d) {
+  const q = d.q; if (!q) return '';
+  const score = (n) => { n = String(n || '').toLowerCase(); return n === q ? 3 : n.startsWith(q) ? 2 : n.includes(q) ? 1 : 0; };
+  const c = [...d.artists.map((a) => ({ t: 'artist', s: score(a.artist_name) * 10 + 3, a })), ...d.songs.map((s) => ({ t: 'song', s: score(s.song_title) * 10 + 2, song: s })), ...d.albums.map((a) => ({ t: 'album', s: score(a.title) * 10 + 1, a }))].sort((x, y) => y.s - x.s)[0];
+  if (!c) return '';
+  if (c.t === 'artist') { const songs = songsByArtist(c.a.artist_id); return `<article class="top-card clickable" tabindex="0" role="link" data-open-artist="${c.a.artist_id}" ${songs.length ? `data-queue="${ids(songs).join(',')}"` : ''}><span class="top-art round" style="background:${grad(c.a.artist_id)}">${esc(c.a.artist_name?.[0] || 'A')}</span><h3>${esc(c.a.artist_name)}</h3><span class="type-pill">Artist</span>${songs.length ? `<button type="button" class="hover-play" data-play="${songs[0].song_id}" aria-label="Play ${esc(c.a.artist_name)}">${icon('play')}</button>` : ''}</article>`; }
+  if (c.t === 'album') return `<article class="top-card clickable" tabindex="0" role="link" data-open-album="${c.a.album_id}" data-queue="${ids(c.a.songs).join(',')}"><span class="top-art">${albumArt({ song_id: c.a.album_id, album: c.a }, 'large')}</span><h3>${esc(c.a.title)}</h3><p><span class="type-pill">Album</span> ${esc(c.a.artist?.artist_name || '')}</p><button type="button" class="hover-play" data-play="${c.a.songs[0].song_id}" aria-label="Play ${esc(c.a.title)}">${icon('play')}</button></article>`;
+  const s = c.song;
+  return `<article class="top-card clickable" tabindex="0" role="link" ${s.album ? `data-open-album="${s.album.album_id}"` : ''} data-queue="${ids(d.songs).join(',')}"><span class="top-art">${albumArt(s, 'large')}</span><h3>${esc(s.song_title)}</h3><p><span class="type-pill">Song</span> ${esc(s.album?.artist?.artist_name || '')}</p><button type="button" class="hover-play" data-play="${s.song_id}" aria-label="Play ${esc(s.song_title)}">${icon('play')}</button></article>`;
+}
+function browseAllHtml() {
+  const g = state.genres;
+  const tiles = g.length ? g.map((x, i) => `<button type="button" class="browse-tile" data-genre="${x.genre_id}" style="background:${BROWSE_COLORS[i % BROWSE_COLORS.length]}"><span>${esc(x.genre_name)}</span><i>${icon('music')}</i></button>`).join('')
+    : [['Podcasts', 'podcasts', 'mic'], ['Your library', 'playlists', 'library'], ['Artists', 'artists', 'users'], ['Recently played', 'history', 'clock']].map(([label, page, ico], i) => `<button type="button" class="browse-tile" data-nav="${page}" style="background:${BROWSE_COLORS[i * 2 % BROWSE_COLORS.length]}"><span>${label}</span><i>${icon(ico)}</i></button>`).join('');
+  return `<div class="section-heading"><h2>Browse all</h2></div><div class="browse-grid">${tiles}</div>`;
+}
+function searchResultsHtml() {
+  const d = searchData(), tab = state.searchTab, genre = state.searchGenre && state.genres.find((x) => Number(x.genre_id) === Number(state.searchGenre));
+  if (!d.q && !state.searchGenre) return browseAllHtml();
+  const any = d.songs.length || d.artists.length || d.albums.length || d.playlists.length || d.shows.length;
+  const genreChip = genre ? `<div class="genre-chip"><span>${esc(genre.genre_name)}</span><button type="button" data-clear-genre aria-label="Clear genre filter">${icon('close')}</button></div>` : '';
+  if (!any) return `${genreChip}<div class="empty-state"><h3>No results found${d.q ? ` for “${esc(state.searchQuery)}”` : ''}</h3><p>Check your spelling, or try fewer or different keywords.</p></div>`;
+  const tabs = [['all', 'All', true], ['songs', 'Songs', d.songs.length], ['artists', 'Artists', d.artists.length], ['albums', 'Albums', d.albums.length], ['playlists', 'Playlists', d.playlists.length], ['podcasts', 'Podcasts', d.shows.length]].filter((t) => t[2]).map(([k, l]) => `<button type="button" class="${tab === k ? 'active' : ''}" data-search-tab="${k}">${l}</button>`).join('');
+  const sec = (title, html) => html ? `<section class="search-section"><div class="section-heading"><h2>${title}</h2></div>${html}</section>` : '';
+  const songsHtml = (full) => d.songs.length ? trackTable(full ? d.songs : d.songs.slice(0, 4), { queue: ids(d.songs), header: false, showAlbum: full }) : '';
+  const artistsHtml = d.artists.length ? `<div class="shelf">${d.artists.slice(0, tab === 'artists' ? 60 : 7).map(artistCard).join('')}</div>` : '';
+  const albumsHtml = d.albums.length ? `<div class="shelf">${d.albums.slice(0, tab === 'albums' ? 60 : 7).map(albumTile).join('')}</div>` : '';
+  const plHtml = d.playlists.length ? `<div class="shelf">${d.playlists.map((p, i) => `<article class="release-tile card-link" tabindex="0" role="link" data-openplaylist="${p.playlist_id}"><span class="release-art"><span class="placeholder-art large" style="background:${grad(i)}">${icon('music')}</span></span><strong>${esc(p.playlist_name)}</strong><small>Playlist · You</small></article>`).join('')}</div>` : '';
+  const showHtml = d.shows.length ? `<div class="shelf">${d.shows.map(showCard).join('')}</div>` : '';
+  let body;
+  if (tab === 'songs') body = sec('Songs', songsHtml(true));
+  else if (tab === 'artists') body = sec('Artists', artistsHtml);
+  else if (tab === 'albums') body = sec('Albums', albumsHtml);
+  else if (tab === 'playlists') body = sec('Playlists', plHtml);
+  else if (tab === 'podcasts') body = sec('Podcasts', showHtml);
+  else {
+    const top = topResultHtml(d);
+    body = `${top || d.songs.length ? `<div class="search-top">${top ? `<section><div class="section-heading"><h2>Top result</h2></div>${top}</section>` : ''}${d.songs.length ? `<section><div class="section-heading"><h2>Songs</h2></div>${songsHtml(false)}</section>` : ''}</div>` : ''}${sec('Artists', artistsHtml)}${sec('Albums', albumsHtml)}${sec('Playlists', plHtml)}${sec('Podcasts', showHtml)}`;
+  }
+  return `${genreChip}<div class="home-chips search-tabs">${tabs}</div>${body}`;
+}
+function renderSearchResults() {
+  const box = document.getElementById('search-results'); if (!box) return;
+  box.innerHTML = searchResultsHtml();
+  bindContent(box); bindMusic(box); bindSearchBits(box); syncHearts(); markPlaying();
+}
+function bindSearchBits(root) {
+  root.querySelectorAll('[data-search-tab]').forEach((b) => b.onclick = () => { state.searchTab = b.dataset.searchTab; renderSearchResults(); });
+  root.querySelectorAll('[data-genre]').forEach((b) => b.onclick = () => { state.searchGenre = Number(b.dataset.genre); state.searchTab = 'all'; renderSearchResults(); });
+  root.querySelectorAll('[data-clear-genre]').forEach((b) => b.onclick = () => { state.searchGenre = null; renderSearchResults(); });
+}
+function artists(){
+ shell(`<div class="home-chips"><button class="active" data-nav="artists">Discover</button><button data-nav="liked-artists">Following</button></div><div class="artist-grid">${state.artists.map((a,i)=>artistCard(a,i,{follow:true})).join('')||'<div class="empty">No active artists found.</div>'}</div>`,'Artists','Discover and follow artists.');
+}
+function likedArtists(){ followers(); }
+function bindFavoriteButtons(){ /* Follow buttons are handled globally (see the document click handler). */ }
+const personName = (uid) => state.socialProfiles?.[String(uid)]?.display_name || `Listener ${String(uid || '').slice(0, 6)}`;
+const fmtDate = (d) => { try { return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); } catch { return ''; } };
+function followerRows() {
+  // People who tapped Follow on this account's artist profile (listeners cannot be followed).
+  return (state.artistFollowers || []).map((r) => ({ id: r.follower_user_id, name: r.display_name || personName(r.follower_user_id), since: r.followed_at }));
+}
+function myFollowerCount() { return Math.max(followerRows().length, state.artist ? (state.followerCounts?.[Number(state.artist.artist_id)] || 0) : 0); }
+const followingArtists = () => state.artists.filter((a) => isFollowing(a.artist_id));
+const followNav = () => (hasArtistAccess() ? 'followers' : 'liked-artists');
+const followLabel = () => (hasArtistAccess() ? 'Followers' : 'Following');
+function followers(){
+ const isArtist=hasArtistAccess();
+ const tab=!isArtist||state.page==='liked-artists'?'following':'followers';
+ const fans=followerRows(),fArtists=followingArtists();
+ const initial=(n,i=0)=>`<span class="member-avatar" style="background:${grad(i)}">${esc((n||'?')[0].toUpperCase())}</span>`;
+ const followersList=fans.length?fans.map((r,i)=>`<div class="social-row">${initial(r.name,i)}<div><strong>${esc(r.name)}</strong><small>${r.since?`Followed you ${esc(fmtDate(r.since))}`:'Follows you'}</small></div></div>`).join(''):`<div class="empty">No followers yet. When a listener taps <b>Follow</b> on your artist page, they will show up here.</div>`;
+ const followingList=fArtists.length?fArtists.map((a,i)=>`<div class="social-row"><button type="button" class="social-link" data-open-artist="${a.artist_id}"><span class="member-avatar" style="background:${grad(i)}">${esc(a.artist_name?.[0]||'A')}</span><span><strong>${esc(a.artist_name)}</strong><small>Artist${followerText(a.artist_id)?' · '+followerText(a.artist_id):''}</small></span></button>${followBtn(a,'sm')}</div>`).join(''):`<div class="empty">You are not following any artists yet. <button type="button" class="text-link" data-nav="artists">Find artists to follow</button></div>`;
+ const needsSql=isArtist&&tab==='followers'&&!state.socialRpc?.mine;
+ const chips=isArtist?`<div class="home-chips"><button class="${tab==='followers'?'active':''}" data-nav="followers">Followers</button><button class="${tab==='following'?'active':''}" data-nav="liked-artists">Following</button></div>`:`<div class="home-chips"><button data-nav="artists">Discover</button><button class="active" data-nav="liked-artists">Following</button></div>`;
+ const stats=isArtist?`<div class="social-stats"><div><strong>${fans.length}</strong><span>Followers</span></div><div><strong>${fArtists.length}</strong><span>Following</span></div></div>`:`<div class="social-stats"><div><strong>${fArtists.length}</strong><span>Following</span></div></div>`;
+ shell(`${chips}${stats}${needsSql?`<div class="notice">To see who follows your artist profile, run <code>sql/RUN_ME_likes_and_followers.sql</code> once in the Supabase SQL Editor, then refresh this page.</div>`:''}<section class="social-list">${tab==='followers'?followersList:followingList}</section>`,tab==='followers'?'Followers':'Following','Your SoundWave social connections.');
+}
+
+function profile(){
+ const display=state.profile?.display_name||state.user?.email?.split('@')[0]||'SoundWave user';
+ const st=state.profileStats||{};
+ const followerCount=Number(st.follower_count ?? (hasArtistAccess()?followerRows().length:state.followers.length) ?? 0);
+ const followingCount=Number(st.following_count ?? followingArtists().length ?? 0);
+ const playlistCount=Number(st.playlist_count ?? state.playlists.length ?? 0);
+ const avatar=state.profilePhotoUrl?`<img src="${esc(state.profilePhotoUrl)}" alt="${esc(display)}">`:esc(display[0]?.toUpperCase()||'S');
+ shell(`<section class="profile-hero"><button type="button" class="profile-avatar-large profile-photo-btn" id="profile-photo-btn" title="Change profile photo">${avatar}<span class="profile-photo-edit">${icon('upload')} Change photo</span></button><div><span class="eyebrow">PROFILE</span><h2>${esc(display)}</h2><p><span class="role-badge">${esc(hasAdminAccess()?(hasArtistAccess()?'Artist + Admin':'Admin'):hasArtistAccess()?'Artist':'Listener')}</span></p><p class="profile-social-line"><strong>${followerCount}</strong> followers · <strong>${followingCount}</strong> following · <strong>${playlistCount}</strong> playlists</p><button class="button secondary sm" id="edit-profile-btn">Edit profile</button></div></section><div class="profile-grid">${hasArtistAccess()?`<button data-nav="followers">${icon('users')}<span><strong>${followerCount} followers</strong><small>See who follows your music</small></span></button>`:''}<button data-nav="playlists">${icon('library')}<span><strong>${playlistCount} playlists</strong><small>Open your library</small></span></button><button data-nav="liked-artists">${icon('heart')}<span><strong>${followingCount} following</strong><small>People and artists you follow</small></span></button>${isPremiumUser()?`<button data-nav="downloads">${icon('check')}<span><strong>${state.offlineDownloads.length} downloads</strong><small>Offline Premium library</small></span></button>`:''}</div><div class="profile-danger-zone"><button class="button danger" id="deactivate-account">Deactivate account</button><button class="button secondary profile-signout" id="profile-page-signout">Sign out</button></div><input type="file" accept="image/jpeg,image/png,image/webp" id="profile-photo-file" hidden><dialog class="sw-modal" id="edit-profile-dialog"><div class="modal-head"><div><span class="eyebrow">PROFILE</span><h2>Edit your profile</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><form id="edit-profile-form"><label class="single-field">Display name<input id="profile-display-name" value="${esc(display)}" required maxlength="90"></label><p class="muted small">Profile photos are stored in the profile-images bucket; SoundWave stores only profile_photo_path in public.users.</p><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button">Save</button></div></form></dialog>`,'Profile','Your account and SoundWave activity.');
+ $('#edit-profile-btn').onclick=()=>$('#edit-profile-dialog').showModal();
+ $('#profile-photo-btn').onclick=()=>$('#profile-photo-file').click();
+ $('#profile-photo-file').onchange=e=>action(async()=>{const file=e.target.files?.[0];if(!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Choose a JPEG, PNG or WebP image.');if(file.size>5*1048576)throw Error('Profile photo must be under 5 MB.');const ext=(file.name.split('.').pop()||'jpg').toLowerCase();const path=`${state.user.id}/avatar.${ext}`;check(await db.storage.from('profile-images').upload(path,file,{upsert:true,contentType:file.type}));check(await db.from('users').update({profile_photo_path:path}).eq('user_id',state.user.id));await loadData();render();toast('Profile photo updated');});
+ $('#edit-profile-form').onsubmit=e=>{e.preventDefault();action(async()=>{check(await db.from('users').update({display_name:val('profile-display-name')}).eq('user_id',state.user.id));await loadData();render();toast('Profile updated');});};
+ $('#deactivate-account')?.addEventListener('click',()=>{if(!confirm('Deactivate your SoundWave account? Your public content will be hidden until you restore the account.'))return;action(async()=>{check(await db.rpc('deactivate_my_account'));await loadData();render();toast('Account deactivated');});});
+ $('#profile-page-signout')?.addEventListener('click',()=>action(async()=>{stopAudio();document.getElementById('soundwave-player')?.remove();check(await db.auth.signOut());}));
+}
+
+async function playlistDetail(){
+ if(!state.selectedPlaylist)return;
+ const chosen=state.playlists.find(p=>Number(p.playlist_id)===Number(state.selectedPlaylist));
+ const collabQuery=chosen?.user_id===state.user.id?db.rpc('playlist_collaborators_for_owner',{p_playlist_id:state.selectedPlaylist}):db.from('playlist_collaborator').select('playlist_id,user_id,date_added').eq('playlist_id',state.selectedPlaylist).order('date_added');
+ const [r,c]=await Promise.all([
+   db.from('playlist_song').select('playlist_id,song_id,track_order').eq('playlist_id',state.selectedPlaylist).order('track_order'),
+   collabQuery
+ ]);
+ if(r.error){toast(humanErr(r.error),true);state.playlistSongs=[];}else state.playlistSongs=r.data||[];
+ if(c.error){console.warn('Collaborators unavailable',c.error);state.playlistCollaborators=[];}else state.playlistCollaborators=c.data||[];
+ render();
+}
+// Fast-create mirrors a listening-first library: no mandatory forms or interruptions.
+// Private by default. Public requires at least one song (BR-017).
+async function quickCreatePlaylist(){
+ const next=state.playlists.reduce((highest,p)=>{const m=/^My Playlist #(\d+)$/i.exec(p.playlist_name||'');return m?Math.max(highest,Number(m[1])):highest;},0)+1;
+ // Use the controlled RPC instead of a direct INSERT. This keeps playlist
+ // creation stable even when playlist SELECT/RLS rules change later.
+ const created=check(await db.rpc('create_my_playlist',{
+   p_name:`My Playlist #${next}`,
+   p_description:null,
+   p_visibility:'Private'
+ }));
+ const result=Array.isArray(created)?created[0]:created;
+ if(!result?.playlist_id)throw Error('Playlist was created but no playlist id was returned.');
+ state.selectedPlaylist=Number(result.playlist_id);state.playlistSongs=[];state.page='playlists';
+ await loadData();await playlistDetail();render();toast('Playlist created. Find your first song!');
+}
+function playlists() {
+  const chosen = state.playlists.find((p) => p.playlist_id === state.selectedPlaylist);
+  if (!chosen) return libraryOverview();
+  const rows = state.playlistSongs.map((ps) => songById(ps.song_id) || { song_id: ps.song_id, song_title: `Song #${ps.song_id}`, duration_seconds: null, album: null });
+  const queueIds = rows.map((s) => s.song_id);
+  const available = state.songs.filter((s) => !state.playlistSongs.some((p) => p.song_id === s.song_id)).slice(0, 10);
+  const idx = state.playlists.findIndex((p) => p.playlist_id === chosen.playlist_id);
+  const display = state.profile?.display_name || 'You';
+  const covers = rows.filter((s) => s.album?.cover_path && state.coverUrls[s.album.cover_path]);
+  const cover = chosen.cover_path&&state.coverUrls[chosen.cover_path]?`<img class="cover-img playlist-main-cover" src="${esc(state.coverUrls[chosen.cover_path])}" alt="${esc(chosen.playlist_name)}">`:covers.length >= 4 ? `<div class="cover-collage">${covers.slice(0, 4).map((s) => albumArt(s, 'tiny')).join('')}</div>` : covers.length ? albumArt(covers[0], 'large') : `<span class="placeholder-art large" style="background:${grad(idx)}">${icon('music')}</span>`;
+  const collab = state.playlistCollaborators.map((c, i) => `<div class="collab-row"><span class="member-avatar">${i + 1}</span><div><strong>${esc(c.display_name||('User '+String(c.user_id).slice(0,8)+'…'))}</strong><small>Collaborator${c.date_added ? ` · ${esc(c.date_added)}` : ''}</small></div><button type="button" class="icon-quiet" data-collab-remove="${esc(c.user_id)}" aria-label="Remove collaborator">${icon('close')}</button></div>`).join('');
+  state.tint = tintFor(chosen.playlist_id);
+  shell(`<header class="coll-hero"><div class="coll-cover">${cover}</div><div class="coll-meta"><span class="coll-kind">${esc(chosen.visibility)} playlist</span><h1 class="coll-title">${esc(chosen.playlist_name)}</h1>${chosen.description ? `<p class="coll-desc">${esc(chosen.description)}</p>` : ''}<p class="coll-sub"><span class="sw-owner-avatar">${esc(display[0]?.toUpperCase() || 'S')}</span><strong>${esc(display)}</strong> · ${rows.length} ${rows.length === 1 ? 'song' : 'songs'}${rows.length ? ', ' + totalTime(rows) : ''}${state.playlistCollaborators.length ? ` · ${state.playlistCollaborators.length} collaborators` : ''}</p><div id="playlist-presence" class="playlist-presence">${playlistPresenceHtml()}</div></div></header>
+<div class="coll-actions"><button type="button" class="sw-big-play" data-play-ids="${queueIds.join(',')}" ${!queueIds.length ? 'disabled' : ''} aria-label="Play playlist">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle" ${!queueIds.length ? 'disabled' : ''}>${icon('shuffle')}</button><button type="button" class="sw-quiet-action" data-open-modal="playlist-collab-dialog">${icon('users')} <span>Collaborators</span></button><button type="button" class="sw-quiet-action" data-open-modal="playlist-edit-dialog">${icon('settings')} <span>Details</span></button><div class="more-wrap"><button type="button" class="sw-more" id="sw-more-menu" aria-label="More options">${icon('dots')}</button><div id="sw-more-options" class="sw-more-options" hidden><button type="button" id="deactivate">Delete playlist</button></div></div></div>
+${rows.length ? trackTable(rows, { queue: queueIds, remove: true }) : `<div class="sw-playlist-empty"><h3>Let’s find something for your playlist</h3><p>Add songs from the suggestions below, or use the ••• menu on any song.</p></div>`}
+<section class="sw-add-section"><div class="section-heading"><h2>Recommended</h2><button type="button" class="text-link" data-nav="music">Browse all music</button></div><div class="sw-song-results">${playlistSongSuggestions(available)}</div></section>
+<dialog class="sw-modal" id="playlist-edit-dialog"><div class="modal-head"><h2>Edit details</h2><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><form class="form compact-form" id="editplaylist"><div class="field"><label>Cover image</label><input id="editplcover" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="field"><label>Playlist name</label><input id="editplname" maxlength="100" value="${esc(chosen.playlist_name)}" required></div><div class="field"><label>Description</label><textarea id="editpldesc">${esc(chosen.description || '')}</textarea></div><div class="field"><label>Visibility</label><select id="editplvis"><option value="Private" ${chosen.visibility === 'Private' ? 'selected' : ''}>Private</option><option value="Public" ${chosen.visibility === 'Public' ? 'selected' : ''} ${!rows.length ? 'disabled' : ''}>Public</option></select></div><button class="button" data-busy>Save</button></form></dialog>
+<dialog class="sw-modal" id="playlist-collab-dialog"><div class="modal-head"><div><span class="eyebrow">PLAYLIST</span><h2>Collaborators</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><div class="collab-list">${collab || '<p class="muted">No collaborators yet.</p>'}</div><div class="collab-invite"><h3>Invite with a link</h3><p class="muted">Create a one-time link and send it to the person you want to collaborate with. They only need to sign in and open the link.</p><button type="button" class="button" id="create-collab-link">${icon('users')} Copy invite link</button><p class="footnote">No UUID is exposed to the user. Invite links expire after 7 days and can be used once.</p></div></dialog>`, '', '');
+  $('#editplaylist')?.addEventListener('submit', (e) => { e.preventDefault(); action(async () => { const visibility = val('editplvis'); if (visibility === 'Public' && !state.playlistSongs.length) throw Error('BR-017: Add at least one song before making this playlist public.'); let cover_path=chosen.cover_path||null;const cf=$('#editplcover')?.files?.[0];if(cf){if(!['image/jpeg','image/png','image/webp'].includes(cf.type))throw Error('Choose a JPEG, PNG or WebP cover.');if(cf.size>5*1048576)throw Error('Playlist artwork must be under 5 MB.');const ext=(cf.name.split('.').pop()||'jpg').toLowerCase();cover_path=`${state.user.id}/playlists/${state.selectedPlaylist}/cover.${ext}`;check(await db.storage.from('covers').upload(cover_path,cf,{upsert:true,contentType:cf.type}));}check(await db.from('playlist').update({ playlist_name: val('editplname'), description: val('editpldesc') || null, visibility, cover_path }).eq('playlist_id', state.selectedPlaylist).eq('user_id', state.user.id)); await loadData(); render(); toast('Playlist updated'); }); });
+  $('#create-collab-link')?.addEventListener('click',()=>action(async()=>{const data=check(await db.rpc('create_playlist_invite',{p_playlist_id:state.selectedPlaylist}));const token=Array.isArray(data)?data[0]?.token:data?.token||data; if(!token)throw Error('Could not create invite link.');const url=`${location.origin}${location.pathname}?playlist_invite=${encodeURIComponent(token)}#/home`;await navigator.clipboard.writeText(url);toast('Collaborator invite link copied');}));
+  document.querySelectorAll('[data-collab-remove]').forEach((b) => b.onclick = () => action(async () => { check(await db.from('playlist_collaborator').delete().eq('playlist_id', state.selectedPlaylist).eq('user_id', b.dataset.collabRemove)); await playlistDetail(); toast('Collaborator removed'); }));
+  $('#sw-more-menu')?.addEventListener('click', (e) => { e.stopPropagation(); const m = $('#sw-more-options'); m.hidden = !m.hidden; });
+  $('#deactivate')?.addEventListener('click', () => { if (!confirm('Delete this playlist?')) return; action(async () => { check(await db.from('playlist').update({ is_active: false }).eq('playlist_id', state.selectedPlaylist).eq('user_id', state.user.id)); state.selectedPlaylist = null; state.playlistSongs = []; await loadData(); render(); toast('Playlist deleted'); }); });
+  bindAddSong(); bindMusic();
+}
+function libraryOverview() {
+  const liked = state.likesAvailable ? `<article class="release-tile card-link" tabindex="0" role="link" data-nav="liked-songs"><span class="release-art"><span class="placeholder-art large liked-cover">${icon('heart')}</span></span><strong>Liked Songs</strong><small data-liked-count>${state.liked.length} songs</small></article>` : '';
+  const pls = state.playlists.map((p, i) => `<article class="release-tile card-link" tabindex="0" role="link" data-openplaylist="${p.playlist_id}"><span class="release-art">${p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="">`:`<span class="placeholder-art large" style="background:${grad(i)}">${icon('music')}</span>`}</span><strong>${esc(p.playlist_name)}</strong><small>Playlist · ${esc(p.visibility)}</small></article>`).join('');
+  const fav = state.artists.filter((a) => state.favorites.some((x) => x.artist_id === a.artist_id));
+  state.tint = '#2d2d3d';
+  shell(`<div class="section-heading"><h2>Playlists</h2></div><div class="shelf wrap"><article class="release-tile card-link create-tile" tabindex="0" role="button" data-create-playlist><span class="release-art"><span class="placeholder-art large">${icon('plus')}</span></span><strong>Create playlist</strong><small>Start a new collection</small></article>${liked}${pls}</div>${fav.length ? `<section class="shelf-section"><div class="section-heading"><h2>Artists you follow</h2></div><div class="shelf wrap">${fav.map(artistCard).join('')}</div></section>` : ''}`, 'Your Library', '');
+}
+function playlistSongSuggestions(songs){return songs.length?songs.map((s,i)=>`<div class="sw-suggest-row"><div class="sw-suggest-art" style="background:${grad(i)}">♫</div><span class="sw-suggest-meta"><strong>${escapeHtml(s.song_title)}</strong><small>${escapeHtml(s.album?.artist?.artist_name||'SoundWave')} · ${escapeHtml(s.album?.album_title||'Song')}</small></span><span class="sw-suggest-duration">${nice(s.duration_seconds)}</span><button type="button" class="sw-add-btn" data-addsong="${s.song_id}">＋ Add</button></div>`).join(''):'<p class="sw-no-match">Your playlist already contains the available songs.</p>';}
+function bindAddSong(){document.querySelectorAll('[data-addsong]').forEach(b=>b.onclick=()=>action(async()=>{const song_id=Number(b.dataset.addsong);check(await db.from('playlist_song').insert({playlist_id:state.selectedPlaylist,song_id,track_order:null}));await playlistDetail();toast('Song added');}));document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>action(async()=>{const playlist=state.playlists.find(x=>x.playlist_id===state.selectedPlaylist);if(playlist?.visibility==='Public'&&state.playlistSongs.length<=1)throw Error('BR-017: Make the playlist Private before removing its last song.');check(await db.from('playlist_song').delete().eq('playlist_id',state.selectedPlaylist).eq('song_id',Number(b.dataset.remove)));await playlistDetail();toast('Song removed');}));}
+
+function addToPlaylistDialog(){
+ return `<dialog class="sw-modal playlist-picker" id="add-to-playlist-dialog"><div class="modal-head"><div><span class="eyebrow">ADD TO PLAYLIST</span><h2>Choose a playlist</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><div class="playlist-picker-list">${state.playlists.length?state.playlists.map((p,i)=>`<button data-pick-playlist="${p.playlist_id}"><span class="library-art" style="background:${grad(i)}">${icon('music')}</span><span><strong>${escapeHtml(p.playlist_name)}</strong><small>${escapeHtml(p.visibility)} playlist</small></span>${icon('plus')}</button>`).join(''):'<p class="muted">Create a playlist first.</p>'}</div></dialog>`;
+}
+function openAddToPlaylist(songId){
+ state.songMenu=Number(songId);const d=$('#add-to-playlist-dialog');if(!d)return;d.showModal();
+ document.querySelectorAll('[data-pick-playlist]').forEach(b=>b.onclick=()=>action(async()=>{check(await db.from('playlist_song').insert({playlist_id:Number(b.dataset.pickPlaylist),song_id:state.songMenu,track_order:null}));d.close();toast('Added to playlist');if(state.selectedPlaylist===Number(b.dataset.pickPlaylist))await playlistDetail();}));
+}
+function bindSongMenus() {
+  document.querySelectorAll('[data-song-menu]').forEach((b) => b.onclick = (e) => {
+    e.stopPropagation();
+    const songId = Number(b.dataset.songMenu), song = songById(songId);
+    document.querySelector('.song-action-popover')?.remove();
+    const pop = document.createElement('div'); pop.className = 'song-action-popover';
+    const downloaded = state.offlineDownloads.some((x)=>Number(x.songId)===songId);
+    const downloadLabel = isPremiumUser()
+      ? (downloaded ? 'Remove download' : 'Download')
+      : 'Download · Premium';
+    pop.innerHTML = `${state.likesAvailable ? `<button data-menu-like>${icon('heart')} ${isLiked(songId) ? 'Remove from Liked Songs' : 'Save to Liked Songs'}</button>` : ''}<button data-menu-queue>${icon('queue')} Add to queue</button><button data-menu-add>${icon('plus')} Add to playlist</button>${song?.album ? `<button data-menu-album>${icon('album')} Go to album</button>` : ''}<button data-menu-artist>${icon('users')} Go to artist</button><button data-menu-download>${icon('download')} ${downloadLabel}</button><button data-menu-share>${icon('forward')} Share</button>`;
+    document.body.appendChild(pop);
+    const r = b.getBoundingClientRect(), h = pop.offsetHeight || 260;
+    pop.style.left = `${Math.max(8, Math.min(window.innerWidth - 250, r.left - 190))}px`;
+    pop.style.top = `${Math.max(8, Math.min(window.innerHeight - h - 100, r.bottom + 6))}px`;
+    const on = (sel, fn) => pop.querySelector(sel)?.addEventListener('click', () => { pop.remove(); fn(); });
+    on('[data-menu-like]', () => action(() => toggleLike(songId)));
+    on('[data-menu-queue]', () => addToQueue(songId));
+    on('[data-menu-add]', () => openAddToPlaylist(songId));
+    on('[data-menu-album]', () => navigate('album-detail', { selectedAlbum: Number(song.album.album_id) }));
+    on('[data-menu-artist]', () => { const aid = song?.album?.artist?.artist_id; if (aid) navigate('artist-detail', { selectedArtist: Number(aid) }); });
+    on('[data-menu-download]', () => action(async()=>{
+      if(!isPremiumUser()){
+        toast('Offline downloads are a Premium feature.');
+        navigate('plans');
+        return;
+      }
+      const downloaded=state.offlineDownloads.some((x)=>Number(x.songId)===songId);
+      if(downloaded){
+        await removeOfflineSong(songId);
+        toast('Download removed');
+      }else{
+        await saveOfflineSong(song);
+      }
+      render();
+    }));
+    on('[data-menu-share]', async () => {
+      const url = `${location.origin}${location.pathname}${song?.album ? `#/album-detail/${song.album.album_id}` : ''}`;
+      const text = `${song?.song_title || 'SoundWave song'} — ${song?.album?.artist?.artist_name || 'SoundWave'}`;
+      try { if (navigator.share) await navigator.share({ title: song?.song_title || 'SoundWave', text, url }); else { await navigator.clipboard.writeText(`${text} ${url}`); toast('Link copied'); } } catch {}
+    });
+  });
+}
+async function showDetail(){if(!state.selectedShow)return;const chosen=[...state.podcasts,...state.myShows].find(p=>Number(p.show_id)===Number(state.selectedShow));let q=db.from('podcast_episode').select('episode_id,show_id,episode_title,description,duration_seconds,audio_path,release_at,is_active').eq('show_id',state.selectedShow).order('release_at',{ascending:false});if(chosen?.user_id!==state.user.id)q=q.eq('is_active',true);const r=await q;if(r.error){state.episodes=[];toast(humanErr(r.error),true)}else state.episodes=r.data||[];render();}
+function podcasts(){
+ const chosen=[...state.podcasts,...state.myShows].find(p=>Number(p.show_id)===Number(state.selectedShow));
+ state.tint='#2f4b56';
+ shell(`<div class="hero hero-podcast"><div><span class="eyebrow">STORIES WORTH HEARING</span><h2>Podcasts for every mood.</h2><p>Discover active shows and listen to the latest episodes.</p><button class="button secondary" data-nav="podcast-studio">${icon('upload')} Podcast Studio</button></div><div class="hero-art">${icon('mic')}</div></div><div class="section-heading"><h2>Explore shows</h2><button class="text-link" data-nav="podcast-studio">Manage your podcasts</button></div><div class="cover-grid">${state.podcasts.map((p,i)=>showCard(p,i)).join('')||'<div class="empty">No active shows published yet.</div>'}</div>${chosen?`<section class="podcast-detail"><div class="section-heading"><h2>${escapeHtml(chosen.show_title)}</h2></div><div class="podcast-detail-head"><span class="podcast-detail-art">${chosen.cover_path&&state.coverUrls[chosen.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[chosen.cover_path])}" alt="${esc(chosen.show_title)}">`:`<span class="placeholder-art large">${icon('mic')}</span>`}</span><div><p class="muted">${escapeHtml(chosen.category||'Podcast')}</p><p>${escapeHtml(chosen.description||'Explore the latest episodes.')}</p>${chosen.user_id===state.user.id?'<button class="button secondary sm" data-nav="podcast-studio">Open in Podcast Studio</button>':''}</div></div>${state.episodes.length?state.episodes.filter(ep=>ep.is_active||chosen.user_id===state.user.id).map((ep,i)=>`<div class="songrow"><div class="songicon podcast-episode-icon">${chosen.cover_path&&state.coverUrls[chosen.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[chosen.cover_path])}" alt="">`:icon('mic')}</div><div class="grow"><strong>${escapeHtml(ep.episode_title)}</strong><small>${escapeHtml(ep.description||chosen.show_title)} · ${nice(ep.duration_seconds)}${ep.is_active?'':' · Inactive'}</small>${episodeProgressHtml(ep)}</div>${ep.is_active?`<button class="button sm" data-episode="${ep.episode_id}">${icon('play')} Listen</button>`:''}</div>`).join(''):'<div class="empty">This show has no episodes yet.</div>'}</section>`:''}`,'Podcasts','Discover shows. Publishing and management live in Podcast Studio.');
+ document.querySelectorAll('[data-episode]').forEach(b=>b.onclick=()=>action(async()=>{const ep=state.episodes.find(x=>String(x.episode_id)===b.dataset.episode);if(!ep?.audio_path)throw Error('Episode has no uploaded audio.');const u=check(await db.storage.from('podcast-audio').createSignedUrl(ep.audio_path,3600));startPlayer({kind:'podcast',id:ep.episode_id,title:ep.episode_title,artist:chosen?.show_title||'SoundWave podcasts',url:u.signedUrl,duration:ep.duration_seconds,resumeAt:Number(state.podcastHistory.find(h=>String(h.episode_id)===String(ep.episode_id)&&Number(h.resume_position_seconds)>5)?.resume_position_seconds)||0});}));
+}
+
+function podcastStudio(){
+ const activeShows=state.myShows.filter(p=>p.is_active);
+ const showRows=state.myShows.map((p,i)=>`<div class="podcast-studio-row"><span class="podcast-studio-art" style="background:${grad(i)}">${p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="${esc(p.show_title)}">`:icon('mic')}</span><div class="grow"><strong>${esc(p.show_title)}</strong><small>${esc(p.category||'Podcast')} · ${p.is_active?'Active':'Inactive'}</small><p>${esc(p.description||'No description yet.')}</p></div><button class="button secondary sm" data-studio-show="${p.show_id}">${icon('settings')} Edit</button><button class="button secondary sm" data-show-active="${p.show_id}" data-active="${p.is_active?'false':'true'}">${p.is_active?'Deactivate':'Restore'}</button></div>`).join('');
+ shell(`<div class="home-chips"><button class="active" data-nav="podcast-studio">Podcast Studio</button><button data-nav="podcasts">Explore podcasts</button></div><section class="workspace-hero"><div><span class="eyebrow">PODCAST STUDIO</span><h2>Create and manage your shows.</h2><p>Publishing tools are kept separate from the listener discovery page.</p><div class="inline"><button class="button" data-open-modal="create-show-dialog">${icon('plus')} Create show</button><button class="button secondary" data-open-modal="publish-episode-dialog" ${!activeShows.length?'disabled':''}>${icon('upload')} Publish episode</button></div></div><span class="hero-vinyl">${icon('mic')}</span></section><div class="section-heading"><h2>Your podcast shows <span class="muted small">(${state.myShows.length})</span></h2></div><div class="podcast-studio-list">${showRows||'<div class="empty">You have not created a podcast show yet.</div>'}</div>
+<dialog class="sw-modal" id="create-show-dialog"><div class="modal-head"><div><span class="eyebrow">NEW SHOW</span><h2>Create a podcast</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><form id="showform" class="form"><label class="cover-drop" for="showcover"><span id="show-cover-preview">${icon('mic')}</span><strong>Choose podcast cover art</strong><small>Optional · JPG, PNG or WebP · 5 MB max</small><input id="showcover" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><div class="field"><label>Show title</label><input id="showtitle" maxlength="140" required placeholder="The name listeners will see"></div><div class="field"><label>Category</label><input id="showcategory" maxlength="60" placeholder="Technology, Life, Education"></div><div class="field"><label>Description</label><textarea id="showdesc" maxlength="1600" placeholder="What is this show about?"></textarea></div><button class="button" data-busy>Create show</button></form></dialog>
+<dialog class="sw-modal" id="edit-show-dialog"><div class="modal-head"><div><span class="eyebrow">PODCAST STUDIO</span><h2>Edit show</h2></div><button type="button" class="modal-close" data-close-modal>${icon('close')}</button></div><form id="editshow" class="form"><input type="hidden" id="editshowid"><label class="cover-drop" for="editshowcover"><span id="edit-show-cover-preview">${icon('mic')}</span><strong>Replace cover art</strong><small>Optional · existing art stays if unchanged</small><input id="editshowcover" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><div class="field"><label>Show title</label><input id="editshowtitle" required maxlength="140"></div><div class="field"><label>Category</label><input id="editshowcategory" maxlength="60"></div><div class="field"><label>Description</label><textarea id="editshowdesc" maxlength="1600"></textarea></div><button class="button">Save changes</button></form></dialog>
+<dialog class="sw-modal studio-dialog wizard-dialog" id="publish-episode-dialog"><div class="modal-head"><div><span class="eyebrow wizard-eyebrow">STEP 1 OF 3</span><h2>Publish an episode</h2></div><button type="button" class="modal-close" data-close-modal>${icon('close')}</button></div><form id="episodeform">${wizardNav(['Show','Audio','Details'])}<section class="upload-step" data-step="1"><h3>Choose a show</h3>${activeShows.length?`<label class="single-field">Your show<select id="epshow" required>${opts(activeShows,'show_id','show_title')}</select></label>`:'<p class="notice">Create and activate a show first.</p>'}</section><section class="upload-step" data-step="2" hidden><h3>Add your audio file</h3>${audioDropHtml('ep')}</section><section class="upload-step" data-step="3" hidden><h3>Episode details</h3><label class="single-field">Episode title<input id="eptitle" maxlength="140" required></label><label class="single-field">Description<textarea id="epdesc" maxlength="1600" placeholder="What is this episode about?"></textarea></label><div id="ep-final"></div></section><div class="dialog-actions"><button type="button" class="button secondary wiz-back" hidden>Back</button><button type="button" class="button wiz-next" ${activeShows.length?'':'disabled'}>Continue</button><button type="submit" class="button wiz-finish" data-busy hidden>Publish episode</button></div></form></dialog>`,'Podcast Studio','Create shows, upload cover art, publish episodes, and control visibility.');
+ const previewFile=(inputId,previewId)=>{const inp=$(inputId),preview=$(previewId);if(!inp||!preview)return;inp.onchange=e=>{const f=e.target.files?.[0];if(!f)return;const u=URL.createObjectURL(f);preview.innerHTML=`<img class="cover-img" src="${esc(u)}" alt="Selected cover">`;preview.querySelector('img')?.addEventListener('load',()=>URL.revokeObjectURL(u),{once:true});};};
+ previewFile('#showcover','#show-cover-preview');previewFile('#editshowcover','#edit-show-cover-preview');
+ document.querySelectorAll('[data-studio-show]').forEach(b=>b.onclick=()=>{const p=state.myShows.find(x=>Number(x.show_id)===Number(b.dataset.studioShow));if(!p)return;$('#editshowid').value=p.show_id;$('#editshowtitle').value=p.show_title||'';$('#editshowcategory').value=p.category||'';$('#editshowdesc').value=p.description||'';$('#edit-show-cover-preview').innerHTML=p.cover_path&&state.coverUrls[p.cover_path]?`<img class="cover-img" src="${esc(state.coverUrls[p.cover_path])}" alt="">`:icon('mic');$('#edit-show-dialog').showModal();});
+ document.querySelectorAll('[data-show-active]').forEach(b=>b.onclick=()=>action(async()=>{const active=b.dataset.active==='true';check(await db.rpc('set_my_podcast_show_active',{p_show_id:Number(b.dataset.showActive),p_active:active}));await loadData();render();toast(active?'Podcast show restored':'Podcast show deactivated with its episodes');}));
+ $('#showform').onsubmit=e=>{e.preventDefault();action(async()=>{let cover_path=null;const file=$('#showcover')?.files?.[0];if(file){if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Choose a JPEG, PNG or WebP cover.');if(file.size>5*1048576)throw Error('Podcast artwork must be under 5 MB.');const ext=(file.name.split('.').pop()||'jpg').toLowerCase();cover_path=`${state.user.id}/podcasts/${crypto.randomUUID()}.${ext}`;check(await db.storage.from('covers').upload(cover_path,file,{upsert:false,contentType:file.type}));}try{check(await db.from('podcast_show').insert({user_id:state.user.id,show_title:val('showtitle'),category:val('showcategory')||null,description:val('showdesc')||null,cover_path,is_active:true}));}catch(err){if(cover_path)await db.storage.from('covers').remove([cover_path]);throw err;}await loadData();render();toast('Podcast show created');});};
+ $('#editshow').onsubmit=e=>{e.preventDefault();action(async()=>{const show_id=Number(val('editshowid'));const existing=state.myShows.find(x=>Number(x.show_id)===show_id);if(!existing)throw Error('Podcast show not found.');let cover_path=existing.cover_path||null;const file=$('#editshowcover')?.files?.[0];if(file){if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Choose a JPEG, PNG or WebP cover.');if(file.size>5*1048576)throw Error('Podcast artwork must be under 5 MB.');const ext=(file.name.split('.').pop()||'jpg').toLowerCase();const newPath=`${state.user.id}/podcasts/${crypto.randomUUID()}.${ext}`;check(await db.storage.from('covers').upload(newPath,file,{upsert:false,contentType:file.type}));cover_path=newPath;}check(await db.from('podcast_show').update({show_title:val('editshowtitle'),category:val('editshowcategory')||null,description:val('editshowdesc')||null,cover_path}).eq('show_id',show_id).eq('user_id',state.user.id));$('#edit-show-dialog').close();await loadData();render();toast('Podcast show updated');});};
+ bindAudioDrop('ep');
+ const epForm=$('#episodeform');
+ const epWiz=bindWizard(epForm,{validate:(st)=>{if(st===1&&!val('epshow'))return 'Choose one of your shows first.';if(st===2){const f=$('#ep-file').files?.[0];if(!f)return 'Choose your audio file first.';return audioProblem(f);}return '';}});
+ epForm.addEventListener('wizardstep',e=>{if(e.detail!==3)return;const f=$('#ep-file').files?.[0];const sel=$('#epshow');$('#ep-final').innerHTML=summaryHtml([['Show',sel?.selectedOptions?.[0]?.textContent],['File',f?.name],['Size',f?`${(f.size/1048576).toFixed(2)} MB`:'']]);});
+ epForm.onsubmit=e=>{e.preventDefault();action(async()=>{if(epWiz.step!==3)throw Error('Complete the upload steps first.');const show_id=Number(val('epshow'));if(!state.myShows.some(p=>Number(p.show_id)===show_id&&p.is_active))throw Error('Select an active show that you own.');const file=$('#ep-file').files?.[0];if(!file)throw Error('Choose an audio file.');const bad=audioProblem(file);if(bad)throw Error(bad);if(!val('eptitle'))throw Error('Add an episode title.');const duration_seconds=await audioDuration(file);if(!(duration_seconds>0))throw Error('Audio metadata is unavailable.');const safe=file.name.replace(/[^a-z0-9._-]/gi,'_').slice(-80);const path=`${state.user.id}/episodes/${crypto.randomUUID()}_${safe}`;const fin=epForm.querySelector('.wiz-finish');setPublishing(fin,true,'Publish episode');try{check(await db.storage.from('podcast-audio').upload(path,file,{upsert:false,contentType:file.type||'audio/mpeg'}));try{check(await db.from('podcast_episode').insert({show_id,episode_title:val('eptitle'),description:val('epdesc')||null,duration_seconds,audio_path:path,release_at:new Date().toISOString(),is_active:true}));}catch(err){await db.storage.from('podcast-audio').remove([path]);throw err;}}finally{setPublishing(fin,false,'Publish episode');}await loadData();render();toast('Episode published');});};
+}
+
+// ---------- Listening history ----------
+const agoText = (d) => { const t = new Date(d).getTime(); if (!t) return ''; const sec = Math.max(0, (Date.now() - t) / 1000); if (sec < 60) return 'Just now'; if (sec < 3600) return `${Math.floor(sec / 60)} min ago`; if (sec < 86400) return `${Math.floor(sec / 3600)} hr ago`; if (sec < 604800) return `${Math.floor(sec / 86400)} d ago`; return new Date(t).toLocaleDateString(); };
+let _histFetchAt = 0;
+async function refreshHistory(force = false) {
+  if (!state.user || !configured) return;
+  if (!force && Date.now() - _histFetchAt < 1500) return;
+  _histFetchAt = Date.now();
+  const uid = state.user.id;
+  const [m, p] = await Promise.all([
+    db.from('listening_history').select('stream_id,song_id,stream_date,duration_played_seconds,completion_status').eq('user_id', uid).order('stream_date', { ascending: false }).limit(50),
+    db.from('podcast_listening_history').select('podcast_stream_id,episode_id,stream_date,duration_played_seconds,resume_position_seconds,completion_status').eq('user_id', uid).order('stream_date', { ascending: false }).limit(30)
+  ]);
+  state.historyError = m.error ? humanErr(m.error) : '';
+  if (m.error) console.warn('Could not load listening history', m.error);
+  const before = JSON.stringify([state.history, state.podcastHistory, state.episodeTitles, state.historyError]);
+  if (!m.error) state.history = m.data || [];
+  if (!p.error) state.podcastHistory = p.data || [];
+  const missing = [...new Set(state.podcastHistory.map((r) => r.episode_id))].filter((id) => !state.episodeTitles[id]);
+  if (missing.length) {
+    const e = await db.from('podcast_episode').select('episode_id,episode_title').in('episode_id', missing);
+    if (!e.error) (e.data || []).forEach((x) => { state.episodeTitles[x.episode_id] = x.episode_title; });
+  }
+  if (state.page === 'history' && before !== JSON.stringify([state.history, state.podcastHistory, state.episodeTitles, state.historyError])) render();
+}
+function historyTable(rows) {
+  const q = [...new Set(rows.map((x) => x.s.song_id))].join(',');
+  return `<div class="tracks" role="table"><div class="tracks-head" role="row"><span class="t-num">#</span><span>Title</span><span class="t-album">Played</span><span class="t-like"></span><span class="t-time" title="Duration">${icon('clock')}</span><span class="t-more"></span></div>${rows.map(({ r, s }, i) => trackRow(s, i, q, { showAlbum: true, histId: r.stream_id, albumHtml: `<span title="${esc(new Date(r.stream_date).toLocaleString())}">${esc(agoText(r.stream_date))}${r.duration_played_seconds ? ` · ${nice(r.duration_played_seconds)} listened` : ''}</span>` })).join('')}</div>`;
+}
+function history() {
+  const rows = state.history.map((r) => ({ r, s: songById(r.song_id) })).filter((x) => x.s);
+  const notice = state.historyWriteError ? `<div class="notice">Your plays are not being saved: ${esc(state.historyWriteError)}. Run <code>sql/RUN_ME_listening_history.sql</code> once in the Supabase SQL Editor, then play a song again.</div>` : state.historyError ? `<div class="notice">Could not load your history: ${esc(state.historyError)}</div>` : '';
+  const pod = state.podcastHistory.length ? `<div class="songlist">${state.podcastHistory.map((r, i) => `<div class="songrow"><div class="songicon" style="background:${grad(i + 2)}">${icon('mic')}</div><div class="grow"><strong>${esc(state.episodeTitles[r.episode_id] || `Episode #${r.episode_id}`)}</strong><small>${esc(r.completion_status || 'Partial')} · ${nice(r.duration_played_seconds)} listened · ${esc(agoText(r.stream_date))}</small></div><button class="button danger sm" data-poddelete="${r.podcast_stream_id}">Remove</button></div>`).join('')}</div>` : '<div class="empty">No podcast history yet.</div>';
+  shell(`${notice}<div class="section-heading"><h2>Recently played</h2></div>${rows.length ? historyTable(rows) : '<div class="empty">No music history yet. Play a song to start tracking your activity.</div>'}<div class="section-heading"><h2>Podcast listening</h2></div>${pod}`, 'Listening history', 'Your recent listening, newest first.');
+  document.querySelectorAll('[data-histdelete]').forEach((b) => b.onclick = (e) => { e.stopPropagation(); action(async () => { check(await db.from('listening_history').delete().eq('stream_id', Number(b.dataset.histdelete)).eq('user_id', state.user.id)); state.history = state.history.filter((x) => String(x.stream_id) !== b.dataset.histdelete); render(); toast('Removed from history'); }); });
+  document.querySelectorAll('[data-poddelete]').forEach((b) => b.onclick = () => action(async () => { check(await db.from('podcast_listening_history').delete().eq('podcast_stream_id', Number(b.dataset.poddelete)).eq('user_id', state.user.id)); state.podcastHistory = state.podcastHistory.filter((x) => String(x.podcast_stream_id) !== b.dataset.poddelete); render(); toast('Podcast history entry removed'); }));
+}
+function plans(){
+ const ent=state.entitlement;
+ const current=ent && String(ent.status||'Active').toLowerCase()==='active' ? ent : null;
+ const pending=state.subscriptionRequests?.find(r=>String(r.status).toLowerCase()==='pending');
+ const cards=state.plans.map(p=>`<article class="plan-card ${current&&String(current.plan_id)===String(p.plan_id)?'current-plan':''}"><span>${esc(p.plan_name)}</span><strong>₱${Number(p.monthly_price||0).toFixed(0)}<small>/month</small></strong><p>${p.max_members} ${Number(p.max_members)===1?'member':'members'}</p>${current&&String(current.plan_id)===String(p.plan_id)?`<button class="button secondary" disabled>${icon('check')} Current plan</button>`:`<button class="button" data-plan-request="${p.plan_id}" ${pending?'disabled':''}>Choose plan</button>`}</article>`).join('');
+ shell(`${current?`<section class="workspace-hero premium-hero"><div><span class="eyebrow">SOUNDWAVE PREMIUM</span><h2>${esc(current.plan_name||'Premium')} is active.</h2><p>${esc(current.relationship||'Owner')} · ${esc(current.start_date||'')} → ${esc(current.end_date||'')}</p></div><span class="hero-vinyl">✓</span></section>`:`<section class="workspace-hero premium-hero"><div><span class="eyebrow">PREMIUM</span><h2>Listen your way.</h2><p>Choose a plan. Payment requests are verified by an Administrator before Premium is activated.</p></div><span class="hero-vinyl">♢</span></section>`}${pending?`<div class="notice">Your ${esc(state.plans.find(p=>String(p.plan_id)===String(pending.plan_id))?.plan_name||'Premium')} payment request is <b>Pending</b>. Reference: ${esc(pending.reference_number||'—')}</div>`:''}<div class="plan-grid">${cards}</div><dialog class="sw-modal" id="plan-request-dialog"><div class="modal-head"><div><span class="eyebrow">SUBSCRIPTION</span><h2 id="plan-request-title">Choose plan</h2></div><button class="modal-close" data-close-modal>${icon('close')}</button></div><form id="plan-request-form" class="form"><input type="hidden" id="plan-request-id"><label class="single-field">Payment method<select id="plan-payment-method"><option>GCash</option><option>Credit Card</option><option>PayPal</option></select></label><label class="single-field">Payment reference<input id="plan-reference" required placeholder="Transaction/reference number"></label><p class="muted small">For the Mission 4 prototype, an Administrator manually verifies the payment reference.</p><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button" data-busy>Submit for verification</button></div></form></dialog>`,'Premium',current?`${current.plan_name} subscription`:'Upgrade your listening experience.');
+ document.querySelectorAll('[data-plan-request]').forEach(b=>b.onclick=()=>{const p=state.plans.find(x=>String(x.plan_id)===String(b.dataset.planRequest));$('#plan-request-id').value=p.plan_id;$('#plan-request-title').textContent=`Choose ${p.plan_name}`;$('#plan-request-dialog').showModal();});
+ $('#plan-request-form')?.addEventListener('submit',e=>{e.preventDefault();action(async()=>{check(await db.from('subscription_request').insert({user_id:state.user.id,plan_id:Number(val('plan-request-id')),payment_method:val('plan-payment-method'),reference_number:val('plan-reference'),status:'Pending'}));await loadData();render();toast('Payment submitted for Admin verification');});});
+}
+// ---------- Step-by-step upload helpers (songs + podcasts) ----------
+function howItWorks(steps) {
+  return `<ol class="how-steps">${steps.map(([t, d], i) => `<li><span class="how-num">${i + 1}</span><span><strong>${esc(t)}</strong><small>${esc(d)}</small></span></li>`).join('')}</ol>`;
+}
+function wizardNav(labels) {
+  return `<ol class="wizard-steps" aria-label="Upload progress">${labels.map((l, i) => `<li class="${i === 0 ? 'current' : ''}"><span>${i + 1}</span>${esc(l)}</li>`).join('')}</ol>`;
+}
+const AUDIO_EXT = /\.(mp3|wav|m4a|aac|ogg|oga|opus|flac|weba)$/i;
+function audioProblem(f) {
+  if (!(String(f.type).startsWith('audio/') || AUDIO_EXT.test(f.name))) return 'That does not look like an audio file. Use MP3, WAV, M4A, OGG or FLAC.';
+  if (f.size > 35 * 1048576) return `That file is ${(f.size / 1048576).toFixed(1)} MB. Please choose one under 35 MB.`;
+  return '';
+}
+
+// Read duration from the selected local audio file before uploading it.
+// Returns a Promise<number> in seconds. Used by both song and podcast uploads.
+function audioDuration(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) { reject(new Error('No audio file selected.')); return; }
+    const audio = document.createElement('audio');
+    const objectUrl = URL.createObjectURL(file);
+    let settled = false;
+    const cleanup = () => {
+      try { URL.revokeObjectURL(objectUrl); } catch (_) {}
+      audio.removeAttribute('src');
+      try { audio.load(); } catch (_) {}
+    };
+    const finish = (fn, value) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      fn(value);
+    };
+    const timer = setTimeout(() => finish(reject, new Error('Timed out while reading audio metadata.')), 12000);
+    const ok = () => {
+      clearTimeout(timer);
+      const duration = Number(audio.duration);
+      if (Number.isFinite(duration) && duration > 0) finish(resolve, Math.ceil(duration));
+      else finish(reject, new Error('Could not read the audio duration.'));
+    };
+    const fail = () => { clearTimeout(timer); finish(reject, new Error('Could not read audio metadata.')); };
+    audio.preload = 'metadata';
+    audio.addEventListener('loadedmetadata', ok, { once: true });
+    audio.addEventListener('durationchange', () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) ok();
+    }, { once: true });
+    audio.addEventListener('error', fail, { once: true });
+    audio.src = objectUrl;
+    try { audio.load(); } catch (e) { fail(); }
+  });
+}
+function audioDropHtml(p) {
+  return `<label class="audio-drop" id="${p}-drop" for="${p}-file">${icon('upload')}<strong id="${p}-drop-title">Choose an audio file</strong><small>Or drag and drop it here</small><input id="${p}-file" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac" hidden></label><div id="${p}-summary" class="audio-summary"></div>`;
+}
+function bindAudioDrop(p) {
+  const input = document.getElementById(`${p}-file`), zone = document.getElementById(`${p}-drop`);
+  if (!input || !zone) return;
+  const show = () => {
+    const f = input.files?.[0]; if (!f) return;
+    document.getElementById(`${p}-drop-title`).textContent = f.name;
+    const bad = audioProblem(f);
+    document.getElementById(`${p}-summary`).textContent = bad || `${(f.size / 1048576).toFixed(2)} MB selected`;
+    document.getElementById(`${p}-summary`).classList.toggle('bad', Boolean(bad));
+  };
+  input.addEventListener('change', show);
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', (e) => { e.preventDefault(); zone.classList.remove('drag-over'); if (e.dataTransfer.files.length) { input.files = e.dataTransfer.files; show(); } });
+}
+const summaryHtml = (rows) => `<dl class="upload-summary">${rows.filter((r) => r[1]).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
+function bindWizard(form, { validate = () => '' } = {}) {
+  const dialog = form.closest('dialog');
+  const steps = [...form.querySelectorAll('.upload-step')], total = steps.length;
+  const back = form.querySelector('.wiz-back'), next = form.querySelector('.wiz-next'), finish = form.querySelector('.wiz-finish');
+  const label = dialog?.querySelector('.wizard-eyebrow');
+  let step = 1;
+  const go = (n) => {
+    step = Math.max(1, Math.min(total, n));
+    steps.forEach((el, i) => { el.hidden = i + 1 !== step; });
+    form.querySelectorAll('.wizard-steps li').forEach((li, i) => { li.classList.toggle('current', i + 1 === step); li.classList.toggle('done', i + 1 < step); });
+    if (label) label.textContent = `STEP ${step} OF ${total}`;
+    back.hidden = step === 1; next.hidden = step === total; finish.hidden = step !== total;
+    form.dispatchEvent(new CustomEvent('wizardstep', { detail: step }));
+  };
+  next.onclick = () => { const err = validate(step); if (err) return toast(err, true); go(step + 1); };
+  back.onclick = () => go(step - 1);
+  dialog?.addEventListener('close', () => go(1));
+  go(1);
+  return { go, get step() { return step; } };
+}
+function setPublishing(btn, on, idle) { if (!btn) return; btn.disabled = on; btn.textContent = on ? 'Uploading… keep this window open' : idle; }
+
+function studio(){if(!hasArtistAccess())return home();
+ const validAlbums=state.albums.filter(a=>a.is_active);
+ const ownedSongs=state.ownedSongs||[];
+ const albums=state.albums.map((a,i)=>`<div class="studio-album-row"><button class="studio-album" data-album-select="${a.album_id}"><span class="studio-album-art" style="background:${grad(i)}">${a.cover_path&&state.coverUrls[a.cover_path]?`<img src="${escapeHtml(state.coverUrls[a.cover_path])}" alt="">`:icon('album')}</span><span><strong>${escapeHtml(a.album_title)}</strong><small>${a.is_active?'Active release':'Inactive release'}</small></span></button><button type="button" class="button secondary sm" data-album-active="${a.album_id}" data-active="${a.is_active?'false':'true'}">${a.is_active?'Deactivate album':'Restore album'}</button></div>`).join('');
+ shell(`<section class="workspace-hero artist-hero"><div><span class="eyebrow">SOUNDWAVE FOR ARTISTS</span><h2>What will you release next?</h2><p>Less paperwork, more music. Start with an album or upload your next track.</p><button class="button" data-open-modal="new-song-modal">${icon('upload')} Upload a song</button></div><span class="hero-vinyl">${icon('album')}</span></section><div class="section-heading"><h2>How publishing works</h2></div>${howItWorks([['Create an album','Create an album or single release, add a description, and choose optional cover art.'],['Add your audio','Pick or drop an audio file under 35 MB.'],['Name it and publish','Add a title, description, genre and optional song/single cover art.']])}<div class="section-heading"><h2>Create something</h2></div><div class="studio-actions"><button data-open-modal="new-album-modal"><span class="studio-action-art gradient-one">${icon('album')}</span><strong>New album / single</strong><small>Add release details, description and cover art</small><span class="studio-arrow">${icon('plus')}</span></button><button data-open-modal="new-song-modal"><span class="studio-action-art gradient-two">${icon('upload')}</span><strong>Upload a song</strong><small>Add audio, description and optional song cover</small><span class="studio-arrow">${icon('plus')}</span></button><button data-open-modal="edit-song-modal"><span class="studio-action-art gradient-three">${icon('settings')}</span><strong>Edit a release</strong><small>Update an existing song title</small><span class="studio-arrow">${icon('forward')}</span></button></div><div class="section-heading"><h2>Your albums <span class="muted small">(${state.albums.length})</span></h2><button class="text-link" data-open-modal="new-album-modal">+ Add album</button></div><div class="studio-albums">${albums||'<div class="empty">Your first release starts with an album.</div>'}</div><div class="section-heading"><h2>Royalty summary</h2></div><div class="royalty-panel"><div><small>Total streams</small><strong>${Number(state.royaltySummary?.total_streams||0)}</strong></div><div><small>Royalty rate</small><strong>${Number(state.royaltySummary?.royalty_rate||0).toFixed(4)}</strong></div><div><small>Estimated royalty</small><strong>₱${Number(state.royaltySummary?.estimated_royalty||0).toFixed(2)}</strong></div></div><div class="section-heading"><h2>Your tracks</h2></div><div class="release-management">${ownedSongs.length?ownedSongs.map((song,i)=>`<div class="admin-song-row"><div class="admin-song-meta"><strong>${esc(song.song_title)}</strong><small>${esc(song.album?.album_title||'Release')} · ${song.is_active?'Active':'Inactive'}</small></div><button class="button secondary sm" data-own-song-active="${song.song_id}" data-active="${song.is_active?'false':'true'}">${song.is_active?'Deactivate':'Restore'}</button></div>`).join(''):'<div class="empty">No songs yet.</div>'}</div>
+ <dialog class="sw-modal studio-dialog" id="new-album-modal"><div class="modal-head"><div><span class="eyebrow">STEP 1 OF 1</span><h2>Create an album</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><form id="albumform"><label class="cover-drop" id="cover-drop" for="albumcover"><span id="cover-preview">${icon('album')}</span><strong>Choose cover art</strong><small>Optional • JPG, PNG or WebP • 5 MB max</small><input type="file" id="albumcover" accept="image/png,image/jpeg,image/webp" hidden></label><label class="single-field">Release type<select id="releasetype"><option value="Album">Album</option><option value="Single">Single</option></select></label><label class="single-field">Release title<input id="albumtitle" required maxlength="160" placeholder="Give your release a name"></label><label class="single-field">Description<textarea id="albumdesc" maxlength="1200" placeholder="Describe this release"></textarea></label><label class="single-field">Release date<input id="releasedate" type="date" required value="${new Date().toISOString().slice(0,10)}"></label><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button" data-busy>Create album</button></div></form></dialog>
+ <dialog class="sw-modal studio-dialog wizard-dialog" id="new-song-modal"><div class="modal-head"><div><span class="eyebrow wizard-eyebrow">STEP 1 OF 3</span><h2>Upload a track</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><form id="songform">${wizardNav(['Album','Audio','Details'])}<section class="upload-step" data-step="1"><h3>Choose where this track lives</h3><p class="step-desc">Every track belongs to an album. Pick one of your albums below, or create a new one first. A single is just an album with one song.</p><div class="album-picks">${validAlbums.map((a,i)=>`<label class="album-pick"><input type="radio" name="albumchoice" value="${a.album_id}" ${i===0?'checked':''}><span style="background:${grad(i)}">${icon('album')}</span><strong>${escapeHtml(a.album_title)}</strong>${icon('check')}</label>`).join('')||'<p class="notice">You do not have an album yet. Create one first, then come back to upload.</p>'}</div><button type="button" class="button secondary" data-switch-modal="new-album-modal">${icon('plus')} Create an album</button></section><section class="upload-step" data-step="2" hidden><h3>Add your audio file</h3><p class="step-desc">Drag your finished track into the box, or click it to browse your device.</p>${audioDropHtml('song')}<ul class="step-tips"><li><b>Formats:</b> MP3, WAV, M4A/AAC, OGG or FLAC.</li><li><b>Size:</b> up to 35 MB per file.</li><li><b>Rights:</b> only upload music you made or have permission to release.</li><li><b>Double-check the file:</b> you can rename a published track later, but not replace its audio.</li></ul></section><section class="upload-step" data-step="3" hidden><h3>Name your track</h3><p class="step-desc">Add a title and pick a genre. We read the track length from your file, so there is nothing else to fill in.</p><label class="single-field">Song title<input id="songtitle" maxlength="160" placeholder="Track title"></label><label class="single-field">Description<textarea id="songdesc" maxlength="1200" placeholder="Tell listeners about this song"></textarea></label><label class="single-field">Song / single cover art<input id="songcover" type="file" accept="image/jpeg,image/png,image/webp"></label><label class="single-field">Genre<select id="songgenre">${opts(state.genres,'genre_id','genre_name')}</select></label><div id="song-final"></div><p class="step-desc subtle"><b>What happens next:</b> when you press Publish, your audio uploads securely and the track appears on your artist page and in search for every listener. Keep this window open until it finishes.</p></section><div class="dialog-actions"><button type="button" class="button secondary wiz-back" hidden>Back</button><button type="button" class="button wiz-next" ${validAlbums.length?'':'disabled'}>Continue</button><button type="submit" class="button wiz-finish" data-busy hidden>Publish song</button></div></form></dialog>
+ <dialog class="sw-modal" id="edit-song-modal"><div class="modal-head"><div><span class="eyebrow">YOUR RELEASES</span><h2>Edit song details</h2></div><button type="button" class="modal-close" data-close-modal aria-label="Close">${icon('close')}</button></div><form class="form" id="editsong"><label class="single-field">Select song<select id="owned-song" required>${opts(ownedSongs,'song_id','song_title')}</select></label><label class="single-field">New song title<input id="owned-song-title" required maxlength="155" placeholder="New title"></label><div class="dialog-actions"><button type="button" class="button secondary" data-close-modal>Cancel</button><button class="button" data-busy>Save changes</button></div></form></dialog>`,'Artist Studio','Make your next release.');
+ // Step-by-step upload: each step only shows what is needed for it.
+ bindAudioDrop('song');
+ const songForm=$('#songform');
+ const wiz=bindWizard(songForm,{validate:(st)=>{if(st===1&&!document.querySelector('input[name="albumchoice"]:checked'))return 'Choose an album or create one first.';if(st===2){const f=$('#song-file').files?.[0];if(!f)return 'Choose your audio file first.';return audioProblem(f);}return '';}});
+ songForm.addEventListener('wizardstep',e=>{if(e.detail!==3)return;const f=$('#song-file').files?.[0];const pick=document.querySelector('input[name="albumchoice"]:checked');const alb=state.albums.find(a=>String(a.album_id)===pick?.value);$('#song-final').innerHTML=summaryHtml([['Album',alb?.album_title],['File',f?.name],['Size',f?`${(f.size/1048576).toFixed(2)} MB`:'']]);});
+ document.querySelectorAll('[data-album-select]').forEach(b=>b.onclick=()=>{const a=state.albums.find(x=>String(x.album_id)===b.dataset.albumSelect);if(!a?.is_active)return toast('This album is inactive.',true);$('#new-song-modal').showModal();const input=document.querySelector(`input[name="albumchoice"][value="${a.album_id}"]`);if(input)input.checked=true;});
+ $('#albumcover').onchange=e=>{const file=e.target.files[0];const preview=$('#cover-preview');if(file){const url=URL.createObjectURL(file);preview.innerHTML=`<img src="${escapeHtml(url)}" alt="Selected album artwork">`;preview.querySelector('img').onload=()=>URL.revokeObjectURL(url);}};
+ $('#editsong').onsubmit=e=>{e.preventDefault();action(async()=>{check(await db.from('song').update({song_title:val('owned-song-title')}).eq('song_id',Number(val('owned-song'))));await loadData();render();toast('Song title updated');});};
+ document.querySelectorAll('[data-album-active]').forEach(b=>b.onclick=()=>action(async()=>{const active=b.dataset.active==='true';check(await db.rpc('set_my_album_active',{p_album_id:Number(b.dataset.albumActive),p_active:active}));await loadData();render();toast(active?'Album restored with eligible songs':'Album deactivated with its songs');}));
+ document.querySelectorAll('[data-own-song-active]').forEach(b=>b.onclick=()=>action(async()=>{check(await db.from('song').update({is_active:b.dataset.active==='true'}).eq('song_id',Number(b.dataset.ownSongActive)));await loadData();render();toast(b.dataset.active==='true'?'Song restored':'Song deactivated');}));
+ $('#albumform').onsubmit=e=>{e.preventDefault();action(async()=>{let cover_path=null;const file=$('#albumcover').files?.[0];if(file){if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Choose a JPEG, PNG or WebP cover.');if(file.size>5*1048576)throw Error('Album artwork must be under 5 MB.');const ext=file.name.split('.').pop().toLowerCase();cover_path=`${state.user.id}/albums/${crypto.randomUUID()}.${ext}`;check(await db.storage.from('covers').upload(cover_path,file,{upsert:false,contentType:file.type}));}
+ try{check(await db.from('album').insert({artist_id:state.artist.artist_id,album_title:val('albumtitle'),description:val('albumdesc')||null,release_type:val('releasetype')||'Album',release_date:val('releasedate'),cover_path,is_active:true}));}catch(error){if(cover_path)await db.storage.from('covers').remove([cover_path]);throw error;}
+ await loadData();render();toast('Album created. You can now upload songs.');});};
+ $('#songform').onsubmit=e=>{e.preventDefault();action(async()=>{if(wiz.step!==3)throw Error('Complete the upload steps first.');const file=$('#song-file').files?.[0];if(!file)throw Error('Choose an audio file.');const bad=audioProblem(file);if(bad)throw Error(bad);const album_id=Number(document.querySelector('input[name="albumchoice"]:checked')?.value);if(!validAlbums.some(a=>a.album_id===album_id))throw Error('Select an active album you own.');if(!val('songtitle'))throw Error('Add a song title.');if(!val('songgenre'))throw Error('Select a genre.');const duration_seconds=await audioDuration(file);if(!Number.isFinite(duration_seconds)||duration_seconds<1)throw Error('Could not read the audio duration.');const path=`${state.user.id}/songs/${crypto.randomUUID()}_${file.name.replace(/[^a-z0-9._-]/gi,'_').slice(-75)}`;
+ const fin=songForm.querySelector('.wiz-finish');setPublishing(fin,true,'Publish song');
+ try{
+ const trackQuery=await db.from('song').select('track_number').eq('album_id',album_id).order('track_number',{ascending:false}).limit(1);
+ if(trackQuery.error)throw trackQuery.error;
+ const track_number=(Number(trackQuery.data?.[0]?.track_number)||0)+1;
+ check(await db.storage.from('song-audio').upload(path,file,{upsert:false,contentType:file.type||'audio/mpeg'}));
+ let cover_path=null;const cover=$('#songcover')?.files?.[0];if(cover){if(!['image/png','image/jpeg','image/webp'].includes(cover.type))throw Error('Choose a JPEG, PNG or WebP song cover.');if(cover.size>5*1048576)throw Error('Song artwork must be under 5 MB.');const ext=(cover.name.split('.').pop()||'jpg').toLowerCase();cover_path=`${state.user.id}/songs/${crypto.randomUUID()}.${ext}`;check(await db.storage.from('covers').upload(cover_path,cover,{upsert:false,contentType:cover.type}));}
+ try{check(await db.from('song').insert({album_id,genre_id:Number(val('songgenre')),song_title:val('songtitle'),description:val('songdesc')||null,cover_path,duration_seconds,track_number,audio_path:path,is_active:true}));}catch(error){await db.storage.from('song-audio').remove([path]);if(cover_path)await db.storage.from('covers').remove([cover_path]);throw error;}
+ }finally{setPublishing(fin,false,'Publish song');}
+ await loadData();render();toast('Your track has been released!');});};
+}
+function admin(){if(!hasAdminAccess())return home();
+ const d=state.adminData||{};const users=d.users||[],artists=d.artists||[],songs=d.songs||state.songs||[],pods=d.podcasts||[],requests=d.subscription_requests||[];
+ const row=(type,id,title,meta,active)=>`<div class="admin-song-row"><div class="admin-song-meta"><strong>${esc(title)}</strong><small>${esc(meta||'')}</small></div><span class="admin-active">${active===false?'Inactive':'Active'}</span><button class="button secondary sm" data-entity="${type}" data-id="${esc(id)}" data-active="${active===false?'true':'false'}">${active===false?'Restore':'Deactivate'}</button></div>`;
+ shell(`<div class="home-chips admin-tabs"><button class="${state.adminTab==='accounts'?'active':''}" data-admin-tab="accounts">Accounts</button><button class="${state.adminTab==='artists'?'active':''}" data-admin-tab="artists">Artists</button><button class="${state.adminTab==='songs'?'active':''}" data-admin-tab="songs">Songs</button><button class="${state.adminTab==='podcasts'?'active':''}" data-admin-tab="podcasts">Podcasts</button><button class="${state.adminTab==='payments'?'active':''}" data-admin-tab="payments">Payments</button></div><section class="workspace-hero admin-hero"><div><span class="eyebrow">MODERATION CENTER</span><h2>Manage SoundWave safely.</h2><p>Moderation is grouped by entity and every protected action is verified by the database.</p></div><span class="hero-vinyl">${icon('shield')}</span></section><section class="admin-panel" data-admin-panel="accounts" ${state.adminTab!=='accounts'?'hidden':''}>${users.length?users.map(u=>row('users',u.user_id,u.display_name||'User',u.account_type||'',u.is_active)).join(''):'<div class="empty">Admin account data RPC is not installed yet.</div>'}</section><section class="admin-panel" data-admin-panel="artists" ${state.adminTab!=='artists'?'hidden':''}>${artists.length?artists.map(a=>row('artist',a.artist_id,a.artist_name||'Artist',a.country||'',a.is_active)).join(''):'<div class="empty">No artists available.</div>'}</section><section class="admin-panel" data-admin-panel="songs" ${state.adminTab!=='songs'?'hidden':''}>${songs.length?songs.map(s=>row('song',s.song_id,s.song_title||'Song',`Song #${s.song_id}`,s.is_active)).join(''):'<div class="empty">No songs available.</div>'}</section><section class="admin-panel" data-admin-panel="podcasts" ${state.adminTab!=='podcasts'?'hidden':''}>${pods.length?pods.map(p=>row('podcast_show',p.show_id,p.show_title||'Podcast',p.category||'',p.is_active)).join(''):'<div class="empty">No podcasts available.</div>'}</section><section class="admin-panel" data-admin-panel="payments" ${state.adminTab!=='payments'?'hidden':''}>${requests.length?requests.map(r=>`<div class="admin-song-row"><div class="admin-song-meta"><strong>${esc(r.display_name||String(r.user_id).slice(0,8))} · ${esc(r.plan_name||'Plan')}</strong><small>${esc(r.payment_method||'')} · Ref: ${esc(r.reference_number||'—')} · ${esc(r.status||'Pending')}</small></div>${String(r.status).toLowerCase()==='pending'?`<button class="button secondary sm" data-review-request="${r.request_id}" data-approve="false">Reject</button><button class="button sm" data-review-request="${r.request_id}" data-approve="true">Confirm payment</button>`:''}</div>`).join(''):'<div class="empty">No payment requests.</div>'}</section>`,'Admin moderation','Accounts, Artists, Songs, Podcasts and Payments.');
+ document.querySelectorAll('[data-admin-tab]').forEach(b=>b.onclick=()=>{state.adminTab=b.dataset.adminTab;document.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('[data-admin-panel]').forEach(p=>p.hidden=p.dataset.adminPanel!==b.dataset.adminTab);});
+ document.querySelectorAll('[data-entity]').forEach(b=>b.onclick=()=>action(async()=>{const r=await db.rpc('admin_set_entity_active',{p_entity:b.dataset.entity,p_id:b.dataset.id,p_active:b.dataset.active==='true'});if(r.error){if(b.dataset.entity==='song'){check(await db.rpc('admin_set_song_active',{p_song_id:Number(b.dataset.id),p_active:b.dataset.active==='true'}));}else throw r.error;}await loadData();render();toast('Moderation updated');}));
+ document.querySelectorAll('[data-review-request]').forEach(b=>b.onclick=()=>action(async()=>{check(await db.rpc('admin_review_subscription_request',{p_request_id:Number(b.dataset.reviewRequest),p_approve:b.dataset.approve==='true'}));await loadData();render();toast(b.dataset.approve==='true'?'Payment confirmed':'Request rejected');}));
+}
+function deactivatedAccountView(){
+ const name=state.profile?.display_name||state.user?.email?.split('@')[0]||'SoundWave user';
+ $('#app').innerHTML=`<main class="deactivated-wrap"><section class="deactivated-card"><span class="eyebrow">ACCOUNT DEACTIVATED</span><h1>${esc(name)}</h1><p>Your account and public content are hidden. Restore the account to make your playlists, podcasts, and artist releases available again.</p><div class="inline"><button class="button" id="restore-account">Restore account</button><button class="button secondary" id="deactivated-signout">Sign out</button></div></section></main>`;
+ $('#restore-account').onclick=()=>action(async()=>{check(await db.rpc('restore_my_account'));await loadData();render();toast('Account restored');});
+ $('#deactivated-signout').onclick=()=>action(async()=>{check(await db.auth.signOut());});
+}
+
+
+
+function showAsyncSkeleton(){const main=document.getElementById('main-content');if(!main||main.querySelector('.async-skeleton'))return;const el=document.createElement('div');el.className='async-skeleton';el.innerHTML='<div class="skeleton-line big"></div><div class="skeleton-line"></div><div class="skeleton-line" style="width:72%"></div><div class="skeleton-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>';main.append(el);}function hideAsyncSkeleton(){document.querySelector('.async-skeleton')?.remove();}
+function enhanceAuth(){
+  const show=document.querySelector('.auth-show');
+  if(!show||show.querySelector('.auth-waveform')) return;
+  const wave=document.createElement('div');
+  wave.className='auth-waveform';
+  wave.setAttribute('aria-hidden','true');
+  wave.innerHTML=Array.from({length:34},(_,i)=>`<i style="--i:${i}"></i>`).join('');
+  show.append(wave);
+  const particles=document.createElement('div');
+  particles.className='note-particles';
+  particles.setAttribute('aria-hidden','true');
+  particles.innerHTML=Array.from({length:14},(_,i)=>`<span style="--n:${i}">${i%3===0?'♫':i%3===1?'♪':'♬'}</span>`).join('');
+  show.append(particles);
+  let pulse=0;
+  document.querySelectorAll('.auth-panel input,.auth-panel select').forEach(el=>{
+    el.addEventListener('input',()=>{
+      pulse++;
+      wave.querySelectorAll('i').forEach((bar,i)=>bar.style.setProperty('--boost',String(1+((i+pulse)%7)/4)));
+      wave.classList.remove('typing');
+      void wave.offsetWidth;
+      wave.classList.add('typing');
+    });
+  });
+}
+function burstHearts(id){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.querySelectorAll(`[data-like="${id}"]`).forEach(btn=>{const b=document.createElement('span');b.className='heart-burst';b.innerHTML='<i>♥</i><i>♥</i><i>♥</i><i>♥</i><i>♥</i>';btn.append(b);setTimeout(()=>b.remove(),800);});}
+// ================= COMPETITION UPGRADE: insights, realtime, search, onboarding =================
+const RECENT_SEARCH_KEY='soundwave-recent-searches-v1';
+function rememberSearch(q){q=String(q||'').trim();if(!q)return;state.recentSearches=[q,...state.recentSearches.filter(x=>x.toLowerCase()!==q.toLowerCase())].slice(0,6);try{localStorage.setItem(RECENT_SEARCH_KEY,JSON.stringify(state.recentSearches));}catch{}}
+function recentSearchesHtml(){if(state.searchQuery||!state.recentSearches.length)return '';return `<div class="recent-searches"><span>Recent</span>${state.recentSearches.map(q=>`<button type="button" data-recent-search="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;}
+function searchKeyboardNav(e){if(!['ArrowDown','ArrowUp','Enter'].includes(e.key))return;const rows=[...document.querySelectorAll('#search-results .track[data-song],#search-results [data-open-artist],#search-results [data-open-album],#search-results [data-openplaylist],#search-results [data-open-show]')];if(!rows.length)return;const cur=document.activeElement?.dataset?.searchKbdIndex;let i=Number.isFinite(Number(cur))?Number(cur):-1;if(e.key==='Enter'){rememberSearch(e.currentTarget.value);if(i>=0)rows[i]?.click();return;}e.preventDefault();i=e.key==='ArrowDown'?Math.min(rows.length-1,i+1):Math.max(0,i-1);rows.forEach((r,n)=>{r.dataset.searchKbdIndex=n;r.classList.toggle('kbd-active',n===i);});rows[i]?.focus();}
+function cacheSongMetadata(){try{const rows=state.songs.slice(0,50).map(s=>({song_id:s.song_id,song_title:s.song_title,duration_seconds:s.duration_seconds,genre_id:s.genre_id,cover_path:s.cover_path,album:s.album&&{album_id:s.album.album_id,album_title:s.album.album_title,artist:s.album.artist&&{artist_id:s.album.artist.artist_id,artist_name:s.album.artist.artist_name}}}));localStorage.setItem('soundwave-song-cache-v1',JSON.stringify({savedAt:Date.now(),songs:rows}));}catch{}}
+function computeListeningStats(rows){const bySong=new Map(),byArtist=new Map(),byGenre=new Map(),days=new Set();let seconds=0;for(const r of rows){const s=songById(r.song_id);if(!s)continue;seconds+=Number(r.duration_played_seconds)||0;bySong.set(s.song_id,(bySong.get(s.song_id)||0)+1);const aid=s.album?.artist?.artist_id;if(aid)byArtist.set(aid,(byArtist.get(aid)||0)+1);if(s.genre_id)byGenre.set(s.genre_id,(byGenre.get(s.genre_id)||0)+1);if(r.stream_date)days.add(String(r.stream_date).slice(0,10));}let streak=0;for(let d=new Date(),i=0;i<365;i++,d.setDate(d.getDate()-1)){const k=d.toISOString().slice(0,10);if(days.has(k))streak++;else if(i>0)break;}const top=(map,lookup,n=5)=>[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,n).map(([id,count])=>({id,count,item:lookup(id)})).filter(x=>x.item);return {minutes:Math.round(seconds/60),streak,topSongs:top(bySong,id=>songById(id)),topArtists:top(byArtist,id=>state.artists.find(a=>Number(a.artist_id)===Number(id))),favoriteGenre:top(byGenre,id=>state.genres.find(g=>Number(g.genre_id)===Number(id)),1)[0]?.item||null};}
+function svgBars(items){const max=Math.max(1,...items.map(x=>x.count));return `<svg class="mini-bars" viewBox="0 0 320 110" role="img" aria-label="Top listening counts">${items.map((x,i)=>{const h=Math.max(8,(x.count/max)*78),w=44,g=18;return `<g transform="translate(${18+i*(w+g)} 0)"><rect x="0" y="${88-h}" width="${w}" height="${h}" rx="7"></rect><text x="${w/2}" y="104" text-anchor="middle">${i+1}</text></g>`}).join('')}</svg>`;}
+function listeningStatsHtml(){const st=state.listeningStats;if(!st)return '';return `<section class="insights-panel"><div class="section-heading"><div><span class="eyebrow">YOUR LISTENING</span><h2>SoundWave Stats</h2></div><span class="muted small">Based on your listening history</span></div><div class="insight-grid"><div class="insight-number"><strong data-count="${st.minutes}">${st.minutes}</strong><span>minutes listened</span></div><div class="insight-number"><strong data-count="${st.streak}">${st.streak}</strong><span>day streak</span></div><div class="insight-number"><strong>${esc(st.favoriteGenre?.genre_name||'Explore more')}</strong><span>favorite genre</span></div><div class="insight-chart">${svgBars(st.topSongs)}</div></div><div class="insight-lists"><div><h3>Top artists</h3>${st.topArtists.map((x,i)=>`<button type="button" data-open-artist="${x.id}"><b>${i+1}</b><span>${esc(x.item.artist_name)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Listen to artists to build your stats.</p>'}</div><div><h3>Top songs</h3>${st.topSongs.map((x,i)=>`<button type="button" data-play="${x.id}"><b>${i+1}</b><span>${esc(x.item.song_title)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Your top tracks will appear here.</p>'}</div></div></section>`;}
+function weeklyTopHtml(){if(!state.topWeekSongs.length)return '';return `<section class="weekly-mix"><div class="weekly-cover"><span>7</span><small>DAYS</small></div><div><span class="eyebrow">AUTO PLAYLIST</span><h2>Your Top Songs of the Week</h2><p>${state.topWeekSongs.length} tracks ranked from your real listening history. It updates automatically.</p><div class="inline"><button type="button" class="button" data-play-ids="${state.topWeekSongs.map(s=>s.song_id).join(',')}">${icon('play')} Play mix</button><span class="muted small">Cannot be deleted</span></div></div></section>`;}
+function sparkline(rows){const pts=rows.length?rows:[0];const max=Math.max(1,...pts);return `<svg class="sparkline" viewBox="0 0 360 95" preserveAspectRatio="none" aria-label="30 day streams"><polyline points="${pts.map((v,i)=>`${(i/(pts.length-1||1))*360},${88-(v/max)*72}`).join(' ')}" fill="none" vector-effect="non-scaling-stroke"></polyline></svg>`;}
+function artistAnalyticsHtml(){if(!state.artist)return '';const days=Array(30).fill(0);for(const r of state.artistThirtyDay){const diff=Math.floor((Date.now()-new Date(r.stream_date).getTime())/86400000);if(diff>=0&&diff<30)days[29-diff]++;}const roy=state.royaltySummary||{};const rate=Number(roy.royalty_rate||0);return `<section class="artist-analytics"><div class="section-heading"><div><span class="eyebrow">LAST 30 DAYS</span><h2>Audience pulse</h2></div></div><div class="artist-analytics-grid"><div class="analytics-chart"><strong>${state.artistThirtyDay.length}</strong><span>visible streams</span>${sparkline(days)}</div><div class="top-listeners"><h3>Top listeners</h3>${state.artistTopListeners.map((x,i)=>`<div><span class="member-avatar">${i+1}</span><strong>${esc(x.name)}</strong><small>${x.count} streams</small></div>`).join('')||'<p class="muted small">No listener rows are visible under the current RLS policy yet.</p>'}</div><div class="royalty-calc"><h3>Royalty estimator</h3><strong>₱${(state.artistThirtyDay.length*rate).toFixed(2)}</strong><small>${state.artistThirtyDay.length} streams × ₱${rate.toFixed(4)}</small></div></div></section>`;}
+function episodeProgressHtml(ep){const h=state.podcastHistory.find(x=>String(x.episode_id)===String(ep.episode_id));const pos=Number(h?.resume_position_seconds)||0,dur=Number(ep.duration_seconds)||0,pct=dur?Math.min(100,(pos/dur)*100):0;return pct>1?`<div class="episode-progress" title="Resume at ${nice(pos)}"><span style="width:${pct}%"></span></div>`:'';}
+function friendNowHtml(){if(!state.friendNow.length)return '';return `<section class="rail-card friend-now"><h4>Friends listening now</h4>${state.friendNow.slice(0,5).map(x=>`<button type="button" data-play="${x.song_id}"><span class="presence-dot"></span><span><strong>${esc(x.name)}</strong><small>${esc(x.song_title)} · ${esc(x.artist_name)}</small></span></button>`).join('')}</section>`;}
+function friendActivityHtml(){if(!state.friendActivity.length)return '';return `<section class="rail-card friend-feed"><h4>Friend activity</h4>${state.friendActivity.slice(0,6).map(x=>`<div><span class="member-avatar">${esc(x.initial)}</span><p><strong>${esc(x.name)}</strong> ${esc(x.text)}<small>${esc(agoText(x.at))}</small></p></div>`).join('')}</section>`;}
+function playlistPresenceHtml(){if(!state.playlistPresence.length)return '<span class="muted small">Live collaboration ready</span>';return `<span class="presence-label">Viewing now</span>${state.playlistPresence.slice(0,5).map((p,i)=>`<span class="presence-avatar" title="${esc(p.name)}">${esc((p.name||'?')[0].toUpperCase())}</span>`).join('')}`;}
+let realtimeChannel=null,playlistPresenceChannel=null;
+function setupRealtime(){if(!db||!state.user)return;if(realtimeChannel)db.removeChannel(realtimeChannel);realtimeChannel=db.channel(`soundwave-listening-${state.user.id}`).on('postgres_changes',{event:'INSERT',schema:'public',table:'listening_history'},payload=>{const r=payload.new||{},followed=new Set(state.following.map(x=>String(x.followed_user_id)));if(!followed.has(String(r.user_id)))return;const s=songById(r.song_id);const prof=state.socialProfiles[String(r.user_id)];if(!s)return;state.friendNow=[{user_id:r.user_id,song_id:r.song_id,name:prof?.display_name||'A friend',song_title:s.song_title,artist_name:s.album?.artist?.artist_name||'SoundWave',at:r.stream_date||new Date().toISOString()},...state.friendNow.filter(x=>String(x.user_id)!==String(r.user_id))].slice(0,8);refreshRail();}).subscribe();}
+function setupPlaylistPresence(){if(!db||!state.user||state.page!=='playlists'||!state.selectedPlaylist){if(playlistPresenceChannel){db.removeChannel(playlistPresenceChannel);playlistPresenceChannel=null;}return;}const id=state.selectedPlaylist;if(playlistPresenceChannel)db.removeChannel(playlistPresenceChannel);playlistPresenceChannel=db.channel(`playlist-presence-${id}`,{config:{presence:{key:state.user.id}}});playlistPresenceChannel.on('presence',{event:'sync'},()=>{const pres=playlistPresenceChannel.presenceState();state.playlistPresence=Object.values(pres).flat().filter(Boolean).map(x=>({user_id:x.user_id,name:x.name||'Listener'}));const el=document.getElementById('playlist-presence');if(el)el.innerHTML=playlistPresenceHtml();}).subscribe(async status=>{if(status==='SUBSCRIBED')await playlistPresenceChannel.track({user_id:state.user.id,name:state.profile?.display_name||'Listener',at:new Date().toISOString()});});}
+async function loadCompetitionData(){if(!state.user)return;try{state.recentSearches=JSON.parse(localStorage.getItem(RECENT_SEARCH_KEY)||'[]').slice(0,6);}catch{state.recentSearches=[];}if(!state.songs.length){try{const cached=JSON.parse(localStorage.getItem('soundwave-song-cache-v1')||'{}');if(Array.isArray(cached.songs)&&cached.songs.length){state.songs=cached.songs;toast('You are viewing your recent SoundWave catalog offline.');}}catch{}}const now=Date.now(),since90=new Date(now-90*86400000).toISOString(),since30=new Date(now-30*86400000).toISOString();const hist=await db.from('listening_history').select('stream_id,user_id,song_id,stream_date,duration_played_seconds,completion_status').eq('user_id',state.user.id).gte('stream_date',since90).order('stream_date',{ascending:false}).limit(1500);state.insightHistory=hist.error?state.history:(hist.data||[]);state.listeningStats=computeListeningStats(state.insightHistory);const weekCut=now-7*86400000,counts=new Map();state.insightHistory.filter(r=>new Date(r.stream_date).getTime()>=weekCut).forEach(r=>counts.set(Number(r.song_id),(counts.get(Number(r.song_id))||0)+1));state.topWeekSongs=[...counts.entries()].sort((a,b)=>b[1]-a[1]).map(([id])=>songById(id)).filter(Boolean).slice(0,20);cacheSongMetadata();const friendIds=[...new Set(state.following.map(x=>x.followed_user_id).filter(Boolean))];state.friendActivity=[];state.friendNow=[];if(friendIds.length){const [fh,likes,pls,social]=await Promise.all([db.from('listening_history').select('user_id,song_id,stream_date').in('user_id',friendIds).order('stream_date',{ascending:false}).limit(40),db.from('saved_song').select('*').in('user_id',friendIds).limit(60),db.from('playlist').select('*').in('user_id',friendIds).eq('is_active',true).limit(40),db.from('user_follow').select('*').limit(100)]);if(!fh.error)state.friendNow=(fh.data||[]).filter(r=>now-new Date(r.stream_date).getTime()<10*60*1000).map(r=>{const s=songById(r.song_id),p=state.socialProfiles[String(r.user_id)];return s?{user_id:r.user_id,song_id:r.song_id,name:p?.display_name||'A friend',song_title:s.song_title,artist_name:s.album?.artist?.artist_name||'SoundWave',at:r.stream_date}:null;}).filter(Boolean).filter((x,i,a)=>a.findIndex(y=>String(y.user_id)===String(x.user_id))===i);const events=[];if(!likes.error)(likes.data||[]).forEach(r=>{const s=songById(r.song_id),p=state.socialProfiles[String(r.user_id)];if(s)events.push({name:p?.display_name||'A friend',initial:(p?.display_name||'F')[0],text:`liked ${s.song_title}`,at:r.date_saved||r.liked_at||new Date().toISOString()});});if(!pls.error)(pls.data||[]).forEach(r=>{const p=state.socialProfiles[String(r.user_id)];events.push({name:p?.display_name||'A friend',initial:(p?.display_name||'F')[0],text:`created ${r.playlist_name||'a playlist'}`,at:r.created_at||r.date_created||new Date().toISOString()});});if(!social.error)(social.data||[]).forEach(r=>{const uid=r.follower_user_id||r.follower_id||r.user_id;if(!friendIds.some(x=>String(x)===String(uid)))return;const p=state.socialProfiles[String(uid)];events.push({name:p?.display_name||'A friend',initial:(p?.display_name||'F')[0],text:'followed someone new',at:r.date_followed||r.created_at||new Date().toISOString()});});state.friendActivity=events.sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,20);}if(state.artist&&state.ownedSongs.length){const songIds=state.ownedSongs.map(s=>s.song_id);const ar=await db.from('listening_history').select('user_id,song_id,stream_date,duration_played_seconds').in('song_id',songIds).gte('stream_date',since30).order('stream_date',{ascending:true}).limit(4000);state.artistThirtyDay=ar.error?[]:(ar.data||[]);const counts2=new Map();state.artistThirtyDay.forEach(r=>counts2.set(String(r.user_id),(counts2.get(String(r.user_id))||0)+1));state.artistTopListeners=[...counts2.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([uid,count])=>({uid,count,name:state.socialProfiles[uid]?.display_name||`Listener ${uid.slice(0,6)}`}));}state.competitionLoaded=true;}
+function showOnboarding(){
+ const roleKey=hasAdminAccess()?(hasArtistAccess()?'artist-admin':'admin'):hasArtistAccess()?'artist':'listener';
+ const key=`soundwave-onboarded-${roleKey}-${state.user?.id}`;if(!state.user||localStorage.getItem(key))return;
+ const tours={
+  listener:[['Your listening home','Home keeps recommendations, weekly favorites and recent activity focused in one place.','♫'],['Search and save','Find music fast, like songs, follow artists and build playlists.','♥'],['Keep the music moving','Use the player, queue and podcast resume tools across desktop and mobile.','▶']],
+  artist:[['Welcome to Artist Studio','Your sidebar has one clear Studio entry for releases and performance.','✦'],['Publish with confidence','Create albums and songs using your existing SoundWave catalog workflow.','♫'],['Read your audience','Track streams, top listeners and royalty estimates without leaving Studio.','↗']],
+  admin:[['Welcome to Moderation','Your sidebar has one clear Moderation entry for protected admin work.','◆'],['Review safely','Manage accounts, artists, songs, podcasts and payments through existing RLS/RPC rules.','✓'],['Stay focused','Listener tools remain available, but dashboard links no longer compete for attention.','◎']],
+  'artist-admin':[['Two roles, two workspaces','Artist Studio and Moderation are the only dashboard destinations in your sidebar.','✦'],['Create and review','Publish your own catalog in Studio, then switch to Moderation for protected admin actions.','◆'],['No duplicate routes','Profile and top-bar dashboard shortcuts are removed to keep navigation predictable.','✓']]
+ };
+ const slides=tours[roleKey];let i=0;const wrap=document.createElement('div');wrap.className='onboarding';
+ const close=()=>{localStorage.setItem(key,'1');wrap.remove();};
+ const draw=()=>{const [t,d,ico]=slides[i];wrap.innerHTML=`<div class="onboarding-card"><div class="onboarding-illustration">${ico}<i></i><i></i><i></i></div><span class="eyebrow">${roleKey.replace('-',' + ').toUpperCase()} TOUR · ${i+1}/3</span><h2>${t}</h2><p>${d}</p><div class="onboarding-dots">${slides.map((_,n)=>`<span class="${n===i?'active':''}"></span>`).join('')}</div><div class="inline"><button class="button secondary" id="tour-skip">Skip</button><button class="button" id="tour-next">${i===2?'Done':'Next'}</button></div></div>`;wrap.querySelector('#tour-skip').onclick=close;wrap.querySelector('#tour-next').onclick=()=>{if(i===2)close();else{i++;draw();}};};
+ document.body.append(wrap);draw();}
+function animateCounters(){document.querySelectorAll('[data-count]').forEach(el=>{const end=Number(el.dataset.count)||0;if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=end;return;}let start=0,t0=performance.now();const tick=t=>{const p=Math.min(1,(t-t0)/700);el.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick)};requestAnimationFrame(tick);});}
+function afterCompetitionRender(){document.getElementById('app')?.classList.add('route-enter');requestAnimationFrame(()=>document.getElementById('app')?.classList.remove('route-enter'));animateCounters();setupPlaylistPresence();showOnboarding();}
+
+function notFound(){state.tint='#37204a';shell(`<section class="not-found"><div class="not-found-code">404</div><div><span class="eyebrow">TRACK NOT FOUND</span><h2>This page skipped a beat.</h2><p>The link may be old, private, or unavailable to your account.</p><button type="button" class="button" data-nav="home">Back to SoundWave</button></div></section>`,'Lost in the mix','');}
+function render() {
+  if (requireConfig()) return;
+  if (!state.user) { authView(); return; }
+  if (state.profile && state.profile.is_active === false) { deactivatedAccountView(); return; }
+  if (!pageAllowed(state.page)) state.page = 'home';
+  switch (state.page) {
+    case 'listener-dashboard': listenerDashboard(); break;
+    case 'artist-dashboard': artistDashboard(); break;
+    case 'admin-dashboard': adminDashboard(); break;
+    case 'history': history(); refreshHistory(); break;
+    case 'music': music(); break;
+    case 'artists': artists(); break;
+    case 'artist-detail': artistDetail(); break;
+    case 'album-detail': albumDetail(); break;
+    case 'liked-artists': likedArtists(); break;
+    case 'liked-songs': likedSongsPage(); break;
+    case 'followers': followers(); break;
+    case 'profile': profile(); break;
+    case 'playlists': playlists(); break;
+    case 'downloads': downloadsPage(); break;
+    case 'podcasts': podcasts(); break;
+    case 'podcast-studio': podcastStudio(); break;
+    case 'plans': plans(); break;
+    case 'studio': studio(); break;
+    case 'admin': admin(); break;
+    case 'not-found': notFound(); break;
+    default: home();
+  }
+  afterRender();
+  afterCompetitionRender();
+}
+async function acceptPendingPlaylistInvite(){
+ if(state.playlistInviteHandled||!state.user)return;
+ const token=new URLSearchParams(location.search).get('playlist_invite');
+ if(!token)return;
+ state.playlistInviteHandled=true;
+ try{
+   const data=check(await db.rpc('accept_playlist_invite',{p_token:token}));
+   toast('Playlist collaboration accepted');
+   await loadData();
+   const u=new URL(window.location.href);
+   u.searchParams.delete('playlist_invite');
+   const cleanUrl=u.pathname+u.search+(u.hash||'#/playlists');
+   window.history.replaceState(window.history.state||{},document.title,cleanUrl);
+ }catch(e){console.error(e);toast(humanErr(e),true);}
+}
+async function boot(){if(requireConfig())return;try{const result=await db.auth.getSession();if(result.error)throw result.error;state.user=result.data.session?.user||null;state.hist.i=window.history.state?.i??0;state.hist.max=state.hist.i;if(state.user){await loadData();await loadCompetitionData();setupRealtime();await acceptPendingPlaylistInvite();applyHash(location.hash);}await routeLoad();}catch(e){console.error(e);state.error=humanErr(e);authView();toast(state.error,true);}db.auth.onAuthStateChange((event,session)=>{ // Schedule outside callback to avoid auth-client re-entrancy/deadlocks.
+ setTimeout(()=>{action(async()=>{const newUser=session?.user||null;if(newUser?.id===state.user?.id)return;state.user=newUser;stopAudio();state.coverUrls={};state.selectedPlaylist=null;state.page='home';state.routeReady=false;if(newUser){await loadData();await loadCompetitionData();setupRealtime();state.playlistInviteHandled=false;await acceptPendingPlaylistInvite();}render();});},0);
+});}
+function queueRow(item, idx) {
+  return `<button type="button" class="queue-row ${idx == null ? 'current' : ''}" ${idx != null ? `data-queue-jump="${idx}"` : ''}><span class="queue-art">${item.song ? albumArt(item.song, 'tiny') : `<span class="placeholder-art tiny">${icon('mic')}</span>`}</span><span class="queue-text"><strong>${esc(item.title)}</strong><small>${esc(item.artist)}</small></span></button>`;
+}
+function railHtml() {
+  const p = state.player, tab = state.railTab;
+  const head = `<div class="rail-title"><h2>${tab === 'queue' ? 'Queue' : tab === 'lyrics' ? 'Lyrics' : 'Now playing'}</h2><div class="rail-tools">${p?.kind==='song'?`<button type="button" class="icon-quiet ${tab === 'lyrics' ? 'active' : ''}" data-rail-tab="lyrics" aria-label="Show lyrics" title="Lyrics">${icon('music')}</button>`:''}<button type="button" class="icon-quiet ${tab === 'queue' ? 'active' : ''}" data-rail-tab="queue" aria-label="Show queue" title="Queue">${icon('queue')}</button><button type="button" id="close-rail" class="icon-quiet" aria-label="Hide this panel" title="Hide">${icon('close')}</button></div></div>`;
+  if (!p) return `${head}<div class="now-card empty-now"><span class="now-art placeholder">${icon('music')}</span><h3>Nothing playing</h3><p class="muted">Pick a song and its details will show up here.</p></div>${friendNowHtml()}${friendActivityHtml()}`;
+  const song = p.kind === 'song' ? songById(p.id) : null;
+  const current = { song, title: p.title, artist: p.artist };
+  if (tab === 'queue') {
+    const up = p.kind === 'song' ? p.order.slice(p.pos + 1).map((id, k) => ({ id, idx: p.pos + 1 + k, s: songById(id) })).filter((x) => x.s) : [];
+    return `${head}<div class="queue-block"><h4>Now playing</h4>${queueRow(current, null)}</div><div class="queue-block"><h4>Next up</h4>${up.length ? up.slice(0, 60).map((x) => queueRow({ song: x.s, title: x.s.song_title, artist: x.s.album?.artist?.artist_name || 'SoundWave' }, x.idx)).join('') : '<p class="muted small">Nothing queued. Play an album or playlist, or choose “Add to queue”.</p>'}</div>`;
+  }
+  if (tab === 'lyrics' && song) {
+    const lyric = state.lyricsCache[String(song.song_id)];
+    return `${head}<section class="rail-card lyrics-rail"><h4>${esc(song.song_title)}</h4>${lyric===undefined?'<p class="muted">Loading lyrics…</p>':lyric?`<div class="lyrics-display">${esc(lyric).replace(/\n/g,'<br>')}</div>`:'<p class="muted">Lyrics have not been added for this song yet.</p>'}</section>`;
+  }
+  const artist = song?.album?.artist;
+  const full = artist && state.artists.find((a) => Number(a.artist_id) === Number(artist.artist_id));
+  const saved = full && state.favorites.some((f) => Number(f.artist_id) === Number(full.artist_id));
+  const nextId = p.kind === 'song' ? p.order[p.pos + 1] : null, next = nextId != null ? songById(nextId) : null;
+  return `${head}<div class="now-card"><span class="now-art">${p.kind === 'podcast' ? `<span class="placeholder-art large">${icon('mic')}</span>` : albumArt(song, 'large')}</span><div class="now-title"><div><h3>${esc(p.title)}</h3><p class="muted">${artist ? `<a href="#/artist-detail/${artist.artist_id}" data-open-artist="${artist.artist_id}">${esc(p.artist)}</a>` : esc(p.artist)}</p></div>${song ? heartBtn(song.song_id) : ''}</div></div>
+ ${full ? `<section class="rail-card about"><h4>About the artist</h4><span class="about-art" style="background:${grad(full.artist_id)}">${esc(full.artist_name?.[0] || 'A')}</span><strong>${esc(full.artist_name)}</strong><p>${esc(full.bio || full.country || 'SoundWave artist')}</p>${followBtn(full, 'sm')}</section>` : ''}
+ ${next ? `<section class="rail-card"><div class="rail-card-head"><h4>Next in queue</h4><button type="button" class="text-link" data-rail-tab="queue">Open queue</button></div>${queueRow({ song: next, title: next.song_title, artist: next.album?.artist?.artist_name || 'SoundWave' }, p.pos + 1)}</section>` : ''}${friendNowHtml()}${friendActivityHtml()}`;
+}
+function refreshRail() {
+  const el = document.getElementById('context-rail'); if (!el) return;
+  el.innerHTML = railHtml(); bindRail();
+  $('#sw-queue')?.classList.toggle('active', state.railTab === 'queue' && !prefs.railHidden);
+}
+function bindRail() {
+  const rail = document.getElementById('context-rail'); if (!rail) return;
+  rail.querySelector('#close-rail')?.addEventListener('click', () => { toggleRail(true); $('#sw-view')?.classList.remove('active'); });
+  rail.querySelectorAll('[data-rail-tab]').forEach((b) => b.onclick = () => { const next=b.dataset.railTab;state.railTab = next===state.railTab?'now':next;refreshRail();if(state.railTab==='lyrics'&&state.player?.kind==='song'){const sid=String(state.player.id);if(state.lyricsCache[sid]===undefined){db.from('song_lyrics').select('lyrics').eq('song_id',state.player.id).maybeSingle().then(r=>{state.lyricsCache[sid]=r.error?'':(r.data?.lyrics||'');if(state.railTab==='lyrics')refreshRail();});}} });
+  rail.querySelectorAll('[data-queue-jump]').forEach((b) => b.onclick = () => { const p = state.player; if (!p) return; const idx = Number(b.dataset.queueJump); action(() => playSong(p.order[idx], p.queue, { order: p.order, pos: idx })); });
+  bindFavoriteButtons(new Set(state.favorites.map((f) => String(f.artist_id))));
+  bindContent(rail);
+}
+function toggleRail(force) { prefs.railHidden = force ?? !prefs.railHidden; savePrefs(); document.body.classList.toggle('rail-hidden', prefs.railHidden); }
+function albumDetail() {
+  const al = albumById(state.selectedAlbum);
+  if (!al) return music();
+  const owner = al.artist, total = totalTime(al.songs);
+  state.tint = tintFor(al.album_id);
+  shell(`<header class="coll-hero"><div class="coll-cover">${albumArt({ song_id: al.album_id, album: al }, 'large')}</div><div class="coll-meta"><span class="coll-kind">${esc(al.release_type||'Album')}</span><h1 class="coll-title">${esc(al.title)}</h1>${al.description?`<p class="coll-desc">${esc(al.description)}</p>`:''}<p class="coll-sub">${owner ? `<a href="#/artist-detail/${owner.artist_id}" data-open-artist="${owner.artist_id}"><strong>${esc(owner.artist_name)}</strong></a> · ` : ''}${yearOf(al.release_date) ? yearOf(al.release_date) + ' · ' : ''}${al.songs.length} ${al.songs.length === 1 ? 'song' : 'songs'}, ${total}</p></div></header>
+<div class="coll-actions"><button type="button" class="sw-big-play" data-play-ids="${ids(al.songs).join(',')}" aria-label="Play ${esc(al.title)}">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle">${icon('shuffle')}</button></div>
+${trackTable(al.songs, { queue: ids(al.songs), showAlbum: false })}
+${(() => { const more = catalogAlbums().filter((a) => a.album_id !== al.album_id && Number(a.artist?.artist_id) === Number(owner?.artist_id)); return more.length ? `<section class="shelf-section"><div class="section-heading"><h2>More by ${esc(owner.artist_name)}</h2></div><div class="shelf">${more.map(albumTile).join('')}</div></section>` : ''; })()}`, '', '');
+}
+function likedSongsPage() {
+  const songs = state.liked.map((x) => songById(x.song_id)).filter(Boolean);
+  const display = state.profile?.display_name || 'You';
+  state.tint = '#4a3b8f';
+  shell(`<header class="coll-hero"><div class="coll-cover liked-cover">${icon('heart')}</div><div class="coll-meta"><span class="coll-kind">Playlist</span><h1 class="coll-title">Liked Songs</h1><p class="coll-sub"><span class="sw-owner-avatar">${esc(display[0]?.toUpperCase() || 'S')}</span><strong>${esc(display)}</strong> · <span data-liked-count>${songs.length} ${songs.length === 1 ? 'song' : 'songs'}</span></p></div></header>${likesNotice()}
+<div class="coll-actions">${songs.length ? `<button type="button" class="sw-big-play" data-play-ids="${ids(songs).join(',')}" aria-label="Play Liked Songs">${icon('play')}</button><button type="button" class="sw-quiet-action shuffle-toggle" data-toggle-shuffle aria-label="Shuffle">${icon('shuffle')}</button>` : ''}</div>
+${songs.length ? trackTable(songs, { queue: ids(songs) }) : `<div class="empty-state"><h3>Songs you like will appear here</h3><p>Save songs by tapping the heart icon.</p><button type="button" class="button" data-nav="music">Find something to play</button></div>`}`, '', '');
+}
+// ---------- Global interactions ----------
+document.addEventListener('click', (e) => {
+  const like = e.target.closest('[data-like]');
+  if (like) { e.preventDefault(); e.stopPropagation(); toggleLike(like.dataset.like).catch((err) => { console.error(err); toast(humanErr(err), true); }); return; }
+  const fav = e.target.closest('[data-fav]');
+  if (fav) { e.preventDefault(); e.stopPropagation(); toggleFollow(fav.dataset.fav).catch((err) => { console.error(err); toast(humanErr(err), true); }); return; }
+  if (!e.target.closest('.song-action-popover,[data-song-menu]')) document.querySelector('.song-action-popover')?.remove();
+  if (!e.target.closest('.profile-wrap')) { const m = document.getElementById('profile-menu'); if (m) m.hidden = true; }
+  if (!e.target.closest('.more-wrap')) { const m = document.getElementById('sw-more-options'); if (m) m.hidden = true; }
+  const row = e.target.closest('.track[data-song]');
+  if (row && !e.target.closest('button,a,input')) {
+    document.querySelectorAll('.track.selected').forEach((x) => x.classList.remove('selected')); row.classList.add('selected');
+    if (matchMedia('(hover: none)').matches) playRow(row);
+  }
+}, true);
+document.addEventListener('dblclick', (e) => { const row = e.target.closest('.track[data-song]'); if (row && !e.target.closest('button,a,input')) playRow(row); });
+document.addEventListener('keydown',(e)=>{if(!['ArrowDown','ArrowUp'].includes(e.key))return;const active=e.target.closest?.('#search-results .track[data-song],#search-results [data-open-artist],#search-results [data-open-album],#search-results [data-openplaylist],#search-results [data-open-show]');if(!active)return;const rows=[...document.querySelectorAll('#search-results .track[data-song],#search-results [data-open-artist],#search-results [data-open-album],#search-results [data-openplaylist],#search-results [data-open-show]')];const i=rows.indexOf(active);if(i<0)return;e.preventDefault();const n=e.key==='ArrowDown'?Math.min(rows.length-1,i+1):Math.max(0,i-1);rows[n]?.focus();rows.forEach((r,j)=>r.classList.toggle('kbd-active',j===n));});
+document.addEventListener('keydown', (e) => {
+  const t = e.target, typing = t.matches?.('input,textarea,select,[contenteditable="true"]');
+  if (e.key === 'Escape') { document.querySelector('.song-action-popover')?.remove(); return; }
+  if (!state.user) return;
+  if ((e.key === 'Enter' || e.key === ' ') && t.matches?.('[role="link"][tabindex],.track[data-song]') && !e.target.closest('button,a,input')) {
+    e.preventDefault();
+    if (t.matches('.track')) playRow(t); else t.click();
+    return;
+  }
+  if (typing || document.querySelector('dialog[open]')) return;
+  const audio = document.getElementById('sw-audio');
+  if (e.key === ' ' && audio && !t.matches?.('button,a,[role="button"]')) { e.preventDefault(); if (audio.paused) audio.play().catch(() => {}); else audio.pause(); }
+  else if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') { e.preventDefault(); action(() => skip(1)); }
+  else if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') { e.preventDefault(); action(() => skip(-1)); }
+  else if (e.key === '/' ) { e.preventDefault(); document.getElementById('global-search')?.focus(); }
+});
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); state.installEvent = e; const b = document.getElementById('install-app'); if (b) b.hidden = false; });
+window.addEventListener('appinstalled', () => { state.installEvent = null; const b = document.getElementById('install-app'); if (b) b.hidden = true; });
+initMediaKeys();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+boot();
+
+/* Card hover effects: cursor spotlight + subtle 3D tilt (works for cards rendered later too) */
+(() => {
+  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (!fine || calm) return;
+  const SEL = '.release-tile,.artist-card,.cover-card';
+  let raf = 0;
+  document.addEventListener('mousemove', e => {
+    const card = e.target.closest && e.target.closest(SEL);
+    if (!card) return;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      card.style.setProperty('--mx', x + 'px');
+      card.style.setProperty('--my', y + 'px');
+      card.style.setProperty('--ry', ((x / r.width - .5) * 6).toFixed(2) + 'deg');
+      card.style.setProperty('--rx', ((.5 - y / r.height) * 6).toFixed(2) + 'deg');
+    });
+  }, { passive: true });
+  document.addEventListener('mouseout', e => {
+    const card = e.target.closest && e.target.closest(SEL);
+    if (!card || card.contains(e.relatedTarget)) return;
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--ry', '0deg');
+  });
+})();
