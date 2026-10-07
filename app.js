@@ -395,9 +395,8 @@ function syncIdleLayout() { document.body.classList.toggle('is-idle', !state.pla
 function renderIdlePlayer() {
   syncIdleLayout();
   const existing = document.getElementById('soundwave-player');
-  if (!state.user) { if (existing) existing.remove(); return; }
-  if (state.player) return;
-  playerRoot().innerHTML = playerBarHtml(null);
+  // Do not mount an empty player. The app shell expands to the viewport while idle.
+  if (!state.user || !state.player) { existing?.remove(); return; }
 }
 function playerBarHtml(d) {
   const idle = !d, podcast = d?.kind === 'podcast', dis = idle ? 'disabled' : '';
@@ -405,9 +404,8 @@ function playerBarHtml(d) {
   const artistId = song?.album?.artist?.artist_id;
   const vol = prefs.muted ? 0 : Math.round(prefs.volume * 100);
   const thumb = idle ? icon('music') : podcast ? icon('mic') : albumArt(song, 'tiny');
-  const fullArt = idle ? icon('music') : podcast ? thumb : albumArt(song, 'large');
   return `<div class="custom-playbar ${idle ? 'idle-playbar' : ''}">
- <button type="button" class="player-song mobile-player-open" ${idle ? 'disabled' : ''} aria-label="Open now playing"><span class="player-thumb ${idle ? 'idle-thumb' : ''}">${thumb}</span><span class="player-song-text"><strong>${esc(d?.title || 'SoundWave')}</strong><small>${idle ? 'Choose something to play' : esc(d.artist)}</small></span></button>${song ? heartBtn(song.song_id, 'player-heart') : ''}
+ <div class="player-song"><span class="player-thumb ${idle ? 'idle-thumb' : ''}">${thumb}</span><div class="player-song-text"><strong>${esc(d?.title || 'SoundWave')}</strong><small>${idle ? 'Choose something to play' : artistId ? `<a href="#/artist-detail/${artistId}" data-open-artist="${artistId}">${esc(d.artist)}</a>` : esc(d.artist)}</small></div>${song ? heartBtn(song.song_id, 'player-heart') : ''}</div>
  <div class="player-center"><div class="play-controls">
   ${podcast ? '' : `<button type="button" id="sw-shuffle" class="icon-quiet mode ${prefs.shuffle ? 'active' : ''}" aria-pressed="${prefs.shuffle}" aria-label="Shuffle" title="Shuffle" ${dis}>${icon('shuffle')}</button>`}
   <button type="button" id="sw-prev" class="icon-quiet" aria-label="${podcast ? 'Back 15 seconds' : 'Previous song'}" title="${podcast ? 'Back 15 seconds' : 'Previous'}" ${dis}>${podcast ? '<span class="skip-15">−15</span>' : icon('prev')}</button>
@@ -416,14 +414,7 @@ function playerBarHtml(d) {
   ${podcast ? '' : `<button type="button" id="sw-repeat" class="icon-quiet mode ${prefs.repeat !== 'off' ? 'active' : ''}" data-mode="${prefs.repeat}" aria-label="Repeat: ${prefs.repeat}" title="Repeat" ${dis}>${icon(prefs.repeat === 'one' ? 'repeat1' : 'repeat')}</button>`}
  </div><div class="player-timeline"><span id="sw-elapsed">0:00</span><input id="sw-seek" type="range" min="0" max="1000" value="0" style="--pct:0%" aria-label="Seek position" ${dis}><span id="sw-total">${nice(d?.duration || 0)}</span></div></div>
  <div class="player-right"><button type="button" id="sw-queue" class="icon-quiet ${state.railTab === 'queue' && !prefs.railHidden ? 'active' : ''}" aria-label="Queue" title="Queue">${icon('queue')}</button><button type="button" id="sw-mute" class="icon-quiet" aria-label="Mute" title="Mute">${icon(vol === 0 ? 'mute' : 'volume')}</button><input id="sw-volume" type="range" min="0" max="100" value="${vol}" style="--pct:${vol}%" aria-label="Volume"><button type="button" id="sw-view" class="icon-quiet ${prefs.railHidden ? '' : 'active'}" aria-label="Now playing view" title="Now playing view">${icon('library')}</button></div>
- ${idle ? '' : `<audio id="sw-audio" preload="metadata" src="${esc(d.url)}"></audio>
- <section class="mobile-now-playing" id="mobile-now-playing" aria-hidden="true">
-  <div class="mobile-now-head"><button type="button" class="mobile-now-close" id="mobile-now-close" aria-label="Close now playing">${icon('chevron')}</button><div><small>NOW PLAYING</small><strong>${esc(d.contextLabel || (podcast ? 'Podcast' : 'SoundWave'))}</strong></div><span></span></div>
-  <div class="mobile-now-art">${fullArt}</div>
-  <div class="mobile-now-copy"><div><h2>${esc(d.title)}</h2><p>${esc(d.artist)}</p></div>${song ? heartBtn(song.song_id, 'mobile-now-heart') : ''}</div>
-  <div class="mobile-now-progress"><input id="mobile-sw-seek" type="range" min="0" max="1000" value="0" style="--pct:0%" aria-label="Seek position"><div><span id="mobile-sw-elapsed">0:00</span><span id="mobile-sw-total">${nice(d.duration || 0)}</span></div></div>
-  <div class="mobile-now-controls"><button type="button" id="mobile-sw-prev" class="icon-quiet" aria-label="Previous">${podcast ? '<span class="skip-15">−15</span>' : icon('prev')}</button><button type="button" id="mobile-sw-toggle" class="mobile-main-play" aria-label="Pause">${icon('pause')}</button><button type="button" id="mobile-sw-next" class="icon-quiet" aria-label="Next">${podcast ? '<span class="skip-15">+15</span>' : icon('next')}</button></div>
- </section>`}</div>`;
+ ${idle ? '' : `<audio id="sw-audio" preload="metadata" src="${esc(d.url)}"></audio>`}</div>`;
 }
 function stopAudio() {
   const audio = document.getElementById('sw-audio');
@@ -519,25 +510,15 @@ function bindPlayerBar(audio, details, token) {
     if (!live() || !$('#sw-toggle')) return;
     $('#sw-toggle').innerHTML = icon(audio.paused ? 'play' : 'pause');
     $('#sw-toggle').setAttribute('aria-label', audio.paused ? 'Play' : 'Pause');
-    if($('#mobile-sw-toggle')){$('#mobile-sw-toggle').innerHTML=icon(audio.paused?'play':'pause');$('#mobile-sw-toggle').setAttribute('aria-label',audio.paused?'Play':'Pause');}
     $('#sw-total').textContent = nice(dur());
-    if($('#mobile-sw-total'))$('#mobile-sw-total').textContent=nice(dur());
     if (!seeking) {
       const pct = dur() > 0 ? Math.min(1000, Math.floor((audio.currentTime / dur()) * 1000)) : 0;
       $('#sw-elapsed').textContent = nice(audio.currentTime);
-      if($('#mobile-sw-elapsed'))$('#mobile-sw-elapsed').textContent=nice(audio.currentTime);
       const sk = $('#sw-seek'); sk.value = String(pct); sk.style.setProperty('--pct', `${pct / 10}%`);
-      const msk=$('#mobile-sw-seek');if(msk){msk.value=String(pct);msk.style.setProperty('--pct',`${pct/10}%`);}
     }
     try { if ('mediaSession' in navigator && dur() > 0) navigator.mediaSession.setPositionState({ duration: dur(), position: Math.min(audio.currentTime, dur()), playbackRate: audio.playbackRate }); } catch {}
   };
   $('#sw-toggle').onclick = () => { if (audio.paused) audio.play().catch((e) => toast(humanErr(e), true)); else audio.pause(); };
-  const mobileNow=$('#mobile-now-playing');
-  $('.mobile-player-open')?.addEventListener('click',()=>{if(!mobileNow)return;mobileNow.classList.add('open');mobileNow.setAttribute('aria-hidden','false');document.body.classList.add('mobile-player-opened');});
-  $('#mobile-now-close')?.addEventListener('click',()=>{mobileNow?.classList.remove('open');mobileNow?.setAttribute('aria-hidden','true');document.body.classList.remove('mobile-player-opened');});
-  $('#mobile-sw-toggle')?.addEventListener('click',()=>{if(audio.paused)audio.play().catch((e)=>toast(humanErr(e),true));else audio.pause();});
-  $('#mobile-sw-prev')?.addEventListener('click',()=>action(()=>skip(-1)));
-  $('#mobile-sw-next')?.addEventListener('click',()=>action(()=>skip(1)));
   $('#sw-prev').onclick = () => action(() => skip(-1));
   $('#sw-next').onclick = () => action(() => skip(1));
   $('#sw-shuffle')?.addEventListener('click', toggleShuffle);
@@ -545,8 +526,6 @@ function bindPlayerBar(audio, details, token) {
   const seek = $('#sw-seek');
   seek.oninput = (e) => { seeking = true; const v = Number(e.target.value); e.target.style.setProperty('--pct', `${v / 10}%`); $('#sw-elapsed').textContent = nice((dur() * v) / 1000); };
   seek.onchange = (e) => { if (dur() > 0) audio.currentTime = (dur() * Number(e.target.value)) / 1000; seeking = false; sync(); };
-  const mobileSeek=$('#mobile-sw-seek');
-  if(mobileSeek){mobileSeek.oninput=(e)=>{seeking=true;const v=Number(e.target.value);e.target.style.setProperty('--pct',`${v/10}%`);if($('#mobile-sw-elapsed'))$('#mobile-sw-elapsed').textContent=nice((dur()*v)/1000);};mobileSeek.onchange=(e)=>{if(dur()>0)audio.currentTime=(dur()*Number(e.target.value))/1000;seeking=false;sync();};}
   const vol = $('#sw-volume');
   const paintVol = () => { const v = prefs.muted ? 0 : Math.round(prefs.volume * 100); vol.value = String(v); vol.style.setProperty('--pct', `${v}%`); $('#sw-mute').innerHTML = icon(v === 0 ? 'mute' : 'volume'); audio.volume = v / 100; };
   vol.oninput = (e) => { prefs.volume = Number(e.target.value) / 100; prefs.muted = prefs.volume === 0; savePrefs(); paintVol(); };
@@ -771,12 +750,9 @@ function listenerDashboard() {
   const albums = [...catalogAlbums()].sort((a, b) => String(b.release_date || '').localeCompare(String(a.release_date || '')) || b.album_id - a.album_id);
   const popular = state.artists.filter((a) => state.favorites.some((x) => x.artist_id === a.artist_id)).concat(state.artists.filter((a) => !state.favorites.some((x) => x.artist_id === a.artist_id))).slice(0, 7);
   const shelf = (title, link, html) => html ? `<section class="shelf-section"><div class="section-heading"><h2>${title}</h2>${link ? `<button type="button" class="text-link" data-nav="${link}">Show all</button>` : ''}</div>${html}</section>` : '';
-  const music = f !== 'podcasts' ? `${shelf('Recently played', 'history', recent.length ? `<div class="shelf">${recent.slice(0, 7).map(artTile).join('')}</div>` : '')}${shelf('Made for you', 'music', state.songs.length ? `<div class="shelf">${recommendationPicks().map(artTile).join('')}</div>` : '')}${shelf('New releases', 'music', albums.length ? `<div class="shelf">${albums.slice(0, 7).map(albumTile).join('')}</div>` : '')}${!state.songs.length ? '<div class="empty">When artists release music, you will find it here.</div>' : ''}` : '';
+  const music = f !== 'podcasts' ? `${shelf('Recently played', 'history', recent.length ? `<div class="shelf">${recent.slice(0, 7).map(artTile).join('')}</div>` : '')}${shelf('Made for you', 'music', state.songs.length ? `<div class="shelf">${recommendationPicks().map(artTile).join('')}</div>` : '')}${shelf('New releases', 'music', albums.length ? `<div class="shelf">${albums.slice(0, 7).map(albumTile).join('')}</div>` : '')}${shelf('Popular artists', 'artists', popular.length ? `<div class="shelf">${popular.map(artistCard).join('')}</div>` : '')}${!state.songs.length ? '<div class="empty">When artists release music, you will find it here.</div>' : ''}` : '';
   const pods = f !== 'music' ? shelf('Podcasts for you', 'podcasts', state.podcasts.length ? `<div class="shelf">${state.podcasts.slice(0, 7).map(showCard).join('')}</div>` : (f === 'podcasts' ? '<div class="empty">No shows published yet.</div>' : '')) : '';
-  shell(`${chips}${listeningStatsHtml()}${music}${pods}${listeningInsightsDialog()}`, greeting, '');
-  const insights=$('#listening-insights-dialog');
-  $('#open-listening-insights')?.addEventListener('click',()=>insights?.showModal());
-  $('#close-listening-insights')?.addEventListener('click',()=>insights?.close());
+  shell(`${chips}${listeningStatsHtml()}${weeklyTopHtml()}${music}${pods}`, greeting, '');
 }
 function recommendationPicks() {
   const liked = new Set(state.favorites.map((x) => Number(x.artist_id))), recent = new Set(state.history.slice(0, 10).map((x) => Number(x.song_id)));
@@ -1374,17 +1350,7 @@ function searchKeyboardNav(e){if(!['ArrowDown','ArrowUp','Enter'].includes(e.key
 function cacheSongMetadata(){try{const rows=state.songs.slice(0,50).map(s=>({song_id:s.song_id,song_title:s.song_title,duration_seconds:s.duration_seconds,genre_id:s.genre_id,cover_path:s.cover_path,album:s.album&&{album_id:s.album.album_id,album_title:s.album.album_title,artist:s.album.artist&&{artist_id:s.album.artist.artist_id,artist_name:s.album.artist.artist_name}}}));localStorage.setItem('soundwave-song-cache-v1',JSON.stringify({savedAt:Date.now(),songs:rows}));}catch{}}
 function computeListeningStats(rows){const bySong=new Map(),byArtist=new Map(),byGenre=new Map(),days=new Set();let seconds=0;for(const r of rows){const s=songById(r.song_id);if(!s)continue;seconds+=Number(r.duration_played_seconds)||0;bySong.set(s.song_id,(bySong.get(s.song_id)||0)+1);const aid=s.album?.artist?.artist_id;if(aid)byArtist.set(aid,(byArtist.get(aid)||0)+1);if(s.genre_id)byGenre.set(s.genre_id,(byGenre.get(s.genre_id)||0)+1);if(r.stream_date)days.add(String(r.stream_date).slice(0,10));}let streak=0;for(let d=new Date(),i=0;i<365;i++,d.setDate(d.getDate()-1)){const k=d.toISOString().slice(0,10);if(days.has(k))streak++;else if(i>0)break;}const top=(map,lookup,n=5)=>[...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,n).map(([id,count])=>({id,count,item:lookup(id)})).filter(x=>x.item);return {minutes:Math.round(seconds/60),streak,topSongs:top(bySong,id=>songById(id)),topArtists:top(byArtist,id=>state.artists.find(a=>Number(a.artist_id)===Number(id))),favoriteGenre:top(byGenre,id=>state.genres.find(g=>Number(g.genre_id)===Number(id)),1)[0]?.item||null};}
 function svgBars(items){const max=Math.max(1,...items.map(x=>x.count));return `<svg class="mini-bars" viewBox="0 0 320 110" role="img" aria-label="Top listening counts">${items.map((x,i)=>{const h=Math.max(8,(x.count/max)*78),w=44,g=18;return `<g transform="translate(${18+i*(w+g)} 0)"><rect x="0" y="${88-h}" width="${w}" height="${h}" rx="7"></rect><text x="${w/2}" y="104" text-anchor="middle">${i+1}</text></g>`}).join('')}</svg>`;}
-function listeningStatsHtml(){
-  const st=state.listeningStats;if(!st)return '';
-  const hasActivity=Number(st.minutes)>0||Number(st.streak)>0||st.topSongs?.length||st.topArtists?.length;
-  if(!hasActivity)return '';
-  return `<section class="listening-snapshot"><div><span class="eyebrow">YOUR LISTENING</span><h2>Listening snapshot</h2></div><div class="snapshot-metrics"><span><strong data-count="${st.minutes}">${st.minutes}</strong><small>min</small></span><span><strong data-count="${st.streak}">${st.streak}</strong><small>day streak</small></span><span><strong>${esc(st.favoriteGenre?.genre_name||'Discovering')}</strong><small>top genre</small></span></div><button type="button" class="button secondary sm" id="open-listening-insights">View insights</button></section>`;
-}
-function listeningInsightsDialog(){
-  const st=state.listeningStats;if(!st)return '';
-  return `<dialog class="sw-modal listening-insights-modal" id="listening-insights-dialog"><div class="modal-head"><div><span class="eyebrow">YOUR LISTENING</span><h2>Listening insights</h2></div><button type="button" class="modal-close" id="close-listening-insights" aria-label="Close">${icon('close')}</button></div><div class="insight-grid"><div class="insight-number"><strong>${st.minutes}</strong><span>minutes listened</span></div><div class="insight-number"><strong>${st.streak}</strong><span>day streak</span></div><div class="insight-number"><strong>${esc(st.favoriteGenre?.genre_name||'Explore more')}</strong><span>favorite genre</span></div><div class="insight-chart">${svgBars(st.topSongs)}</div></div><div class="insight-lists"><div><h3>Top artists</h3>${st.topArtists.map((x,i)=>`<button type="button" data-open-artist="${x.id}"><b>${i+1}</b><span>${esc(x.item.artist_name)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Listen to artists to build your stats.</p>'}</div><div><h3>Top songs</h3>${st.topSongs.map((x,i)=>`<button type="button" data-play="${x.id}"><b>${i+1}</b><span>${esc(x.item.song_title)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Your top tracks will appear here.</p>'}</div></div></dialog>`;
-}
-
+function listeningStatsHtml(){const st=state.listeningStats;if(!st)return '';return `<section class="insights-panel"><div class="section-heading"><div><span class="eyebrow">YOUR LISTENING</span><h2>SoundWave Stats</h2></div><span class="muted small">Based on your listening history</span></div><div class="insight-grid"><div class="insight-number"><strong data-count="${st.minutes}">${st.minutes}</strong><span>minutes listened</span></div><div class="insight-number"><strong data-count="${st.streak}">${st.streak}</strong><span>day streak</span></div><div class="insight-number"><strong>${esc(st.favoriteGenre?.genre_name||'Explore more')}</strong><span>favorite genre</span></div><div class="insight-chart">${svgBars(st.topSongs)}</div></div><div class="insight-lists"><div><h3>Top artists</h3>${st.topArtists.map((x,i)=>`<button type="button" data-open-artist="${x.id}"><b>${i+1}</b><span>${esc(x.item.artist_name)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Listen to artists to build your stats.</p>'}</div><div><h3>Top songs</h3>${st.topSongs.map((x,i)=>`<button type="button" data-play="${x.id}"><b>${i+1}</b><span>${esc(x.item.song_title)}</span><small>${x.count} plays</small></button>`).join('')||'<p class="muted">Your top tracks will appear here.</p>'}</div></div></section>`;}
 function weeklyTopHtml(){if(!state.topWeekSongs.length)return '';return `<section class="weekly-mix"><div class="weekly-cover"><span>7</span><small>DAYS</small></div><div><span class="eyebrow">AUTO PLAYLIST</span><h2>Your Top Songs of the Week</h2><p>${state.topWeekSongs.length} tracks ranked from your real listening history. It updates automatically.</p><div class="inline"><button type="button" class="button" data-play-ids="${state.topWeekSongs.map(s=>s.song_id).join(',')}">${icon('play')} Play mix</button><span class="muted small">Cannot be deleted</span></div></div></section>`;}
 function sparkline(rows){const pts=rows.length?rows:[0];const max=Math.max(1,...pts);return `<svg class="sparkline" viewBox="0 0 360 95" preserveAspectRatio="none" aria-label="30 day streams"><polyline points="${pts.map((v,i)=>`${(i/(pts.length-1||1))*360},${88-(v/max)*72}`).join(' ')}" fill="none" vector-effect="non-scaling-stroke"></polyline></svg>`;}
 function artistAnalyticsHtml(){if(!state.artist)return '';const days=Array(30).fill(0);for(const r of state.artistThirtyDay){const diff=Math.floor((Date.now()-new Date(r.stream_date).getTime())/86400000);if(diff>=0&&diff<30)days[29-diff]++;}const roy=state.royaltySummary||{};const rate=Number(roy.royalty_rate||0);return `<section class="artist-analytics"><div class="section-heading"><div><span class="eyebrow">LAST 30 DAYS</span><h2>Audience pulse</h2></div></div><div class="artist-analytics-grid"><div class="analytics-chart"><strong>${state.artistThirtyDay.length}</strong><span>visible streams</span>${sparkline(days)}</div><div class="top-listeners"><h3>Top listeners</h3>${state.artistTopListeners.map((x,i)=>`<div><span class="member-avatar">${i+1}</span><strong>${esc(x.name)}</strong><small>${x.count} streams</small></div>`).join('')||'<p class="muted small">No listener rows are visible under the current RLS policy yet.</p>'}</div><div class="royalty-calc"><h3>Royalty estimator</h3><strong>₱${(state.artistThirtyDay.length*rate).toFixed(2)}</strong><small>${state.artistThirtyDay.length} streams × ₱${rate.toFixed(4)}</small></div></div></section>`;}
