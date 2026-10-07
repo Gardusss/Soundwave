@@ -3044,3 +3044,17 @@ body[data-role="admin"]{--role-accent:#ef4444;--role-accent-soft:#ef444424}
 @media (max-width: 760px){
   .track .t-extra,.tracks-head .t-extra{display:none!important}
 }
+
+/* v19 Maya Sandbox checkout */
+.maya-sandbox-info{border-color:rgba(88,207,185,.36)!important;background:linear-gradient(180deg,rgba(33,91,83,.17),rgba(20,23,21,.94))!important}
+.sandbox-badge{display:inline-flex;align-items:center;justify-content:center;padding:7px 11px;border-radius:999px;background:rgba(88,207,185,.12);border:1px solid rgba(88,207,185,.36);color:#bff7ec;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.maya-checkout-dialog{width:min(94vw,560px)}
+.maya-checkout-body{display:grid;gap:16px}
+.maya-order-summary{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:14px;padding:16px;border-radius:18px;background:#151918;border:1px solid #2d3733}
+.maya-order-summary>div{min-width:0}.maya-order-summary small{display:block;color:#9daaa3}.maya-order-summary strong{font-size:18px}.maya-order-summary>strong:last-child{font-size:24px;white-space:nowrap}.maya-order-summary p{margin:4px 0 0;color:#aeb9b3;font-size:13px}
+.maya-mark{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#45bfa8,#247f71);font:900 28px Outfit,system-ui;color:white}
+.maya-test-notice{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border-radius:16px;background:rgba(88,207,185,.08);border:1px solid rgba(88,207,185,.28);color:#d7f7f0}.maya-test-notice svg{width:20px;height:20px;flex:0 0 20px}.maya-test-notice strong,.maya-test-notice small{display:block}.maya-test-notice small{margin-top:3px;color:#a9c9c2}
+.maya-checkout-steps{display:grid;gap:10px;list-style:none;padding:0;margin:0}.maya-checkout-steps li{display:flex;align-items:center;gap:10px;color:#c5cec9;font-size:13px}.maya-checkout-steps li span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#202622;border:1px solid #39443e;color:#fff;font-weight:900;flex:0 0 28px}
+.maya-pay-button{background:linear-gradient(135deg,#34b99e,#1ed760)!important;color:#07120b!important}
+.maya-pay-button:disabled{opacity:.65;cursor:wait}
+@media(max-width:560px){.maya-order-summary{grid-template-columns:46px minmax(0,1fr)}.maya-order-summary>strong:last-child{grid-column:2;justify-self:start}.maya-mark{width:46px;height:46px;border-radius:14px}.maya-checkout-dialog .dialog-actions{display:grid;grid-template-columns:1fr}.maya-checkout-dialog .button{width:100%;justify-content:center}}
